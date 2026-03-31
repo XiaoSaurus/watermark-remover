@@ -1,4 +1,4 @@
-﻿package com.watermark.config;
+package com.watermark.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

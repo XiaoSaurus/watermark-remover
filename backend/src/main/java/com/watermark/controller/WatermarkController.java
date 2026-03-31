@@ -1,4 +1,4 @@
-﻿package com.watermark.controller;
+package com.watermark.controller;
 
 import com.watermark.model.Result;
 import com.watermark.model.VideoInfo;

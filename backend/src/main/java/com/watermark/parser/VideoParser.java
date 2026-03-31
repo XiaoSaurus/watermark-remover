@@ -1,4 +1,4 @@
-﻿package com.watermark.parser;
+package com.watermark.parser;
 
 import com.watermark.model.VideoInfo;
 

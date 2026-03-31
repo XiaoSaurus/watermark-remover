@@ -14,4 +14,10 @@ export const videoApi = {
   parse(url) {
     return http.post("/video/parse", { url });
   },
+  listTasks() {
+    return Promise.resolve({ code: 200, data: [] });
+  },
+  downloadUrl(taskId) {
+    return `/api/video/download/${taskId}`;
+  },
 };

@@ -1,4 +1,4 @@
-﻿package com.watermark.model;
+package com.watermark.model;
 
 import lombok.Data;
 import lombok.AllArgsConstructor;

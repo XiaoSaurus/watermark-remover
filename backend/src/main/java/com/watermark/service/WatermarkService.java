@@ -1,4 +1,4 @@
-﻿package com.watermark.service;
+package com.watermark.service;
 
 import com.watermark.model.VideoInfo;
 

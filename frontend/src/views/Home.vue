@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="app">
     <!-- 顶部导航 -->
     <header class="navbar">

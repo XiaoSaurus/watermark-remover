@@ -1,4 +1,4 @@
-﻿package com.watermark.parser.impl;
+package com.watermark.parser.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;

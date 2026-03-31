@@ -1,4 +1,4 @@
-﻿package com.watermark;
+package com.watermark;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
