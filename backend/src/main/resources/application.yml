@@ -4,15 +4,6 @@
 spring:
   application:
     name: watermark-remover
-  servlet:
-    multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
-
-watermark:
-  upload-dir: ./uploads
-  output-dir: ./outputs
-  ffmpeg-path: ffmpeg
 
 springdoc:
   swagger-ui:

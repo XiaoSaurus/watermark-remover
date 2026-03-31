@@ -1,61 +1,35 @@
 ﻿package com.watermark.controller;
 
 import com.watermark.model.Result;
-import com.watermark.model.WatermarkTask;
+import com.watermark.model.VideoInfo;
 import com.watermark.service.WatermarkService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
-@Tag(name = "去水印接口")
+@Tag(name = "短视频去水印")
 @RestController
-@RequestMapping("/api/watermark")
+@RequestMapping("/api/video")
 @RequiredArgsConstructor
 public class WatermarkController {
 
     private final WatermarkService watermarkService;
 
-    @Operation(summary = "上传文件并提交去水印任务")
-    @PostMapping("/submit")
-    public Result<WatermarkTask> submit(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam(value = "type", defaultValue = "image") String type,
-            @RequestParam(value = "x", defaultValue = "0") int x,
-            @RequestParam(value = "y", defaultValue = "0") int y,
-            @RequestParam(value = "width", defaultValue = "100") int width,
-            @RequestParam(value = "height", defaultValue = "50") int height) {
-        WatermarkTask task = watermarkService.submitTask(file, type, x, y, width, height);
-        return Result.success(task);
+    @Operation(summary = "解析分享链接，获取无水印视频地址",
+               description = "支持抖音、快手、B站、微博、小红书。可直接粘贴分享文案，自动提取链接。")
+    @PostMapping("/parse")
+    public Result<VideoInfo> parse(@RequestBody ParseRequest request) {
+        try {
+            VideoInfo info = watermarkService.parseVideo(request.getUrl());
+            return Result.success(info);
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
     }
 
-    @Operation(summary = "查询任务状态")
-    @GetMapping("/task/{taskId}")
-    public Result<WatermarkTask> getTask(@PathVariable String taskId) {
-        WatermarkTask task = watermarkService.getTask(taskId);
-        if (task == null) return Result.error("任务不存在");
-        return Result.success(task);
-    }
-
-    @Operation(summary = "获取所有任务列表")
-    @GetMapping("/tasks")
-    public Result<List<WatermarkTask>> listTasks() {
-        return Result.success(watermarkService.listTasks());
-    }
-
-    @Operation(summary = "下载处理结果")
-    @GetMapping("/download/{taskId}")
-    public ResponseEntity<byte[]> download(@PathVariable String taskId) throws Exception {
-        byte[] data = watermarkService.downloadResult(taskId);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=result_" + taskId)
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(data);
+    @lombok.Data
+    public static class ParseRequest {
+        private String url;
     }
 }
