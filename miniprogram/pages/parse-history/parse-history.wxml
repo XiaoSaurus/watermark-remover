@@ -1,34 +1,29 @@
-<view class="page">
-  <!-- 页头 -->
+<view class="page" style="--color-primary:{{theme.primary}};--gradient-btn:{{theme.gradBtn}}">
   <view class="page-header">
     <view class="page-title-wrap">
       <text class="page-title">🔍 解析历史</text>
-      <view class="count-badge" wx:if="{{total > 0}}">{{total}}</view>
+      <view class="count-badge" wx:if="{{total > 0}}" style="background:{{theme.gradBtn}}">{{total}}</view>
     </view>
     <view class="btn-clear-all" bindtap="clearAll" wx:if="{{list.length > 0}}">清空</view>
   </view>
 
-  <!-- 加载中 -->
   <view class="loading-wrap" wx:if="{{pageLoading}}">
-    <view class="loading-spinner"></view>
+    <view class="loading-spinner" style="border-top-color:{{theme.primary}}"></view>
   </view>
 
-  <!-- 空状态 -->
   <view class="empty-wrap" wx:elif="{{list.length === 0}}">
     <text class="empty-icon">🔍</text>
     <text class="empty-text">暂无解析记录</text>
     <text class="empty-sub">去解析一个视频吧～</text>
   </view>
 
-  <!-- 列表 -->
   <view class="list" wx:else>
     <view class="card parse-item" wx:for="{{list}}" wx:key="id">
-      <!-- 视频信息 -->
       <view class="item-top">
         <view class="cover-wrap">
           <image class="item-cover" src="{{item.cover}}" mode="aspectFill" wx:if="{{item.cover}}" />
           <view class="cover-ph" wx:else><text>🎬</text></view>
-          <view class="cover-badge">{{platformMap[item.platform] || item.platform}}</view>
+          <view class="cover-badge" style="background:{{theme.primary}}">{{platformMap[item.platform] || item.platform}}</view>
         </view>
         <view class="item-info">
           <text class="item-title">{{item.title || '无标题'}}</text>
@@ -40,38 +35,34 @@
         <view class="btn-del-circle" bindtap="deleteItem" data-id="{{item.id}}">✕</view>
       </view>
 
-      <!-- 下载区 -->
       <view class="download-area" wx:if="{{item.videoUrls && item.videoUrls.length > 0}}">
         <view class="download-area-title">📥 选择清晰度下载</view>
         <view class="dl-row" wx:for="{{item.videoUrls}}" wx:for-item="v" wx:for-index="vi" wx:key="vi">
           <view class="dl-quality">
-            <view class="quality-dot"></view>
+            <view class="quality-dot" style="background:{{theme.gradBtn}}"></view>
             <text>{{v.quality}}</text>
           </view>
           <view class="dl-actions">
             <view
               class="btn-dl {{downloadingKey === item.id + '-' + vi ? 'btn-dl-loading' : ''}}"
+              style="{{downloadingKey !== item.id + '-' + vi ? 'background:' + theme.gradBtn : ''}}"
               bindtap="downloadVideo"
-              data-item="{{item}}"
-              data-url="{{v.url}}"
-              data-quality="{{v.quality}}"
-              data-vi="{{vi}}"
+              data-item="{{item}}" data-url="{{v.url}}" data-quality="{{v.quality}}" data-vi="{{vi}}"
             >
               <text wx:if="{{downloadingKey === item.id + '-' + vi}}">{{downloadProgress}}%</text>
               <text wx:else>⬇️ 下载</text>
             </view>
-            <view class="btn-copy-sm" bindtap="copyUrl" data-url="{{v.url}}">📋</view>
+            <view class="btn-copy-sm" style="color:{{theme.primary}}" bindtap="copyUrl" data-url="{{v.url}}">📋</view>
           </view>
         </view>
       </view>
     </view>
   </view>
 
-  <!-- 悬浮进度条 -->
   <view class="float-progress" wx:if="{{downloadStatus}}">
-    <text class="float-label">{{downloadStatus === 'saving' ? '⏳ 保存中...' : '⬇️ 下载中 ' + downloadProgress + '%'}}</text>
+    <text class="float-label" style="color:{{theme.primary}}">{{downloadStatus === 'saving' ? '⏳ 保存中...' : '⬇️ 下载中 ' + downloadProgress + '%'}}</text>
     <view class="progress-bar-bg">
-      <view class="progress-bar-fill" style="width: {{downloadStatus === 'saving' ? 100 : downloadProgress}}%"></view>
+      <view class="progress-bar-fill" style="width:{{downloadStatus==='saving'?100:downloadProgress}}%;background:{{theme.gradBtn}}"></view>
     </view>
   </view>
 </view>

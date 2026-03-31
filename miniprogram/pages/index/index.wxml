@@ -1,7 +1,12 @@
-<view class="page">
+<view class="page" style="--color-primary:{{theme.primary}};--color-primary-light:{{theme.primaryLight}};--gradient-btn:{{theme.gradBtn}};--gradient-bg:{{theme.gradBg}}">
+
   <!-- Hero Banner -->
-  <view class="hero">
-    <view class="hero-badge">✨ 免费 · 无广告 · 无水印</view>
+  <view class="hero" style="background:{{theme.gradBg}}">
+    <view class="hero-top-bar">
+      <view class="hero-badge">✨ 免费 · 无广告 · 无水印</view>
+      <!-- 主题切换按钮 -->
+      <view class="theme-btn" bindtap="showThemePicker">🎨</view>
+    </view>
     <text class="hero-title">短视频去水印</text>
     <text class="hero-sub">抖音 · 快手 · B站 · 微博 · 小红书</text>
     <view class="platform-chips">
@@ -21,26 +26,29 @@
       auto-height
     />
     <view class="btn-row">
-      <view class="btn-clear-sm" bindtap="clearInput" wx:if="{{inputUrl}}">
-        🗑 清空
+      <view class="btn-clear-sm" bindtap="clearInput" wx:if="{{inputUrl}}">🗑 清空</view>
+      <view class="parse-btn-wrap">
+        <button
+          class="btn-parse {{loading ? 'btn-parse-loading' : ''}}"
+          style="background:{{loading ? 'linear-gradient(135deg,#999,#bbb)' : theme.gradBtn}}"
+          bindtap="handleParse"
+          disabled="{{!inputUrl || loading}}"
+          loading="{{loading}}"
+        >
+          <text wx:if="{{!loading}}">🚀 立即解析</text>
+          <text wx:else>解析中...</text>
+        </button>
       </view>
-      <button class="btn-primary btn-parse"
-        bindtap="handleParse"
-        disabled="{{!inputUrl || loading}}"
-        loading="{{loading}}">
-        {{loading ? '解析中...' : '🚀 立即解析'}}
-      </button>
     </view>
   </view>
 
   <!-- 解析结果 -->
   <view class="card result-card" wx:if="{{result}}">
-    <!-- 视频信息 -->
     <view class="result-header">
       <view class="cover-wrap">
         <image class="cover-img" src="{{result.cover}}" mode="aspectFill" wx:if="{{result.cover}}" />
         <view class="cover-placeholder" wx:else><text>🎬</text></view>
-        <view class="cover-platform-badge">{{platformLabel}}</view>
+        <view class="cover-platform-badge" style="background:{{theme.primary}}">{{platformLabel}}</view>
       </view>
       <view class="result-meta">
         <text class="result-title">{{result.title || '无标题'}}</text>
@@ -53,13 +61,15 @@
     <!-- 下载进度 -->
     <view class="progress-block" wx:if="{{downloadStatus}}">
       <view class="progress-info-row">
-        <text class="progress-label-text">
+        <text class="progress-label-text" style="color:{{theme.primary}}">
           {{downloadStatus === 'saving' ? '⏳ 保存到相册中...' : '⬇️ 下载中 ' + downloadProgress + '%'}}
         </text>
-        <view class="progress-pct-badge">{{downloadStatus === 'saving' ? '100%' : downloadProgress + '%'}}</view>
+        <view class="progress-pct-badge" style="background:{{theme.gradBtn}}">
+          {{downloadStatus === 'saving' ? '100%' : downloadProgress + '%'}}
+        </view>
       </view>
       <view class="progress-bar-bg">
-        <view class="progress-bar-fill" style="width: {{downloadStatus === 'saving' ? 100 : downloadProgress}}%"></view>
+        <view class="progress-bar-fill" style="width:{{downloadStatus==='saving'?100:downloadProgress}}%;background:{{theme.gradBtn}}"></view>
       </view>
     </view>
 
@@ -69,12 +79,13 @@
       <view class="quality-list">
         <view class="quality-row" wx:for="{{result.videoUrls}}" wx:key="quality">
           <view class="quality-info">
-            <view class="quality-dot"></view>
+            <view class="quality-dot" style="background:{{theme.gradBtn}}"></view>
             <text class="quality-name">{{item.quality}}</text>
           </view>
           <view class="quality-actions">
             <view
               class="btn-dl {{downloadingIndex === index ? 'btn-dl-loading' : ''}}"
+              style="{{downloadingIndex !== index ? 'background:' + theme.gradBtn : ''}}"
               bindtap="downloadVideo"
               data-url="{{item.url}}"
               data-quality="{{item.quality}}"
@@ -83,7 +94,7 @@
               <text wx:if="{{downloadingIndex === index}}">{{downloadProgress}}%</text>
               <text wx:else>⬇️ 下载</text>
             </view>
-            <view class="btn-copy-sm" bindtap="copyUrl" data-url="{{item.url}}">📋</view>
+            <view class="btn-copy-sm" style="color:{{theme.primary}}" bindtap="copyUrl" data-url="{{item.url}}">📋</view>
           </view>
         </view>
       </view>
@@ -99,7 +110,7 @@
     <view class="guide-title">📖 使用说明</view>
     <view class="guide-steps">
       <view class="guide-step" wx:for="{{steps}}" wx:key="index">
-        <view class="step-num">{{index + 1}}</view>
+        <view class="step-num" style="background:{{theme.gradBtn}}">{{index + 1}}</view>
         <text class="step-text">{{item}}</text>
       </view>
     </view>
@@ -107,9 +118,31 @@
 
   <!-- 悬浮进度条 -->
   <view class="float-progress" wx:if="{{downloadStatus}}">
-    <text class="float-label">{{downloadStatus === 'saving' ? '⏳ 保存中...' : '⬇️ 下载中 ' + downloadProgress + '%'}}</text>
+    <text class="float-label" style="color:{{theme.primary}}">
+      {{downloadStatus === 'saving' ? '⏳ 保存中...' : '⬇️ 下载中 ' + downloadProgress + '%'}}
+    </text>
     <view class="progress-bar-bg">
-      <view class="progress-bar-fill" style="width: {{downloadStatus === 'saving' ? 100 : downloadProgress}}%"></view>
+      <view class="progress-bar-fill" style="width:{{downloadStatus==='saving'?100:downloadProgress}}%;background:{{theme.gradBtn}}"></view>
+    </view>
+  </view>
+
+  <!-- 主题选择弹窗 -->
+  <view class="theme-mask" wx:if="{{showTheme}}" bindtap="hideThemePicker">
+    <view class="theme-panel" catchtap="">
+      <view class="theme-panel-title">🎨 选择主题</view>
+      <view class="theme-list">
+        <view
+          wx:for="{{themeList}}"
+          wx:key="key"
+          class="theme-item {{currentThemeKey === item.key ? 'theme-item-active' : ''}}"
+          bindtap="selectTheme"
+          data-key="{{item.key}}"
+        >
+          <view class="theme-color-dot" style="background:{{item.gradBtn}}"></view>
+          <text class="theme-name">{{item.emoji}} {{item.name}}</text>
+          <text class="theme-check" wx:if="{{currentThemeKey === item.key}}">✓</text>
+        </view>
+      </view>
     </view>
   </view>
 </view>
