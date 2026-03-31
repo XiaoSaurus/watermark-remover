@@ -172,9 +172,6 @@ function downloadVideo(url, quality) {
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-}_${Date.now()}.mp4`;
-  a.target = "_blank";
-  a.click();
 }
 
 function copyUrl(url) {
