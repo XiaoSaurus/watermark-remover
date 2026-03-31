@@ -18,11 +18,9 @@
       </div>
 
       <div class="input-card">
-        <el-input
-          v-model="inputUrl" type="textarea" :rows="3"
-          placeholder="粘贴视频分享链接或分享文案，例如：&#10;https://v.douyin.com/xxxxx/&#10;3.14 复制打开抖音，看看【xxx】的作品 https://v.douyin.com/xxxxx/"
-          resize="none"
-        />
+        <el-input v-model="inputUrl" type="textarea" :rows="3"
+          placeholder="粘贴视频分享链接或分享文案，例如：&#10;https://v.douyin.com/xxxxx/"
+          resize="none" />
         <div class="input-actions">
           <el-button @click="inputUrl = ''" :disabled="!inputUrl" plain>清空</el-button>
           <el-button type="primary" size="large" :loading="loading"
@@ -53,7 +51,7 @@
           <div v-if="downloadStatus" class="progress-wrap">
             <div class="progress-header">
               <span class="progress-label">
-                {{ downloadStatus === 'saving' ? '⏳ 保存中...' : `⬇️ 下载中` }}
+                {{ downloadStatus === 'saving' ? '⏳ 保存中...' : '⬇️ 下载中' }}
               </span>
               <span class="progress-pct">{{ downloadStatus === 'saving' ? '100%' : downloadProgress + '%' }}</span>
             </div>
@@ -61,10 +59,7 @@
               :percentage="downloadStatus === 'saving' ? 100 : downloadProgress"
               :striped="downloadStatus === 'downloading'"
               :striped-flow="downloadStatus === 'downloading'"
-              :duration="10"
-              :stroke-width="10"
-              status="success"
-            />
+              :duration="10" :stroke-width="10" />
           </div>
 
           <div class="download-section">
@@ -121,7 +116,7 @@ const loading = ref(false)
 const result = ref(null)
 const downloadingIndex = ref(-1)
 const downloadProgress = ref(0)
-const downloadStatus = ref('') // 'downloading' | 'saving' | ''
+const downloadStatus = ref('')
 
 const platforms = [
   { name: '抖音', icon: '🎵' }, { name: '快手', icon: '⚡' },
@@ -161,7 +156,14 @@ function downloadVideo(url, quality, idx) {
   downloadProgress.value = 0
   downloadStatus.value = 'downloading'
 
-  // 用 XMLHttpRequest 实现进度监听
+  const historyBase = {
+    title: result.value?.title,
+    platform: result.value?.platform,
+    cover: result.value?.cover,
+    quality,
+    url   // 保存原始视频地址，供历史记录再次下载
+  }
+
   const xhr = new XMLHttpRequest()
   xhr.open('GET', proxyUrl, true)
   xhr.responseType = 'blob'
@@ -176,7 +178,6 @@ function downloadVideo(url, quality, idx) {
     if (xhr.status === 200) {
       downloadStatus.value = 'saving'
       downloadProgress.value = 100
-      // 触发浏览器下载
       const blob = xhr.response
       const a = document.createElement('a')
       a.href = URL.createObjectURL(blob)
@@ -186,22 +187,19 @@ function downloadVideo(url, quality, idx) {
       document.body.removeChild(a)
       URL.revokeObjectURL(a.href)
       ElMessage.success('下载完成！')
-      // 写入历史记录
-      addHistory({
-        title: result.value.title,
-        platform: result.value.platform,
-        cover: result.value.cover,
-        quality,
-        url
-      })
+      // ✅ 写入历史 - 成功
+      addHistory({ ...historyBase, status: 'success' })
     } else {
       ElMessage.error('下载失败: HTTP ' + xhr.status)
+      // ✅ 写入历史 - 失败
+      addHistory({ ...historyBase, status: 'fail', errMsg: 'HTTP ' + xhr.status })
     }
     resetDownload()
   }
 
   xhr.onerror = () => {
     ElMessage.error('下载失败，请检查网络')
+    addHistory({ ...historyBase, status: 'fail', errMsg: '网络错误' })
     resetDownload()
   }
 

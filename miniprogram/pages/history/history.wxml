@@ -4,14 +4,12 @@
     <view class="btn-clear-all" bindtap="clearAll" wx:if="{{list.length > 0}}">清空</view>
   </view>
 
-  <!-- 空状态 -->
   <view class="empty" wx:if="{{list.length === 0}}">
     <text class="empty-icon">📭</text>
     <text class="empty-text">暂无下载记录</text>
     <text class="empty-sub">去解析一个视频吧～</text>
   </view>
 
-  <!-- 历史列表 -->
   <view class="list" wx:else>
     <view class="item card" wx:for="{{list}}" wx:key="time">
       <image class="item-cover" src="{{item.cover}}" mode="aspectFill" wx:if="{{item.cover}}" />
@@ -19,11 +17,35 @@
       <view class="item-info">
         <text class="item-title">{{item.title || '无标题'}}</text>
         <view class="item-meta">
-          <text class="item-platform">{{platformMap[item.platform] || item.platform}}</text>
-          <text class="item-quality">{{item.quality}}</text>
+          <text class="tag-platform">{{platformMap[item.platform] || item.platform}}</text>
+          <text class="tag-quality">{{item.quality}}</text>
+          <text class="tag-status tag-success" wx:if="{{item.status === 'success'}}">✅ 成功</text>
+          <text class="tag-status tag-fail" wx:elif="{{item.status === 'fail'}}">❌ 失败</text>
+          <text class="tag-status tag-unknown" wx:else>⏺ 未知</text>
         </view>
-        <text class="item-time">{{item.timeStr}}</text>
+        <view class="item-bottom">
+          <text class="item-time">{{item.timeStr}}</text>
+          <text class="item-errmsg" wx:if="{{item.status === 'fail' && item.errMsg}}">{{item.errMsg}}</text>
+        </view>
       </view>
+      <view class="item-actions">
+        <view
+          class="btn-redownload {{downloadingTime === item.time ? 'btn-downloading' : ''}}"
+          bindtap="reDownload"
+          data-item="{{item}}"
+        >
+          <text wx:if="{{downloadingTime === item.time}}">{{downloadProgress}}%</text>
+          <text wx:else>⬇️ 再下</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 悬浮进度条 -->
+  <view class="float-progress" wx:if="{{downloadStatus}}">
+    <text class="float-label">{{downloadStatus === 'saving' ? '⏳ 保存中...' : '⬇️ 下载中 ' + downloadProgress + '%'}}</text>
+    <view class="progress-bar-bg">
+      <view class="progress-bar-fill" style="width: {{downloadStatus === 'saving' ? 100 : downloadProgress}}%"></view>
     </view>
   </view>
 </view>
