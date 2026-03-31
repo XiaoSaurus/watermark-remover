@@ -1,14 +1,18 @@
 <template>
-  <el-config-provider>
+  <el-config-provider :locale="zhCn">
     <router-view />
   </el-config-provider>
 </template>
-
 <script setup>
 import { ElConfigProvider } from "element-plus";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
+import { onMounted } from "vue";
+onMounted(() => {
+  const saved = localStorage.getItem("wm_theme") || "light";
+  document.documentElement.setAttribute("data-theme", saved);
+});
 </script>
-
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f7fa; }
+@import "./assets/styles/theme.css";
+@import "./assets/styles/base.css";
 </style>
