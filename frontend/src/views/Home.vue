@@ -163,9 +163,16 @@ async function handleParse() {
 }
 
 function downloadVideo(url, quality) {
+  // 通过后端代理下载，解决抖音等平台的 403 问题
+  const filename = `video_${quality}_${Date.now()}.mp4`;
+  const proxyUrl = `/api/video/download?url=${encodeURIComponent(url)}&filename=${encodeURIComponent(filename)}`;
   const a = document.createElement("a");
-  a.href = url;
-  a.download = `video_${quality}_${Date.now()}.mp4`;
+  a.href = proxyUrl;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}_${Date.now()}.mp4`;
   a.target = "_blank";
   a.click();
 }
