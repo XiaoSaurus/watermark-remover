@@ -1,0 +1,36 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/history/history"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#667eea",
+    "navigationBarTitleText": "去水印下载",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f6fa"
+  },
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#667eea",
+    "backgroundColor": "#fff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "解析下载",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home_active.png"
+      },
+      {
+        "pagePath": "pages/history/history",
+        "text": "历史记录",
+        "iconPath": "images/history.png",
+        "selectedIconPath": "images/history_active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

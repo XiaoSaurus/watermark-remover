@@ -1,0 +1,114 @@
+<view class="container">
+  <!-- 顶部 Banner -->
+  <view class="hero">
+    <text class="hero-title">✂️ 去水印下载</text>
+    <text class="hero-sub">支持抖音 · 快手 · B站 · 微博 · 小红书</text>
+  </view>
+
+  <!-- 输入区 -->
+  <view class="card input-card">
+    <textarea
+      class="url-input"
+      value="{{inputUrl}}"
+      bindinput="onInput"
+      placeholder="粘贴视频分享链接或分享文案&#10;例如：https://v.douyin.com/xxxxx/&#10;或直接粘贴抖音分享文案"
+      maxlength="-1"
+      auto-height
+    />
+    <view class="btn-row">
+      <view class="btn-clear" bindtap="clearInput" wx:if="{{inputUrl}}">清空</view>
+      <button
+        class="btn-primary {{loading ? 'loading' : ''}}"
+        bindtap="handleParse"
+        disabled="{{!inputUrl || loading}}"
+        loading="{{loading}}"
+      >
+        {{loading ? '解析中...' : '🚀 立即解析'}}
+      </button>
+    </view>
+  </view>
+
+  <!-- 平台标签 -->
+  <view class="platforms">
+    <view class="platform-tag" wx:for="{{platforms}}" wx:key="name">
+      {{item.icon}} {{item.name}}
+    </view>
+  </view>
+
+  <!-- 解析结果 -->
+  <view class="card result-card" wx:if="{{result}}">
+    <!-- 视频信息 -->
+    <view class="result-header">
+      <image
+        class="cover"
+        src="{{result.cover}}"
+        mode="aspectFill"
+        wx:if="{{result.cover}}"
+      />
+      <view class="cover-placeholder" wx:else>
+        <text>🎬</text>
+      </view>
+      <view class="result-meta">
+        <view class="platform-badge">{{platformLabel}}</view>
+        <text class="video-title">{{result.title || '无标题'}}</text>
+        <text class="video-author">👤 {{result.author}}</text>
+      </view>
+    </view>
+
+    <view class="divider" />
+
+    <!-- 下载按钮 -->
+    <view class="download-section">
+      <text class="section-title">选择清晰度下载</text>
+      <view class="download-list">
+        <view
+          class="download-item"
+          wx:for="{{result.videoUrls}}"
+          wx:key="quality"
+        >
+          <text class="quality-label">{{item.quality}}</text>
+          <view class="download-btns">
+            <view
+              class="btn-download {{downloadingIndex === index ? 'downloading' : ''}}"
+              bindtap="downloadVideo"
+              data-url="{{item.url}}"
+              data-quality="{{item.quality}}"
+              data-index="{{index}}"
+            >
+              {{downloadingIndex === index ? '下载中...' : '⬇️ 下载'}}
+            </view>
+            <view class="btn-copy" bindtap="copyUrl" data-url="{{item.url}}">
+              📋 复制链接
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- B站音频 -->
+      <view class="download-item" wx:if="{{result.audioUrl}}">
+        <text class="quality-label">🎵 音频</text>
+        <view class="download-btns">
+          <view class="btn-download" bindtap="downloadVideo" data-url="{{result.audioUrl}}" data-quality="音频" data-index="-1">
+            ⬇️ 下载音频
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- B站提示 -->
+    <view class="tip-box" wx:if="{{result.platform === 'bilibili'}}">
+      <text>⚠️ B站视频音视频分离，需分别下载后用工具合并</text>
+    </view>
+  </view>
+
+  <!-- 使用说明 -->
+  <view class="card guide-card">
+    <text class="guide-title">📖 使用说明</text>
+    <view class="guide-steps">
+      <view class="step" wx:for="{{steps}}" wx:key="index">
+        <view class="step-num">{{index + 1}}</view>
+        <text class="step-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+</view>
