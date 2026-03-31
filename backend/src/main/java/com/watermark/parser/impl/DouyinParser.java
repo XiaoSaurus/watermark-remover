@@ -15,10 +15,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * 抖音无水印解析器
- * 核心方案：从 iesdouyin H5 页面提取 window._ROUTER_DATA，获取真实视频地址
- */
 @Slf4j
 @Component
 public class DouyinParser implements VideoParser {
@@ -40,137 +36,80 @@ public class DouyinParser implements VideoParser {
         if (videoId == null) throw new Exception("无法提取抖音视频ID，URL=" + realUrl);
         log.info("抖音视频ID: {}", videoId);
 
-        // 3. 从 iesdouyin H5 页面提取 _ROUTER_DATA（最稳定方案）
+        // 3. 用干净的 URL 请求 H5 页面（不带多余参数，避免重定向超时）
         VideoInfo info = parseFromRouterData(videoId, url);
         if (info != null) return info;
 
-        // 4. 降级：旧版 iesdouyin API
-        info = tryLegacyApi(videoId, url);
-        if (info != null) return info;
-
-        throw new Exception("抖音视频解析失败，请稍后重试");
+        throw new Exception("抖音视频解析失败，请稍后重试（videoId=" + videoId + "）");
     }
 
-    /**
-     * 主方案：从 iesdouyin H5 页面的 window._ROUTER_DATA 提取视频信息
-     */
-    private VideoInfo parseFromRouterData(String videoId, String shareUrl) {
-        try {
-            String pageUrl = "https://www.iesdouyin.com/share/video/" + videoId + "/";
-            String html = HttpUtil.get(pageUrl, HttpUtil.UA_MOBILE);
+    private VideoInfo parseFromRouterData(String videoId, String shareUrl) throws Exception {
+        // 用干净的 videoId 直接构造 URL，避免带参数的长 URL 触发额外重定向
+        String pageUrl = "https://www.iesdouyin.com/share/video/" + videoId + "/";
+        log.info("请求 H5 页面: {}", pageUrl);
 
-            // 提取 window._ROUTER_DATA = {...}
-            Pattern p = Pattern.compile("<script>window\\._ROUTER_DATA\\s*=\\s*(.+?)</script>",
-                    Pattern.DOTALL);
-            Matcher m = p.matcher(html);
-            if (!m.find()) {
-                log.warn("未找到 _ROUTER_DATA");
-                return null;
-            }
+        String html = HttpUtil.get(pageUrl, HttpUtil.UA_MOBILE);
+        log.info("H5 页面长度: {}", html.length());
 
-            JSONObject data = JSON.parseObject(m.group(1));
-            JSONObject loaderData = data.getJSONObject("loaderData");
-            if (loaderData == null) return null;
-
-            // key 可能是 "video_(id)/page" 或 "video_[id]/page"
-            JSONObject pageData = null;
-            for (String key : loaderData.keySet()) {
-                if (key.contains("video") && key.contains("page")) {
-                    pageData = loaderData.getJSONObject(key);
-                    break;
-                }
-            }
-            if (pageData == null) return null;
-
-            JSONObject videoInfoRes = pageData.getJSONObject("videoInfoRes");
-            if (videoInfoRes == null) return null;
-
-            JSONArray itemList = videoInfoRes.getJSONArray("item_list");
-            if (itemList == null || itemList.isEmpty()) return null;
-
-            JSONObject item = itemList.getJSONObject(0);
-            String title = item.getString("desc");
-            String author = item.getJSONObject("author").getString("nickname");
-
-            JSONObject video = item.getJSONObject("video");
-            String cover = "";
-            try {
-                cover = video.getJSONObject("cover").getJSONArray("url_list").getString(0);
-            } catch (Exception ignored) {}
-
-            List<VideoUrl> urls = new ArrayList<>();
-
-            // play_addr 替换 playwm -> play 得到无水印
-            JSONObject playAddr = video.getJSONObject("play_addr");
-            if (playAddr != null) {
-                JSONArray urlList = playAddr.getJSONArray("url_list");
-                if (urlList != null && !urlList.isEmpty()) {
-                    String u = urlList.getString(0).replace("playwm", "play");
-                    urls.add(new VideoUrl("无水印高清", u));
-                }
-            }
-
-            // download_addr 通常也是无水印
-            JSONObject downloadAddr = video.getJSONObject("download_addr");
-            if (downloadAddr != null) {
-                JSONArray urlList = downloadAddr.getJSONArray("url_list");
-                if (urlList != null && !urlList.isEmpty()) {
-                    String u = urlList.getString(0);
-                    if (urls.isEmpty()) urls.add(new VideoUrl("无水印", u));
-                }
-            }
-
-            if (urls.isEmpty()) return null;
-
-            return VideoInfo.builder()
-                    .platform("douyin")
-                    .title(title)
-                    .author(author)
-                    .cover(cover)
-                    .videoUrls(urls)
-                    .shareUrl(shareUrl)
-                    .build();
-
-        } catch (Exception e) {
-            log.warn("_ROUTER_DATA 解析失败: {}", e.getMessage());
-            return null;
+        Pattern p = Pattern.compile("<script>window\\._ROUTER_DATA\\s*=\\s*(.+?)</script>",
+                Pattern.DOTALL);
+        Matcher m = p.matcher(html);
+        if (!m.find()) {
+            log.warn("未找到 _ROUTER_DATA，页面前200字符: {}", html.substring(0, Math.min(200, html.length())));
+            throw new Exception("抖音页面结构变化，未找到视频数据");
         }
-    }
 
-    /**
-     * 降级方案：旧版 iesdouyin API
-     */
-    private VideoInfo tryLegacyApi(String videoId, String shareUrl) {
+        JSONObject data = JSON.parseObject(m.group(1));
+        JSONObject loaderData = data.getJSONObject("loaderData");
+        if (loaderData == null) throw new Exception("loaderData 为空");
+
+        JSONObject pageData = null;
+        for (String key : loaderData.keySet()) {
+            if (key.contains("video") && key.contains("page")) {
+                pageData = loaderData.getJSONObject(key);
+                break;
+            }
+        }
+        if (pageData == null) throw new Exception("未找到 video page 数据");
+
+        JSONObject videoInfoRes = pageData.getJSONObject("videoInfoRes");
+        if (videoInfoRes == null) throw new Exception("videoInfoRes 为空");
+
+        JSONArray itemList = videoInfoRes.getJSONArray("item_list");
+        if (itemList == null || itemList.isEmpty()) throw new Exception("item_list 为空");
+
+        JSONObject item = itemList.getJSONObject(0);
+        String title = item.getString("desc");
+        String author = "";
+        try { author = item.getJSONObject("author").getString("nickname"); } catch (Exception ignored) {}
+
+        JSONObject video = item.getJSONObject("video");
+        String cover = "";
+        try { cover = video.getJSONObject("cover").getJSONArray("url_list").getString(0); } catch (Exception ignored) {}
+
+        List<VideoUrl> urls = new ArrayList<>();
         try {
-            String apiUrl = "https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=" + videoId;
-            String body = HttpUtil.get(apiUrl, HttpUtil.UA_MOBILE);
-            JSONObject json = JSON.parseObject(body);
-            if (json == null) return null;
-            JSONArray itemList = json.getJSONArray("item_list");
-            if (itemList == null || itemList.isEmpty()) return null;
-
-            JSONObject item = itemList.getJSONObject(0);
-            String title = item.getString("desc");
-            String author = item.getJSONObject("author").getString("nickname");
-            JSONObject video = item.getJSONObject("video");
-            String cover = "";
-            try { cover = video.getJSONObject("cover").getJSONArray("url_list").getString(0); } catch (Exception ignored) {}
-
-            List<VideoUrl> urls = new ArrayList<>();
             JSONObject playAddr = video.getJSONObject("play_addr");
             if (playAddr != null) {
                 String u = playAddr.getJSONArray("url_list").getString(0).replace("playwm", "play");
+                urls.add(new VideoUrl("无水印高清", u));
+            }
+        } catch (Exception ignored) {}
+
+        try {
+            JSONObject downloadAddr = video.getJSONObject("download_addr");
+            if (downloadAddr != null && urls.isEmpty()) {
+                String u = downloadAddr.getJSONArray("url_list").getString(0);
                 urls.add(new VideoUrl("无水印", u));
             }
-            if (urls.isEmpty()) return null;
+        } catch (Exception ignored) {}
 
-            return VideoInfo.builder()
-                    .platform("douyin").title(title).author(author)
-                    .cover(cover).videoUrls(urls).shareUrl(shareUrl).build();
-        } catch (Exception e) {
-            log.warn("旧版 API 失败: {}", e.getMessage());
-            return null;
-        }
+        if (urls.isEmpty()) throw new Exception("未获取到视频下载地址");
+
+        log.info("解析成功: title={}, urls={}", title, urls.size());
+        return VideoInfo.builder()
+                .platform("douyin").title(title).author(author)
+                .cover(cover).videoUrls(urls).shareUrl(shareUrl).build();
     }
 
     private String extractVideoId(String url) {
