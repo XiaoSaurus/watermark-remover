@@ -1,16 +1,18 @@
-<view class="page" style="--color-primary:{{theme.primary}};--color-primary-light:{{theme.primaryLight}};--gradient-btn:{{theme.gradBtn}};--gradient-bg:{{theme.gradBg}}">
+<view class="page" style="--color-primary:{{theme.primary}};--gradient-btn:{{theme.gradBtn}};--gradient-bg:{{theme.gradBg}}">
 
-  <!-- Hero Banner -->
+  <!-- Hero -->
   <view class="hero" style="background:{{theme.gradBg}}">
     <view class="hero-top-bar">
       <view class="hero-badge">✨ 免费 · 无广告 · 无水印</view>
-      <!-- 主题切换按钮 -->
       <view class="theme-btn" bindtap="showThemePicker">🎨</view>
     </view>
     <text class="hero-title">短视频去水印</text>
-    <text class="hero-sub">抖音 · 快手 · B站 · 微博 · 小红书</text>
+    <text class="hero-sub">粘贴链接，一键去水印下载</text>
     <view class="platform-chips">
-      <view class="chip" wx:for="{{platforms}}" wx:key="name">{{item.icon}} {{item.name}}</view>
+      <view class="chip" wx:for="{{platforms}}" wx:key="name">
+        <image class="chip-icon" src="{{item.iconPath}}" mode="aspectFit" wx:if="{{item.iconPath}}" />
+        <text>{{item.name}}</text>
+      </view>
     </view>
   </view>
 
@@ -27,17 +29,15 @@
     />
     <view class="btn-row">
       <view class="btn-clear-sm" bindtap="clearInput" wx:if="{{inputUrl}}">🗑 清空</view>
-      <view class="parse-btn-wrap">
-        <button
-          class="btn-parse {{loading ? 'btn-parse-loading' : ''}}"
-          style="background:{{loading ? 'linear-gradient(135deg,#999,#bbb)' : theme.gradBtn}}"
-          bindtap="handleParse"
-          disabled="{{!inputUrl || loading}}"
-          loading="{{loading}}"
-        >
-          <text wx:if="{{!loading}}">🚀 立即解析</text>
-          <text wx:else>解析中...</text>
-        </button>
+      <view
+        class="btn-parse {{loading ? 'btn-parse-loading' : ''}}"
+        style="background:{{loading ? 'linear-gradient(135deg,#aaa,#ccc)' : theme.gradBtn}}"
+        bindtap="handleParse"
+      >
+        <view class="btn-parse-inner">
+          <text wx:if="{{loading}}">⏳ 解析中...</text>
+          <text wx:else>🚀 立即解析</text>
+        </view>
       </view>
     </view>
   </view>
@@ -55,10 +55,7 @@
         <text class="result-author">👤 {{result.author || '未知作者'}}</text>
       </view>
     </view>
-
     <view class="divider" />
-
-    <!-- 下载进度 -->
     <view class="progress-block" wx:if="{{downloadStatus}}">
       <view class="progress-info-row">
         <text class="progress-label-text" style="color:{{theme.primary}}">
@@ -72,8 +69,6 @@
         <view class="progress-bar-fill" style="width:{{downloadStatus==='saving'?100:downloadProgress}}%;background:{{theme.gradBtn}}"></view>
       </view>
     </view>
-
-    <!-- 下载选项 -->
     <view class="download-section">
       <view class="section-title">📥 选择清晰度下载</view>
       <view class="quality-list">
@@ -87,9 +82,7 @@
               class="btn-dl {{downloadingIndex === index ? 'btn-dl-loading' : ''}}"
               style="{{downloadingIndex !== index ? 'background:' + theme.gradBtn : ''}}"
               bindtap="downloadVideo"
-              data-url="{{item.url}}"
-              data-quality="{{item.quality}}"
-              data-index="{{index}}"
+              data-url="{{item.url}}" data-quality="{{item.quality}}" data-index="{{index}}"
             >
               <text wx:if="{{downloadingIndex === index}}">{{downloadProgress}}%</text>
               <text wx:else>⬇️ 下载</text>
@@ -99,7 +92,6 @@
         </view>
       </view>
     </view>
-
     <view class="tip-box" wx:if="{{result.platform === 'bilibili'}}">
       ⚠️ B站视频音视频分离，需分别下载后合并
     </view>
@@ -110,8 +102,11 @@
     <view class="guide-title">📖 使用说明</view>
     <view class="guide-steps">
       <view class="guide-step" wx:for="{{steps}}" wx:key="index">
-        <view class="step-num" style="background:{{theme.gradBtn}}">{{index + 1}}</view>
-        <text class="step-text">{{item}}</text>
+        <image class="step-icon" src="{{item.icon}}" mode="aspectFit" />
+        <view class="step-content">
+          <text class="step-title">{{item.title}}</text>
+          <text class="step-desc">{{item.desc}}</text>
+        </view>
       </view>
     </view>
   </view>
@@ -132,15 +127,17 @@
       <view class="theme-panel-title">🎨 选择主题</view>
       <view class="theme-list">
         <view
-          wx:for="{{themeList}}"
-          wx:key="key"
+          wx:for="{{themeList}}" wx:key="key"
           class="theme-item {{currentThemeKey === item.key ? 'theme-item-active' : ''}}"
-          bindtap="selectTheme"
-          data-key="{{item.key}}"
+          style="{{currentThemeKey === item.key ? 'border-color:' + item.primary : ''}}"
+          bindtap="selectTheme" data-key="{{item.key}}"
         >
-          <view class="theme-color-dot" style="background:{{item.gradBtn}}"></view>
-          <text class="theme-name">{{item.emoji}} {{item.name}}</text>
-          <text class="theme-check" wx:if="{{currentThemeKey === item.key}}">✓</text>
+          <view class="theme-color-preview" style="background:{{item.gradBtn}}"></view>
+          <view class="theme-info">
+            <text class="theme-name">{{item.emoji}} {{item.name}}</text>
+            <text class="theme-desc">{{item.desc}}</text>
+          </view>
+          <view class="theme-check" style="background:{{item.gradBtn}}" wx:if="{{currentThemeKey === item.key}}">✓</view>
         </view>
       </view>
     </view>

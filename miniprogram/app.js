@@ -2,45 +2,50 @@ App({
   globalData: {
     apiBase: 'http://10.16.247.27:8080',
     history: [],
-    theme: 'purple'   // 当前主题
+    theme: 'purple'
   },
 
-  // 主题配置
+  // 5套柔和主题
   themes: {
     purple: {
-      name: '紫罗兰', emoji: '💜',
-      primary: '#6c63ff', primaryLight: '#8b85ff',
-      gradBtn: 'linear-gradient(135deg,#6c63ff,#764ba2)',
-      gradBg:  'linear-gradient(135deg,#667eea 0%,#764ba2 100%)',
-      navBg: '#6c63ff'
+      name: '紫罗兰', emoji: '💜', desc: '经典紫色，沉稳优雅',
+      primary: '#7c6ff7',
+      primaryLight: '#a09af9',
+      gradBtn: 'linear-gradient(135deg,#7c6ff7,#9b59b6)',
+      gradBg:  'linear-gradient(135deg,#7c6ff7 0%,#9b59b6 100%)',
+      navBg:   '#7c6ff7'
     },
-    ocean: {
-      name: '深海蓝', emoji: '🌊',
-      primary: '#0ea5e9', primaryLight: '#38bdf8',
-      gradBtn: 'linear-gradient(135deg,#0ea5e9,#0284c7)',
-      gradBg:  'linear-gradient(135deg,#0ea5e9 0%,#0369a1 100%)',
-      navBg: '#0ea5e9'
+    slate: {
+      name: '深空蓝', emoji: '🌌', desc: '深邃蓝调，专业沉稳',
+      primary: '#4a7fa5',
+      primaryLight: '#6b9fc4',
+      gradBtn: 'linear-gradient(135deg,#4a7fa5,#2c5f82)',
+      gradBg:  'linear-gradient(135deg,#5b8db8 0%,#2c5f82 100%)',
+      navBg:   '#4a7fa5'
+    },
+    sage: {
+      name: '抹茶绿', emoji: '🍵', desc: '清新自然，舒适护眼',
+      primary: '#4a9e7f',
+      primaryLight: '#6bbfa0',
+      gradBtn: 'linear-gradient(135deg,#4a9e7f,#2d7a5f)',
+      gradBg:  'linear-gradient(135deg,#5aaf8e 0%,#2d7a5f 100%)',
+      navBg:   '#4a9e7f'
     },
     rose: {
-      name: '玫瑰红', emoji: '🌹',
-      primary: '#f43f5e', primaryLight: '#fb7185',
-      gradBtn: 'linear-gradient(135deg,#f43f5e,#e11d48)',
-      gradBg:  'linear-gradient(135deg,#f43f5e 0%,#be123c 100%)',
-      navBg: '#f43f5e'
+      name: '玫瑰粉', emoji: '🌸', desc: '温柔粉调，清新甜美',
+      primary: '#c0607a',
+      primaryLight: '#d4849a',
+      gradBtn: 'linear-gradient(135deg,#c0607a,#a04060)',
+      gradBg:  'linear-gradient(135deg,#cc7088 0%,#a04060 100%)',
+      navBg:   '#c0607a'
     },
-    forest: {
-      name: '森林绿', emoji: '🌿',
-      primary: '#10b981', primaryLight: '#34d399',
-      gradBtn: 'linear-gradient(135deg,#10b981,#059669)',
-      gradBg:  'linear-gradient(135deg,#10b981 0%,#047857 100%)',
-      navBg: '#10b981'
-    },
-    sunset: {
-      name: '日落橙', emoji: '🌅',
-      primary: '#f97316', primaryLight: '#fb923c',
-      gradBtn: 'linear-gradient(135deg,#f97316,#ea580c)',
-      gradBg:  'linear-gradient(135deg,#f97316 0%,#c2410c 100%)',
-      navBg: '#f97316'
+    amber: {
+      name: '琥珀橙', emoji: '🍂', desc: '温暖橙调，活力秋意',
+      primary: '#c07830',
+      primaryLight: '#d49050',
+      gradBtn: 'linear-gradient(135deg,#c07830,#a05820)',
+      gradBg:  'linear-gradient(135deg,#cc8840 0%,#a05820 100%)',
+      navBg:   '#c07830'
     }
   },
 
