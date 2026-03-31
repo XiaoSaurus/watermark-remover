@@ -1,29 +1,29 @@
-// 历史记录管理 - 统一走后端 MySQL 存储
-import { historyApi } from '@/api/watermark'
+import { parseHistoryApi, historyApi } from '@/api/watermark'
 
-export async function getHistory(page = 0, size = 20) {
-  const res = await historyApi.list(page, size)
-  return res.data  // Page 对象
+// 解析历史
+export async function saveParse(item) {
+  return parseHistoryApi.save({ ...item, client: 'web' })
+}
+export async function getParseHistory(page=0, size=20) {
+  return parseHistoryApi.list(page, size)
+}
+export async function removeParseHistory(id) {
+  return parseHistoryApi.remove(id)
+}
+export async function clearParseHistory() {
+  return parseHistoryApi.clear()
 }
 
-export async function addHistory(item) {
-  await historyApi.save({
-    platform: item.platform,
-    title: item.title,
-    cover: item.cover,
-    quality: item.quality,
-    videoUrl: item.url,
-    shareUrl: item.shareUrl || '',
-    status: item.status,
-    errMsg: item.errMsg || '',
-    client: 'web'
-  })
+// 下载历史
+export async function saveDownload(item) {
+  return historyApi.save({ ...item, client: 'web' })
 }
-
-export async function removeHistory(id) {
-  await historyApi.remove(id)
+export async function getDownloadHistory(page=0, size=20) {
+  return historyApi.list(page, size)
 }
-
-export async function clearHistory() {
-  await historyApi.clear()
+export async function removeDownloadHistory(id) {
+  return historyApi.remove(id)
+}
+export async function clearDownloadHistory() {
+  return historyApi.clear()
 }

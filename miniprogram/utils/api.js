@@ -15,41 +15,26 @@ function request(method, path, data) {
   })
 }
 
-function parseVideo(url) {
-  return request('POST', '/api/video/parse', { url })
-}
+function parseVideo(url) { return request('POST', '/api/video/parse', { url }) }
 
 function getDownloadUrl(videoUrl, filename) {
-  const encoded = encodeURIComponent(videoUrl)
-  const encodedName = encodeURIComponent(filename)
-  return `${app.globalData.apiBase}/api/video/download?url=${encoded}&filename=${encodedName}`
+  return `${app.globalData.apiBase}/api/video/download?url=${encodeURIComponent(videoUrl)}&filename=${encodeURIComponent(filename)}`
 }
 
-// 历史记录 API
-function saveHistory(item) {
-  return request('POST', '/api/history', {
-    platform: item.platform,
-    title: item.title,
-    cover: item.cover,
-    quality: item.quality,
-    videoUrl: item.url,
-    shareUrl: item.shareUrl || '',
-    status: item.status,
-    errMsg: item.errMsg || '',
-    client: 'miniprogram'
-  })
-}
+// 解析历史
+function saveParseHistory(item) { return request('POST', '/api/parse-history', { ...item, client: 'miniprogram' }) }
+function getParseHistory(page, size) { return request('GET', `/api/parse-history?page=${page||0}&size=${size||20}`) }
+function deleteParseHistory(id) { return request('DELETE', `/api/parse-history/${id}`) }
+function clearParseHistoryApi() { return request('DELETE', '/api/parse-history') }
 
-function getHistory(page, size) {
-  return request('GET', `/api/history?page=${page || 0}&size=${size || 20}`)
-}
+// 下载历史
+function saveDownloadHistory(item) { return request('POST', '/api/history', { ...item, client: 'miniprogram' }) }
+function getDownloadHistory(page, size) { return request('GET', `/api/history?page=${page||0}&size=${size||20}`) }
+function deleteDownloadHistory(id) { return request('DELETE', `/api/history/${id}`) }
+function clearDownloadHistoryApi() { return request('DELETE', '/api/history') }
 
-function deleteHistory(id) {
-  return request('DELETE', `/api/history/${id}`)
+module.exports = {
+  parseVideo, getDownloadUrl,
+  saveParseHistory, getParseHistory, deleteParseHistory, clearParseHistoryApi,
+  saveDownloadHistory, getDownloadHistory, deleteDownloadHistory, clearDownloadHistoryApi
 }
-
-function clearHistoryApi() {
-  return request('DELETE', '/api/history')
-}
-
-module.exports = { parseVideo, getDownloadUrl, saveHistory, getHistory, deleteHistory, clearHistoryApi }

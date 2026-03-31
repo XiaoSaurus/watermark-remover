@@ -1,5 +1,4 @@
-// pages/index/index.js
-const { parseVideo, getDownloadUrl, saveHistory } = require('../../utils/api')
+const { parseVideo, getDownloadUrl, saveParseHistory, saveDownloadHistory } = require('../../utils/api')
 const app = getApp()
 
 Page({
@@ -12,14 +11,8 @@ Page({
     downloadProgress: 0,
     downloadStatus: '',
     platforms: [
-      { name: '抖音', icon: '🎵' }, { name: '快手', icon: '⚡' },
-      { name: 'B站', icon: '📺' }, { name: '微博', icon: '🌐' }, { name: '小红书', icon: '📕' }
-    ],
-    steps: [
-      '打开抖音/快手/B站等 App，找到想下载的视频',
-      '点击「分享」→「复制链接」或「复制文案」',
-      '粘贴到上方输入框，点击「立即解析」',
-      '选择清晰度，点击「下载」保存到相册'
+      { name:'抖音',icon:'🎵' },{ name:'快手',icon:'⚡' },
+      { name:'B站',icon:'📺' },{ name:'微博',icon:'🌐' },{ name:'小红书',icon:'📕' }
     ]
   },
 
@@ -34,16 +27,24 @@ Page({
       const res = await parseVideo(url)
       if (res.code === 200) {
         const platformMap = {
-          douyin: '🎵 抖音', kuaishou: '⚡ 快手',
-          bilibili: '📺 B站', weibo: '🌐 微博', xiaohongshu: '📕 小红书'
+          douyin:'🎵 抖音',kuaishou:'⚡ 快手',bilibili:'📺 B站',weibo:'🌐 微博',xiaohongshu:'📕 小红书'
         }
         this.setData({ result: res.data, platformLabel: platformMap[res.data.platform] || res.data.platform })
         wx.showToast({ title: '解析成功', icon: 'success' })
+        // 写解析历史
+        saveParseHistory({
+          platform: res.data.platform,
+          title: res.data.title,
+          cover: res.data.cover,
+          author: res.data.author,
+          shareUrl: url,
+          videoUrls: res.data.videoUrls
+        }).catch(() => {})
       } else {
         wx.showToast({ title: res.message || '解析失败', icon: 'none', duration: 3000 })
       }
     } catch (err) {
-      wx.showToast({ title: err.message || '网络错误，请检查服务器地址', icon: 'none', duration: 3000 })
+      wx.showToast({ title: err.message || '网络错误', icon: 'none', duration: 3000 })
     } finally {
       this.setData({ loading: false })
     }
@@ -51,13 +52,16 @@ Page({
 
   downloadVideo(e) {
     const { url, quality, index } = e.currentTarget.dataset
-    if (this.data.downloadingIndex !== -1) {
-      wx.showToast({ title: '请等待当前下载完成', icon: 'none' })
-      return
-    }
+    if (this.data.downloadingIndex !== -1) return
     const filename = `video_${quality}_${Date.now()}.mp4`
     const downloadUrl = getDownloadUrl(url, filename)
     const self = this
+    const base = {
+      platform: self.data.result.platform,
+      title: self.data.result.title,
+      cover: self.data.result.cover,
+      quality, videoUrl: url
+    }
 
     self.setData({ downloadingIndex: index, downloadProgress: 0, downloadStatus: 'downloading' })
 
@@ -70,68 +74,34 @@ Page({
             filePath: res.tempFilePath,
             success() {
               wx.showToast({ title: '已保存到相册 ✅', icon: 'success', duration: 2000 })
-              // ✅ 传入 url 和 status
-              saveHistory({
-                title: self.data.result.title,
-                platform: self.data.result.platform,
-                cover: self.data.result.cover,
-                quality,
-                url,          // 原始视频地址，供再次下载
-                status: 'success'
-              })
+              saveDownloadHistory({ ...base, status: 'success' }).catch(() => {})
               self._resetDownload()
             },
             fail(err) {
+              saveDownloadHistory({ ...base, status: 'fail', errMsg: '保存相册失败' }).catch(() => {})
               self._resetDownload()
-              saveHistory({
-                title: self.data.result.title,
-                platform: self.data.result.platform,
-                cover: self.data.result.cover,
-                quality, url,
-                status: 'fail',
-                errMsg: '保存相册失败'
-              })
               if (err.errMsg && err.errMsg.includes('auth deny')) {
                 wx.showModal({
-                  title: '需要相册权限', content: '请授权访问相册以保存视频',
+                  title: '需要相册权限', content: '请授权访问相册',
                   confirmText: '去授权',
                   success(r) { if (r.confirm) wx.openSetting() }
                 })
-              } else {
-                wx.showToast({ title: '保存失败', icon: 'none', duration: 2000 })
               }
             }
           })
         } else {
-          wx.showToast({ title: '下载失败: HTTP ' + res.statusCode, icon: 'none' })
-          saveHistory({
-            title: self.data.result.title,
-            platform: self.data.result.platform,
-            cover: self.data.result.cover,
-            quality, url,
-            status: 'fail',
-            errMsg: 'HTTP ' + res.statusCode
-          })
+          saveDownloadHistory({ ...base, status: 'fail', errMsg: 'HTTP ' + res.statusCode }).catch(() => {})
+          wx.showToast({ title: '下载失败 HTTP ' + res.statusCode, icon: 'none' })
           self._resetDownload()
         }
       },
       fail(err) {
-        wx.showToast({ title: '下载失败: ' + (err.errMsg || '未知错误'), icon: 'none', duration: 3000 })
-        saveHistory({
-          title: self.data.result.title,
-          platform: self.data.result.platform,
-          cover: self.data.result.cover,
-          quality, url,
-          status: 'fail',
-          errMsg: err.errMsg || '网络错误'
-        })
+        saveDownloadHistory({ ...base, status: 'fail', errMsg: err.errMsg || '网络错误' }).catch(() => {})
+        wx.showToast({ title: '下载失败', icon: 'none' })
         self._resetDownload()
       }
     })
-
-    task.onProgressUpdate(res => {
-      self.setData({ downloadProgress: res.progress })
-    })
+    task.onProgressUpdate(res => { self.setData({ downloadProgress: res.progress }) })
   },
 
   _resetDownload() {
@@ -139,10 +109,7 @@ Page({
   },
 
   copyUrl(e) {
-    const { url } = e.currentTarget.dataset
-    wx.setClipboardData({
-      data: url,
-      success: () => wx.showToast({ title: '链接已复制', icon: 'success' })
-    })
+    wx.setClipboardData({ data: e.currentTarget.dataset.url,
+      success: () => wx.showToast({ title: '链接已复制', icon: 'success' }) })
   }
 })

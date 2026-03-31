@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data @Entity @Builder @NoArgsConstructor @AllArgsConstructor
-@Table(name = "download_history")
-public class DownloadHistory {
+@Table(name = "parse_history")
+public class ParseHistory {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,22 +24,18 @@ public class DownloadHistory {
     @Column(length = 1024)
     private String cover;
 
-    @Column(length = 64)
-    private String quality;
+    @Column(length = 1024)
+    private String author;
 
-    @Column(length = 2048)
-    private String videoUrl;
-
+    /** 原始分享链接 */
     @Column(length = 1024)
     private String shareUrl;
 
-    /** success / fail */
-    @Column(length = 16)
-    private String status;
+    /** 视频地址列表，JSON 存储 */
+    @Column(columnDefinition = "TEXT")
+    private String videoUrlsJson;
 
-    @Column(length = 256)
-    private String errMsg;
-
+    /** 客户端：web / miniprogram */
     @Column(length = 32)
     private String client;
 

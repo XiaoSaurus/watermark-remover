@@ -1,18 +1,17 @@
 <view class="container">
   <view class="header">
-    <text class="header-title">📋 下载历史</text>
+    <text class="header-title">📥 下载历史</text>
     <view class="btn-clear-all" bindtap="clearAll" wx:if="{{list.length > 0}}">清空</view>
   </view>
 
   <view class="loading-wrap" wx:if="{{pageLoading}}">
-    <view class="loading-dot"></view>
     <text class="loading-text">加载中...</text>
   </view>
 
   <view class="empty" wx:elif="{{list.length === 0}}">
     <text class="empty-icon">📭</text>
     <text class="empty-text">暂无下载记录</text>
-    <text class="empty-sub">去解析一个视频吧～</text>
+    <text class="empty-sub">去解析历史中下载视频吧～</text>
   </view>
 
   <view class="list" wx:else>
@@ -26,32 +25,13 @@
           <text class="tag-quality">{{item.quality}}</text>
           <text class="tag-status tag-success" wx:if="{{item.status === 'success'}}">✅ 成功</text>
           <text class="tag-status tag-fail" wx:elif="{{item.status === 'fail'}}">❌ 失败</text>
-          <text class="tag-status tag-unknown" wx:else>⏺ 未知</text>
         </view>
         <view class="item-bottom">
           <text class="item-time">{{item.timeStr}}</text>
           <text class="item-errmsg" wx:if="{{item.status === 'fail' && item.errMsg}}">{{item.errMsg}}</text>
         </view>
       </view>
-      <view class="item-actions">
-        <view
-          class="btn-redownload {{downloadingId === item.id ? 'btn-downloading' : ''}}"
-          bindtap="reDownload"
-          data-item="{{item}}"
-        >
-          <text wx:if="{{downloadingId === item.id}}">{{downloadProgress}}%</text>
-          <text wx:else>下载</text>
-        </view>
-        <view class="btn-delete" bindtap="deleteItem" data-id="{{item.id}}">删除</view>
-      </view>
-    </view>
-  </view>
-
-  <!-- 悬浮进度条 -->
-  <view class="float-progress" wx:if="{{downloadStatus}}">
-    <text class="float-label">{{downloadStatus === 'saving' ? '⏳ 保存中...' : '⬇️ 下载中 ' + downloadProgress + '%'}}</text>
-    <view class="progress-bar-bg">
-      <view class="progress-bar-fill" style="width: {{downloadStatus === 'saving' ? 100 : downloadProgress}}%"></view>
+      <view class="btn-delete" bindtap="deleteItem" data-id="{{item.id}}">删除</view>
     </view>
   </view>
 </view>

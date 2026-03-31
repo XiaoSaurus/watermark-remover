@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/parse-history/parse-history",
     "pages/history/history"
   ],
   "window": {
@@ -18,13 +19,19 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "解析下载",
+        "text": "解析",
         "iconPath": "images/home.png",
         "selectedIconPath": "images/home_active.png"
       },
       {
+        "pagePath": "pages/parse-history/parse-history",
+        "text": "解析历史",
+        "iconPath": "images/parse.png",
+        "selectedIconPath": "images/parse_active.png"
+      },
+      {
         "pagePath": "pages/history/history",
-        "text": "历史记录",
+        "text": "下载历史",
         "iconPath": "images/history.png",
         "selectedIconPath": "images/history_active.png"
       }

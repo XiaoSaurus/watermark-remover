@@ -1,0 +1,36 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-03-31T23:45:17.566+08:00  INFO 23112 --- [           main] c.watermark.WatermarkRemoverApplication  : Starting WatermarkRemoverApplication v1.0.0 using Java 17.0.12 with PID 23112 (C:\Users\Administrator\.qclaw\workspace\watermark-remover\backend\target\watermark-remover-1.0.0.jar started by Administrator in C:\Users\Administrator\.qclaw\workspace\watermark-remover\backend\target)
+2026-03-31T23:45:17.568+08:00  INFO 23112 --- [           main] c.watermark.WatermarkRemoverApplication  : No active profile set, falling back to 1 default profile: "default"
+2026-03-31T23:45:18.206+08:00  INFO 23112 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-31T23:45:18.256+08:00  INFO 23112 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 43 ms. Found 2 JPA repository interfaces.
+2026-03-31T23:45:18.682+08:00  INFO 23112 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-03-31T23:45:18.683+08:00  INFO 23112 --- [           main] o.a.catalina.core.AprLifecycleListener   : An older version [1.2.39] of the Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [2.0.5]
+2026-03-31T23:45:18.683+08:00  INFO 23112 --- [           main] o.a.catalina.core.AprLifecycleListener   : Loaded Apache Tomcat Native library [1.2.39] using APR version [1.7.4].
+2026-03-31T23:45:18.686+08:00  INFO 23112 --- [           main] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 3.0.11 19 Sep 2023]
+2026-03-31T23:45:18.692+08:00  INFO 23112 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-03-31T23:45:18.692+08:00  INFO 23112 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-03-31T23:45:18.726+08:00  INFO 23112 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-03-31T23:45:18.727+08:00  INFO 23112 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1094 ms
+2026-03-31T23:45:18.894+08:00  INFO 23112 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-31T23:45:18.962+08:00  INFO 23112 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.3.1.Final
+2026-03-31T23:45:19.001+08:00  INFO 23112 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-03-31T23:45:19.231+08:00  INFO 23112 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-31T23:45:19.262+08:00  INFO 23112 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-03-31T23:45:19.450+08:00  INFO 23112 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@636dbfe7
+2026-03-31T23:45:19.456+08:00  INFO 23112 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-03-31T23:45:19.526+08:00  WARN 23112 --- [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-31T23:45:19.527+08:00  WARN 23112 --- [           main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-03-31T23:45:20.337+08:00  INFO 23112 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-31T23:45:20.420+08:00  INFO 23112 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-31T23:45:20.644+08:00  INFO 23112 --- [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-31T23:45:21.251+08:00  WARN 23112 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-31T23:45:21.567+08:00  INFO 23112 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2026-03-31T23:45:21.579+08:00  INFO 23112 --- [           main] c.watermark.WatermarkRemoverApplication  : Started WatermarkRemoverApplication in 4.399 seconds (process running for 4.738)

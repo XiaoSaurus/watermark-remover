@@ -1,21 +1,21 @@
 package com.watermark.service.impl;
 
-import com.watermark.model.DownloadHistory;
-import com.watermark.repository.DownloadHistoryRepository;
-import com.watermark.service.HistoryService;
+import com.watermark.model.ParseHistory;
+import com.watermark.repository.ParseHistoryRepository;
+import com.watermark.service.ParseHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service @RequiredArgsConstructor
-public class HistoryServiceImpl implements HistoryService {
+public class ParseHistoryServiceImpl implements ParseHistoryService {
 
-    private final DownloadHistoryRepository repo;
+    private final ParseHistoryRepository repo;
 
-    @Override public DownloadHistory save(DownloadHistory h) { return repo.save(h); }
+    @Override public ParseHistory save(ParseHistory h) { return repo.save(h); }
 
-    @Override public Page<DownloadHistory> list(int page, int size) {
+    @Override public Page<ParseHistory> list(int page, int size) {
         return repo.findByDeletedFalseOrderByCreatedAtDesc(PageRequest.of(page, size));
     }
 
