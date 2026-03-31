@@ -1,32 +1,29 @@
-// 历史记录管理（localStorage 持久化）
-const STORAGE_KEY = 'wm_download_history'
-const MAX_ITEMS = 50
+// 历史记录管理 - 统一走后端 MySQL 存储
+import { historyApi } from '@/api/watermark'
 
-export function getHistory() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-  } catch {
-    return []
-  }
+export async function getHistory(page = 0, size = 20) {
+  const res = await historyApi.list(page, size)
+  return res.data  // Page 对象
 }
 
-/**
- * @param {object} item
- * @param {string} item.title
- * @param {string} item.platform
- * @param {string} item.cover
- * @param {string} item.quality
- * @param {string} item.url        - 原始视频地址（用于再次下载）
- * @param {'success'|'fail'} item.status
- * @param {string} [item.errMsg]   - 失败时的错误信息
- */
-export function addHistory(item) {
-  const list = getHistory()
-  list.unshift({ ...item, time: Date.now() })
-  if (list.length > MAX_ITEMS) list.pop()
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(list))
+export async function addHistory(item) {
+  await historyApi.save({
+    platform: item.platform,
+    title: item.title,
+    cover: item.cover,
+    quality: item.quality,
+    videoUrl: item.url,
+    shareUrl: item.shareUrl || '',
+    status: item.status,
+    errMsg: item.errMsg || '',
+    client: 'web'
+  })
 }
 
-export function clearHistory() {
-  localStorage.removeItem(STORAGE_KEY)
+export async function removeHistory(id) {
+  await historyApi.remove(id)
+}
+
+export async function clearHistory() {
+  await historyApi.clear()
 }

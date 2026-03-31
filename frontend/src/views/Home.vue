@@ -174,7 +174,7 @@ function downloadVideo(url, quality, idx) {
     }
   }
 
-  xhr.onload = () => {
+  xhr.onload = async () => {
     if (xhr.status === 200) {
       downloadStatus.value = 'saving'
       downloadProgress.value = 100
@@ -188,18 +188,18 @@ function downloadVideo(url, quality, idx) {
       URL.revokeObjectURL(a.href)
       ElMessage.success('下载完成！')
       // ✅ 写入历史 - 成功
-      addHistory({ ...historyBase, status: 'success' })
+      await addHistory({ ...historyBase, status: 'success' })
     } else {
       ElMessage.error('下载失败: HTTP ' + xhr.status)
       // ✅ 写入历史 - 失败
-      addHistory({ ...historyBase, status: 'fail', errMsg: 'HTTP ' + xhr.status })
+      await addHistory({ ...historyBase, status: 'fail', errMsg: 'HTTP ' + xhr.status })
     }
     resetDownload()
   }
 
-  xhr.onerror = () => {
+  xhr.onerror = async () => {
     ElMessage.error('下载失败，请检查网络')
-    addHistory({ ...historyBase, status: 'fail', errMsg: '网络错误' })
+    await addHistory({ ...historyBase, status: 'fail', errMsg: '网络错误' })
     resetDownload()
   }
 

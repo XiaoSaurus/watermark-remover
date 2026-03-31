@@ -4,14 +4,19 @@
     <view class="btn-clear-all" bindtap="clearAll" wx:if="{{list.length > 0}}">清空</view>
   </view>
 
-  <view class="empty" wx:if="{{list.length === 0}}">
+  <view class="loading-wrap" wx:if="{{pageLoading}}">
+    <view class="loading-dot"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <view class="empty" wx:elif="{{list.length === 0}}">
     <text class="empty-icon">📭</text>
     <text class="empty-text">暂无下载记录</text>
     <text class="empty-sub">去解析一个视频吧～</text>
   </view>
 
   <view class="list" wx:else>
-    <view class="item card" wx:for="{{list}}" wx:key="time">
+    <view class="item card" wx:for="{{list}}" wx:key="id">
       <image class="item-cover" src="{{item.cover}}" mode="aspectFill" wx:if="{{item.cover}}" />
       <view class="item-cover-placeholder" wx:else><text>🎬</text></view>
       <view class="item-info">
@@ -30,13 +35,14 @@
       </view>
       <view class="item-actions">
         <view
-          class="btn-redownload {{downloadingTime === item.time ? 'btn-downloading' : ''}}"
+          class="btn-redownload {{downloadingId === item.id ? 'btn-downloading' : ''}}"
           bindtap="reDownload"
           data-item="{{item}}"
         >
-          <text wx:if="{{downloadingTime === item.time}}">{{downloadProgress}}%</text>
-          <text wx:else>⬇️ 再下</text>
+          <text wx:if="{{downloadingId === item.id}}">{{downloadProgress}}%</text>
+          <text wx:else>下载</text>
         </view>
+        <view class="btn-delete" bindtap="deleteItem" data-id="{{item.id}}">删除</view>
       </view>
     </view>
   </view>
