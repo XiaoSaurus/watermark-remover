@@ -1,12 +1,17 @@
-<view class="container">
-  <!-- Hero -->
+<view class="page">
+  <!-- Hero Banner -->
   <view class="hero">
-    <text class="hero-title">✂️ 去水印下载</text>
-    <text class="hero-sub">支持抖音 · 快手 · B站 · 微博 · 小红书</text>
+    <view class="hero-badge">✨ 免费 · 无广告 · 无水印</view>
+    <text class="hero-title">短视频去水印</text>
+    <text class="hero-sub">抖音 · 快手 · B站 · 微博 · 小红书</text>
+    <view class="platform-chips">
+      <view class="chip" wx:for="{{platforms}}" wx:key="name">{{item.icon}} {{item.name}}</view>
+    </view>
   </view>
 
-  <!-- 输入区 -->
+  <!-- 输入卡片 -->
   <view class="card input-card">
+    <view class="input-label">🔗 粘贴分享链接</view>
     <textarea
       class="url-input"
       value="{{inputUrl}}"
@@ -16,59 +21,60 @@
       auto-height
     />
     <view class="btn-row">
-      <view class="btn-clear" bindtap="clearInput" wx:if="{{inputUrl}}">清空</view>
-      <button
-        class="btn-primary"
+      <view class="btn-clear-sm" bindtap="clearInput" wx:if="{{inputUrl}}">
+        🗑 清空
+      </view>
+      <button class="btn-primary btn-parse"
         bindtap="handleParse"
         disabled="{{!inputUrl || loading}}"
-        loading="{{loading}}"
-      >{{loading ? '解析中...' : '🚀 立即解析'}}</button>
-    </view>
-  </view>
-
-  <!-- 平台标签 -->
-  <view class="platforms">
-    <view class="platform-tag" wx:for="{{platforms}}" wx:key="name">
-      {{item.icon}} {{item.name}}
+        loading="{{loading}}">
+        {{loading ? '解析中...' : '🚀 立即解析'}}
+      </button>
     </view>
   </view>
 
   <!-- 解析结果 -->
   <view class="card result-card" wx:if="{{result}}">
+    <!-- 视频信息 -->
     <view class="result-header">
-      <image class="cover" src="{{result.cover}}" mode="aspectFill" wx:if="{{result.cover}}" />
-      <view class="cover-placeholder" wx:else><text>🎬</text></view>
+      <view class="cover-wrap">
+        <image class="cover-img" src="{{result.cover}}" mode="aspectFill" wx:if="{{result.cover}}" />
+        <view class="cover-placeholder" wx:else><text>🎬</text></view>
+        <view class="cover-platform-badge">{{platformLabel}}</view>
+      </view>
       <view class="result-meta">
-        <view class="platform-badge">{{platformLabel}}</view>
-        <text class="video-title">{{result.title || '无标题'}}</text>
-        <text class="video-author">👤 {{result.author}}</text>
+        <text class="result-title">{{result.title || '无标题'}}</text>
+        <text class="result-author">👤 {{result.author || '未知作者'}}</text>
       </view>
     </view>
 
     <view class="divider" />
 
-    <!-- 下载进度条 -->
-    <view class="progress-wrap" wx:if="{{downloadStatus}}">
-      <view class="progress-header">
-        <text class="progress-label">
+    <!-- 下载进度 -->
+    <view class="progress-block" wx:if="{{downloadStatus}}">
+      <view class="progress-info-row">
+        <text class="progress-label-text">
           {{downloadStatus === 'saving' ? '⏳ 保存到相册中...' : '⬇️ 下载中 ' + downloadProgress + '%'}}
         </text>
-        <text class="progress-pct">{{downloadStatus === 'saving' ? '' : downloadProgress + '%'}}</text>
+        <view class="progress-pct-badge">{{downloadStatus === 'saving' ? '100%' : downloadProgress + '%'}}</view>
       </view>
       <view class="progress-bar-bg">
-        <view class="progress-bar-fill" style="width: {{downloadProgress}}%"></view>
+        <view class="progress-bar-fill" style="width: {{downloadStatus === 'saving' ? 100 : downloadProgress}}%"></view>
       </view>
     </view>
 
-    <!-- 下载列表 -->
+    <!-- 下载选项 -->
     <view class="download-section">
-      <text class="section-title">选择清晰度下载</text>
-      <view class="download-list">
-        <view class="download-item" wx:for="{{result.videoUrls}}" wx:key="quality">
-          <text class="quality-label">{{item.quality}}</text>
-          <view class="download-btns">
+      <view class="section-title">📥 选择清晰度下载</view>
+      <view class="quality-list">
+        <view class="quality-row" wx:for="{{result.videoUrls}}" wx:key="quality">
+          <view class="quality-info">
+            <view class="quality-dot"></view>
+            <text class="quality-name">{{item.quality}}</text>
+          </view>
+          <view class="quality-actions">
             <view
-              class="btn-download {{downloadingIndex === index ? 'btn-downloading' : ''}}"
+              class="btn-dl {{downloadingIndex === index ? 'btn-dl-loading' : ''}}"
               bindtap="downloadVideo"
               data-url="{{item.url}}"
               data-quality="{{item.quality}}"
@@ -77,35 +83,33 @@
               <text wx:if="{{downloadingIndex === index}}">{{downloadProgress}}%</text>
               <text wx:else>⬇️ 下载</text>
             </view>
-            <view class="btn-copy" bindtap="copyUrl" data-url="{{item.url}}">📋 复制</view>
-          </view>
-        </view>
-      </view>
-
-      <view class="download-item" wx:if="{{result.audioUrl}}">
-        <text class="quality-label">🎵 音频</text>
-        <view class="download-btns">
-          <view class="btn-download" bindtap="downloadVideo"
-            data-url="{{result.audioUrl}}" data-quality="音频" data-index="-1">
-            ⬇️ 下载
+            <view class="btn-copy-sm" bindtap="copyUrl" data-url="{{item.url}}">📋</view>
           </view>
         </view>
       </view>
     </view>
 
     <view class="tip-box" wx:if="{{result.platform === 'bilibili'}}">
-      <text>⚠️ B站视频音视频分离，需分别下载后合并</text>
+      ⚠️ B站视频音视频分离，需分别下载后合并
     </view>
   </view>
 
   <!-- 使用说明 -->
   <view class="card guide-card">
-    <text class="guide-title">📖 使用说明</text>
+    <view class="guide-title">📖 使用说明</view>
     <view class="guide-steps">
-      <view class="step" wx:for="{{steps}}" wx:key="index">
+      <view class="guide-step" wx:for="{{steps}}" wx:key="index">
         <view class="step-num">{{index + 1}}</view>
         <text class="step-text">{{item}}</text>
       </view>
+    </view>
+  </view>
+
+  <!-- 悬浮进度条 -->
+  <view class="float-progress" wx:if="{{downloadStatus}}">
+    <text class="float-label">{{downloadStatus === 'saving' ? '⏳ 保存中...' : '⬇️ 下载中 ' + downloadProgress + '%'}}</text>
+    <view class="progress-bar-bg">
+      <view class="progress-bar-fill" style="width: {{downloadStatus === 'saving' ? 100 : downloadProgress}}%"></view>
     </view>
   </view>
 </view>

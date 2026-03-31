@@ -1,43 +1,56 @@
-<view class="container">
-  <view class="header">
-    <text class="header-title">🔍 解析历史</text>
-    <view class="btn-clear" bindtap="clearAll" wx:if="{{list.length > 0}}">清空</view>
+<view class="page">
+  <!-- 页头 -->
+  <view class="page-header">
+    <view class="page-title-wrap">
+      <text class="page-title">🔍 解析历史</text>
+      <view class="count-badge" wx:if="{{total > 0}}">{{total}}</view>
+    </view>
+    <view class="btn-clear-all" bindtap="clearAll" wx:if="{{list.length > 0}}">清空</view>
   </view>
 
+  <!-- 加载中 -->
   <view class="loading-wrap" wx:if="{{pageLoading}}">
-    <text class="loading-text">加载中...</text>
+    <view class="loading-spinner"></view>
   </view>
 
-  <view class="empty" wx:elif="{{list.length === 0}}">
+  <!-- 空状态 -->
+  <view class="empty-wrap" wx:elif="{{list.length === 0}}">
     <text class="empty-icon">🔍</text>
     <text class="empty-text">暂无解析记录</text>
     <text class="empty-sub">去解析一个视频吧～</text>
   </view>
 
+  <!-- 列表 -->
   <view class="list" wx:else>
-    <view class="item card" wx:for="{{list}}" wx:key="id">
+    <view class="card parse-item" wx:for="{{list}}" wx:key="id">
       <!-- 视频信息 -->
       <view class="item-top">
-        <image class="item-cover" src="{{item.cover}}" mode="aspectFill" wx:if="{{item.cover}}" />
-        <view class="item-cover-ph" wx:else><text>🎬</text></view>
+        <view class="cover-wrap">
+          <image class="item-cover" src="{{item.cover}}" mode="aspectFill" wx:if="{{item.cover}}" />
+          <view class="cover-ph" wx:else><text>🎬</text></view>
+          <view class="cover-badge">{{platformMap[item.platform] || item.platform}}</view>
+        </view>
         <view class="item-info">
           <text class="item-title">{{item.title || '无标题'}}</text>
           <view class="item-meta">
-            <text class="tag-platform">{{platformMap[item.platform] || item.platform}}</text>
-            <text class="item-author" wx:if="{{item.author}}">👤 {{item.author}}</text>
+            <text class="meta-item" wx:if="{{item.author}}">👤 {{item.author}}</text>
+            <text class="meta-item">🕐 {{item.timeStr}}</text>
           </view>
-          <text class="item-time">{{item.timeStr}}</text>
         </view>
-        <view class="btn-del" bindtap="deleteItem" data-id="{{item.id}}">删除</view>
+        <view class="btn-del-circle" bindtap="deleteItem" data-id="{{item.id}}">✕</view>
       </view>
 
-      <!-- 下载按钮区 -->
+      <!-- 下载区 -->
       <view class="download-area" wx:if="{{item.videoUrls && item.videoUrls.length > 0}}">
+        <view class="download-area-title">📥 选择清晰度下载</view>
         <view class="dl-row" wx:for="{{item.videoUrls}}" wx:for-item="v" wx:for-index="vi" wx:key="vi">
-          <text class="quality-tag">{{v.quality}}</text>
-          <view class="dl-btns">
+          <view class="dl-quality">
+            <view class="quality-dot"></view>
+            <text>{{v.quality}}</text>
+          </view>
+          <view class="dl-actions">
             <view
-              class="btn-download {{downloadingKey === item.id + '-' + vi ? 'btn-downloading' : ''}}"
+              class="btn-dl {{downloadingKey === item.id + '-' + vi ? 'btn-dl-loading' : ''}}"
               bindtap="downloadVideo"
               data-item="{{item}}"
               data-url="{{v.url}}"
@@ -47,7 +60,7 @@
               <text wx:if="{{downloadingKey === item.id + '-' + vi}}">{{downloadProgress}}%</text>
               <text wx:else>⬇️ 下载</text>
             </view>
-            <view class="btn-copy" bindtap="copyUrl" data-url="{{v.url}}">复制</view>
+            <view class="btn-copy-sm" bindtap="copyUrl" data-url="{{v.url}}">📋</view>
           </view>
         </view>
       </view>
