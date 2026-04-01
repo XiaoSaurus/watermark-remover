@@ -1,5 +1,12 @@
 <template>
   <div class="reset-page">
+    <!-- 返回按钮 -->
+    <button class="back-btn" @click="router.back()" title="返回">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    
     <div class="reset-container">
       <div class="reset-header">
         <span class="logo">✂️</span>
@@ -271,5 +278,35 @@ function goLogin() {
 
 :deep(.el-form-item__label) {
   font-weight: 500;
+}
+
+/* 返回按钮 */
+.back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  z-index: 100;
+}
+
+.back-btn:hover {
+  background: #f5f5f5;
+  transform: translateX(-2px);
+}
+
+.back-btn svg {
+  width: 20px;
+  height: 20px;
+  color: #333;
 }
 </style>

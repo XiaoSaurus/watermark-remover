@@ -3,6 +3,8 @@ import Home from "@/views/Home.vue";
 import ParseHistory from "@/views/ParseHistory.vue";
 import History from "@/views/History.vue";
 import Login from "@/views/Login.vue";
+import Register from "@/views/Register.vue";
+import ResetPassword from "@/views/ResetPassword.vue";
 import Profile from "@/views/Profile.vue";
 import { useUserStore } from "@/store/user";
 
@@ -11,6 +13,8 @@ const routes = [
   { path: "/parse-history", component: ParseHistory, meta: { title: "解析历史" } },
   { path: "/history", component: History, meta: { title: "下载历史" } },
   { path: "/login", component: Login, meta: { title: "登录" } },
+  { path: "/register", component: Register, meta: { title: "注册" } },
+  { path: "/reset-password", component: ResetPassword, meta: { title: "忘记密码" } },
   { path: "/profile", component: Profile, meta: { title: "个人资料", requiresAuth: true } },
 ];
 

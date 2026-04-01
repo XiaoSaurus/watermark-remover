@@ -15,7 +15,12 @@ Page({
   onLoad() {},
 
   goBack() {
-    wx.navigateBack()
+    const pages = getCurrentPages()
+    if (pages.length > 1) {
+      wx.navigateBack({ fail: () => wx.switchTab({ url: '/pages/index/index' }) })
+    } else {
+      wx.switchTab({ url: '/pages/index/index' })
+    }
   },
 
   switchTab(e) {
@@ -65,17 +70,25 @@ Page({
       wx.showToast({ title: '请输入手机号和验证码', icon: 'none' }); return
     }
     this.setData({ loading: true })
-    wx.showLoading({ title: '登录中...' })
     try {
+      wx.showLoading({ title: '登录中...', mask: true })
       const res = await api.login('phone', { phone, code })
       app.setUser(res.token, res)
+      wx.hideLoading()
       wx.showToast({ title: '登录成功', icon: 'success' })
-      setTimeout(() => wx.navigateBack(), 1000)
+      setTimeout(() => {
+        const pages = getCurrentPages()
+        if (pages.length > 1) {
+          wx.navigateBack()
+        } else {
+          wx.switchTab({ url: '/pages/index/index' })
+        }
+      }, 1000)
     } catch (e) {
+      wx.hideLoading()
       wx.showToast({ title: e.message || '登录失败', icon: 'none' })
     } finally {
       this.setData({ loading: false })
-      wx.hideLoading()
     }
   },
 
@@ -84,33 +97,49 @@ Page({
       wx.showToast({ title: '授权失败', icon: 'none' }); return
     }
     this.setData({ loading: true })
-    wx.showLoading({ title: '登录中...' })
     try {
+      wx.showLoading({ title: '登录中...', mask: true })
       const res = await api.login('wechat_miniprogram', { code: e.detail.code })
       app.setUser(res.token, res)
+      wx.hideLoading()
       wx.showToast({ title: '登录成功', icon: 'success' })
-      setTimeout(() => wx.navigateBack(), 1000)
+      setTimeout(() => {
+        const pages = getCurrentPages()
+        if (pages.length > 1) {
+          wx.navigateBack()
+        } else {
+          wx.switchTab({ url: '/pages/index/index' })
+        }
+      }, 1000)
     } catch (e) {
+      wx.hideLoading()
       wx.showToast({ title: e.message || '登录失败', icon: 'none' })
     } finally {
       this.setData({ loading: false })
-      wx.hideLoading()
     }
   },
 
   async handleTouristLogin() {
     this.setData({ loading: true })
-    wx.showLoading({ title: '登录中...' })
     try {
+      wx.showLoading({ title: '登录中...', mask: true })
       const res = await api.login('tourist', {})
       app.setUser(res.token, res)
+      wx.hideLoading()
       wx.showToast({ title: '登录成功', icon: 'success' })
-      setTimeout(() => wx.navigateBack(), 1000)
+      setTimeout(() => {
+        const pages = getCurrentPages()
+        if (pages.length > 1) {
+          wx.navigateBack()
+        } else {
+          wx.switchTab({ url: '/pages/index/index' })
+        }
+      }, 1000)
     } catch (e) {
+      wx.hideLoading()
       wx.showToast({ title: e.message || '登录失败', icon: 'none' })
     } finally {
       this.setData({ loading: false })
-      wx.hideLoading()
     }
   },
 

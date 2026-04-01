@@ -83,8 +83,21 @@ public class AuthController {
     @PostMapping("/login")
     public Result<UserVO> login(@RequestBody LoginRequest req) {
         try {
-            log.info("登录请求: type={}", req.getType());
-            UserVO vo = switch (req.getType()) {
+            // 记录完整的请求信息
+            log.info("登录请求接收: {}", req);
+            if (req == null) {
+                log.error("登录请求体为空");
+                return Result.error("请求体不能为空");
+            }
+            String type = req.getType();
+            log.info("登录请求: type={}", type);
+            
+            if (type == null || type.isEmpty()) {
+                log.error("登录类型为空");
+                return Result.error("登录类型不能为空");
+            }
+            
+            UserVO vo = switch (type) {
                 case "phone" -> {
                     log.info("手机号登录");
                     yield userService.loginByPhone(req);
@@ -101,13 +114,14 @@ public class AuthController {
                     log.info("游客登录");
                     yield userService.loginAsTourist();
                 }
-                default -> throw new Exception("不支持的登录方式：" + req.getType());
+                default -> throw new Exception("不支持的登录方式：" + type);
             };
             log.info("登录成功: userId={}", vo.getId());
             return Result.success(vo);
         } catch (Exception e) {
             String errorMsg = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
             log.error("登录失败: {}", errorMsg, e);
+            e.printStackTrace();
             return Result.error(errorMsg);
         }
     }
