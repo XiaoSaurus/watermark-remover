@@ -54,12 +54,15 @@ public class WatermarkController {
         try {
             log.info("代理下载: {}", url.substring(0, Math.min(80, url.length())));
 
+            // 根据平台设置合适的 Referer，避免 403
+            String referer = getRefererForUrl(url);
             Request req = new Request.Builder()
                     .url(url)
-                    .header("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1")
-                    .header("Referer", "https://www.douyin.com/")
+                    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+                    .header("Referer", referer)
                     .header("Accept", "*/*")
                     .header("Accept-Language", "zh-CN,zh;q=0.9")
+                    .header("Range", "bytes=0-")
                     .build();
 
             try (Response upstream = DOWNLOAD_CLIENT.newCall(req).execute()) {
@@ -101,5 +104,16 @@ public class WatermarkController {
     @lombok.Data
     public static class ParseRequest {
         private String url;
+    }
+
+    /** 根据视频 URL 返回对应的 Referer，避免 403 */
+    private String getRefererForUrl(String url) {
+        if (url == null) return "https://www.douyin.com/";
+        if (url.contains("douyin.com") || url.contains("iesdouyin.com")) return "https://www.douyin.com/";
+        if (url.contains("kuaishou.com")) return "https://www.kuaishou.com/";
+        if (url.contains("bilibili.com") || url.contains("b23.tv")) return "https://www.bilibili.com/";
+        if (url.contains("weibo.com") || url.contains("weibo.cn") || url.contains("t.cn")) return "https://weibo.com/";
+        if (url.contains("xiaohongshu.com") || url.contains("xhslink.com")) return "https://www.xiaohongshu.com/";
+        return "https://www.douyin.com/";
     }
 }

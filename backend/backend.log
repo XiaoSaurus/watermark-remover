@@ -62,3 +62,11 @@
 2026-03-31T23:52:41.293+08:00  INFO 23112 --- [nio-8080-exec-7] com.watermark.parser.impl.DouyinParser   : H5 页面长度: 37449
 2026-03-31T23:52:41.295+08:00  INFO 23112 --- [nio-8080-exec-7] com.watermark.parser.impl.DouyinParser   : 解析成功: title=单依纯Q深圳首场开场《李白》～#单依纯 #李白 #李荣浩 #单依纯深圳演唱会, urls=1
 2026-03-31T23:52:51.587+08:00  INFO 23112 --- [nio-8080-exec-3] c.w.controller.WatermarkController       : 代理下载: https://aweme.snssdk.com/aweme/v1/play/?line=0&logo_name=aweme_diversion_search&
+2026-04-01T00:34:38.953+08:00  INFO 23112 --- [nio-8080-exec-6] c.w.service.impl.WatermarkServiceImpl    : 解析链接: https://v.douyin.com/QjvDx-IpTIY/
+2026-04-01T00:34:38.955+08:00  INFO 23112 --- [nio-8080-exec-6] c.w.service.impl.WatermarkServiceImpl    : 使用解析器: DouyinParser
+2026-04-01T00:34:39.791+08:00  INFO 23112 --- [nio-8080-exec-6] com.watermark.parser.impl.DouyinParser   : 抖音真实URL: https://www.iesdouyin.com/share/video/7622698222393963173/?region=CN&mid=7431009115838712591&u_code=0&did=MS4wLjABAAAAIYOnfwpYJx2wX_KrELoxjR_zH_Tt_1w6GjxOzCrceZD63BPA5rh16L7Ja1c6Q2XP&iid=MS4wLjABAAAANwkJuWIRFOzg5uCpDRpMj4OX-QryoDgn-yYlXQnRwQQ&with_sec_did=1&video_share_track_ver=&titleType=title&share_sign=ypr7rk16IeovOXig4LHS.q4nAe7ywYL4zMSCN9.cqRw-&share_version=170400&ts=1774967404&from_aid=6383&from_ssr=1&share_track_info=%7B%22link_description_type%22%3A%22%22%7D&from=web_code_link
+2026-04-01T00:34:39.793+08:00  INFO 23112 --- [nio-8080-exec-6] com.watermark.parser.impl.DouyinParser   : 抖音视频ID: 7622698222393963173
+2026-04-01T00:34:39.793+08:00  INFO 23112 --- [nio-8080-exec-6] com.watermark.parser.impl.DouyinParser   : 请求 H5 页面: https://www.iesdouyin.com/share/video/7622698222393963173/
+2026-04-01T00:34:40.370+08:00  INFO 23112 --- [nio-8080-exec-6] com.watermark.parser.impl.DouyinParser   : H5 页面长度: 37441
+2026-04-01T00:34:40.374+08:00  INFO 23112 --- [nio-8080-exec-6] com.watermark.parser.impl.DouyinParser   : 解析成功: title=单依纯Q深圳首场开场《李白》～#单依纯 #李白 #李荣浩 #单依纯深圳演唱会, urls=1
+2026-04-01T00:34:43.586+08:00  INFO 23112 --- [nio-8080-exec-8] c.w.controller.WatermarkController       : 代理下载: https://aweme.snssdk.com/aweme/v1/play/?line=0&logo_name=aweme_diversion_search&
