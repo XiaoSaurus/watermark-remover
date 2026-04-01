@@ -1,0 +1,89 @@
+.register-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 60rpx 40rpx;
+  display: flex;
+  align-items: flex-start;
+}
+
+.form {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  width: 100%;
+}
+
+.form-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+  text-align: center;
+}
+
+.input-group {
+  background: #f8f9ff;
+  border: 2rpx solid #e8eaf6;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.input {
+  font-size: 28rpx;
+  width: 100%;
+}
+
+.sms-row {
+  display: flex;
+  align-items: center;
+}
+
+.sms-btn {
+  background: #6c63ff;
+  color: #fff;
+  font-size: 24rpx;
+  padding: 0 24rpx;
+  border-radius: 12rpx;
+  white-space: nowrap;
+  min-width: 160rpx;
+  margin-left: 20rpx;
+}
+
+.sms-btn[disabled] {
+  background: #ccc;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #6c63ff, #764ba2);
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  margin-top: 20rpx;
+  border: none;
+}
+
+.bottom-links {
+  display: flex;
+  justify-content: center;
+  margin-top: 30rpx;
+  color: #6c63ff;
+  font-size: 26rpx;
+}
+
+.username-status {
+  font-size: 24rpx;
+  margin-top: 8rpx;
+  padding-left: 8rpx;
+}
+
+.username-status.available {
+  color: #67c23a;
+}
+
+.username-status.taken,
+.username-status.invalid {
+  color: #f56c6c;
+}

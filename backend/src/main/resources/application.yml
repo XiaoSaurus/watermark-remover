@@ -14,9 +14,36 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 3000ms
 
 spring.jpa.open-in-view: false
 
 logging:
   level:
     com.watermark: INFO
+
+# JWT
+jwt:
+  secret: watermark-remover-jwt-secret-key-2024-very-long-string-must-be-256bits
+  expiration: 86400000
+
+# 阿里云短信
+aliyun:
+  sms:
+    access-key-id: YOUR_ACCESS_KEY_ID
+    access-key-secret: YOUR_ACCESS_KEY_SECRET
+    sign-name: 去水印工具
+    template-code: SMS_XXXXXX
+
+# 微信
+wechat:
+  miniprogram:
+    app-id: YOUR_MINIAPP_APPID
+    app-secret: YOUR_MINIAPP_SECRET
+  open:
+    app-id: YOUR_OPEN_APPID
+    app-secret: YOUR_OPEN_SECRET
+    redirect-uri: http://your-domain.com/api/auth/wechat/callback

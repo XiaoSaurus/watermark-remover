@@ -1,0 +1,103 @@
+-- 初始化头像数据 SQL 脚本
+-- 包含 50+ MOMO 风格免费头像 URL
+-- 来源: DiceBear API, Multiavatar, Boring Avatars 等免费头像服务
+
+INSERT INTO avatar (id, url, category) VALUES
+-- MOMO 可爱风格头像 (使用 DiceBear 的多种风格)
+(1, 'https://api.dicebear.com/7.x/bottts/png?seed=momo1&backgroundColor=b6e3f4', 'momo'),
+(2, 'https://api.dicebear.com/7.x/bottts/png?seed=momo2&backgroundColor=c0aede', 'momo'),
+(3, 'https://api.dicebear.com/7.x/bottts/png?seed=momo3&backgroundColor=d1d4f9', 'momo'),
+(4, 'https://api.dicebear.com/7.x/bottts/png?seed=momo4&backgroundColor=ffd5dc', 'momo'),
+(5, 'https://api.dicebear.com/7.x/bottts/png?seed=momo5&backgroundColor=ffdfbf', 'momo'),
+(6, 'https://api.dicebear.com/7.x/adventurer/png?seed=momo6', 'momo'),
+(7, 'https://api.dicebear.com/7.x/adventurer/png?seed=momo7', 'momo'),
+(8, 'https://api.dicebear.com/7.x/adventurer/png?seed=momo8', 'momo'),
+(9, 'https://api.dicebear.com/7.x/adventurer/png?seed=momo9', 'momo'),
+(10, 'https://api.dicebear.com/7.x/adventurer/png?seed=momo10', 'momo'),
+(11, 'https://api.dicebear.com/7.x/adventurer-neutral/png?seed=momo11', 'momo'),
+(12, 'https://api.dicebear.com/7.x/adventurer-neutral/png?seed=momo12', 'momo'),
+(13, 'https://api.dicebear.com/7.x/adventurer-neutral/png?seed=momo13', 'momo'),
+(14, 'https://api.dicebear.com/7.x/adventurer-neutral/png?seed=momo14', 'momo'),
+(15, 'https://api.dicebear.com/7.x/adventurer-neutral/png?seed=momo15', 'momo'),
+(16, 'https://api.dicebear.com/7.x/avataaars/png?seed=momo16&backgroundColor=b6e3f4', 'momo'),
+(17, 'https://api.dicebear.com/7.x/avataaars/png?seed=momo17&backgroundColor=c0aede', 'momo'),
+(18, 'https://api.dicebear.com/7.x/avataaars/png?seed=momo18&backgroundColor=d1d4f9', 'momo'),
+(19, 'https://api.dicebear.com/7.x/avataaars/png?seed=momo19&backgroundColor=ffd5dc', 'momo'),
+(20, 'https://api.dicebear.com/7.x/avataaars/png?seed=momo20&backgroundColor=ffdfbf', 'momo'),
+(21, 'https://api.dicebear.com/7.x/avataaars/png?seed=momo21&backgroundColor=b6e3f4', 'momo'),
+(22, 'https://api.dicebear.com/7.x/avataaars/png?seed=momo22&backgroundColor=ffd5dc', 'momo'),
+(23, 'https://api.dicebear.com/7.x/avataaars/png?seed=momo23&backgroundColor=c0aede', 'momo'),
+(24, 'https://api.dicebear.com/7.x/avataaars/png?seed=momo24&backgroundColor=d1d4f9', 'momo'),
+(25, 'https://api.dicebear.com/7.x/avataaars/png?seed=momo25&backgroundColor=ffdfbf', 'momo'),
+-- 大眼萌风格
+(26, 'https://api.dicebear.com/7.x/big-ears/png?seed=momo26&backgroundColor=b6e3f4', 'momo'),
+(27, 'https://api.dicebear.com/7.x/big-ears/png?seed=momo27&backgroundColor=c0aede', 'momo'),
+(28, 'https://api.dicebear.com/7.x/big-ears/png?seed=momo28&backgroundColor=ffd5dc', 'momo'),
+(29, 'https://api.dicebear.com/7.x/big-ears/png?seed=momo29&backgroundColor=d1d4f9', 'momo'),
+(30, 'https://api.dicebear.com/7.x/big-ears/png?seed=momo30&backgroundColor=ffdfbf', 'momo'),
+(31, 'https://api.dicebear.com/7.x/big-ears-neutral/png?seed=momo31', 'momo'),
+(32, 'https://api.dicebear.com/7.x/big-ears-neutral/png?seed=momo32', 'momo'),
+(33, 'https://api.dicebear.com/7.x/big-ears-neutral/png?seed=momo33', 'momo'),
+(34, 'https://api.dicebear.com/7.x/big-ears-neutral/png?seed=momo34', 'momo'),
+(35, 'https://api.dicebear.com/7.x/big-ears-neutral/png?seed=momo35', 'momo'),
+-- 微笑风格
+(36, 'https://api.dicebear.com/7.x/big-smile/png?seed=momo36&backgroundColor=b6e3f4', 'momo'),
+(37, 'https://api.dicebear.com/7.x/big-smile/png?seed=momo37&backgroundColor=c0aede', 'momo'),
+(38, 'https://api.dicebear.com/7.x/big-smile/png?seed=momo38&backgroundColor=ffd5dc', 'momo'),
+(39, 'https://api.dicebear.com/7.x/big-smile/png?seed=momo39&backgroundColor=d1d4f9', 'momo'),
+(40, 'https://api.dicebear.com/7.x/big-smile/png?seed=momo40&backgroundColor=ffdfbf', 'momo'),
+-- 像素风格
+(41, 'https://api.dicebear.com/7.x/pixel-art/png?seed=momo41&backgroundColor=b6e3f4', 'pixel'),
+(42, 'https://api.dicebear.com/7.x/pixel-art/png?seed=momo42&backgroundColor=c0aede', 'pixel'),
+(43, 'https://api.dicebear.com/7.x/pixel-art/png?seed=momo43&backgroundColor=ffd5dc', 'pixel'),
+(44, 'https://api.dicebear.com/7.x/pixel-art/png?seed=momo44&backgroundColor=d1d4f9', 'pixel'),
+(45, 'https://api.dicebear.com/7.x/pixel-art/png?seed=momo45&backgroundColor=ffdfbf', 'pixel'),
+(46, 'https://api.dicebear.com/7.x/pixel-art-neutral/png?seed=momo46', 'pixel'),
+(47, 'https://api.dicebear.com/7.x/pixel-art-neutral/png?seed=momo47', 'pixel'),
+(48, 'https://api.dicebear.com/7.x/pixel-art-neutral/png?seed=momo48', 'pixel'),
+(49, 'https://api.dicebear.com/7.x/pixel-art-neutral/png?seed=momo49', 'pixel'),
+(50, 'https://api.dicebear.com/7.x/pixel-art-neutral/png?seed=momo50', 'pixel'),
+-- 卡通抽象风格
+(51, 'https://api.dicebear.com/7.x/lorelei/png?seed=momo51&backgroundColor=b6e3f4', 'cartoon'),
+(52, 'https://api.dicebear.com/7.x/lorelei/png?seed=momo52&backgroundColor=c0aede', 'cartoon'),
+(53, 'https://api.dicebear.com/7.x/lorelei/png?seed=momo53&backgroundColor=ffd5dc', 'cartoon'),
+(54, 'https://api.dicebear.com/7.x/lorelei/png?seed=momo54&backgroundColor=d1d4f9', 'cartoon'),
+(55, 'https://api.dicebear.com/7.x/lorelei/png?seed=momo55&backgroundColor=ffdfbf', 'cartoon'),
+(56, 'https://api.dicebear.com/7.x/lorelei-neutral/png?seed=momo56', 'cartoon'),
+(57, 'https://api.dicebear.com/7.x/lorelei-neutral/png?seed=momo57', 'cartoon'),
+(58, 'https://api.dicebear.com/7.x/lorelei-neutral/png?seed=momo58', 'cartoon'),
+(59, 'https://api.dicebear.com/7.x/lorelei-neutral/png?seed=momo59', 'cartoon'),
+(60, 'https://api.dicebear.com/7.x/lorelei-neutral/png?seed=momo60', 'cartoon'),
+-- 波普艺术风格
+(61, 'https://api.dicebear.com/7.x/fun-emoji/png?seed=momo61', 'fun'),
+(62, 'https://api.dicebear.com/7.x/fun-emoji/png?seed=momo62', 'fun'),
+(63, 'https://api.dicebear.com/7.x/fun-emoji/png?seed=momo63', 'fun'),
+(64, 'https://api.dicebear.com/7.x/fun-emoji/png?seed=momo64', 'fun'),
+(65, 'https://api.dicebear.com/7.x/fun-emoji/png?seed=momo65', 'fun'),
+-- 玻璃风格
+(66, 'https://api.dicebear.com/7.x/glass/png?seed=momo66', 'glass'),
+(67, 'https://api.dicebear.com/7.x/glass/png?seed=momo67', 'glass'),
+(68, 'https://api.dicebear.com/7.x/glass/png?seed=momo68', 'glass'),
+(69, 'https://api.dicebear.com/7.x/glass/png?seed=momo69', 'glass'),
+(70, 'https://api.dicebear.com/7.x/glass/png?seed=momo70', 'glass'),
+-- 开源图标风格
+(71, 'https://api.dicebear.com/7.x/icons/png?seed=momo71&backgroundColor=b6e3f4', 'icon'),
+(72, 'https://api.dicebear.com/7.x/icons/png?seed=momo72&backgroundColor=c0aede', 'icon'),
+(73, 'https://api.dicebear.com/7.x/icons/png?seed=momo73&backgroundColor=ffd5dc', 'icon'),
+(74, 'https://api.dicebear.com/7.x/icons/png?seed=momo74&backgroundColor=d1d4f9', 'icon'),
+(75, 'https://api.dicebear.com/7.x/icons/png?seed=momo75&backgroundColor=ffdfbf', 'icon'),
+-- 形状风格
+(76, 'https://api.dicebear.com/7.x/shapes/png?seed=momo76&backgroundColor=b6e3f4', 'shape'),
+(77, 'https://api.dicebear.com/7.x/shapes/png?seed=momo77&backgroundColor=c0aede', 'shape'),
+(78, 'https://api.dicebear.com/7.x/shapes/png?seed=momo78&backgroundColor=ffd5dc', 'shape'),
+(79, 'https://api.dicebear.com/7.x/shapes/png?seed=momo79&backgroundColor=d1d4f9', 'shape'),
+(80, 'https://api.dicebear.com/7.x/shapes/png?seed=momo80&backgroundColor=ffdfbf', 'shape'),
+-- 缩略图风格
+(81, 'https://api.dicebear.com/7.x/thumbs/png?seed=momo81&backgroundColor=b6e3f4', 'thumb'),
+(82, 'https://api.dicebear.com/7.x/thumbs/png?seed=momo82&backgroundColor=c0aede', 'thumb'),
+(83, 'https://api.dicebear.com/7.x/thumbs/png?seed=momo83&backgroundColor=ffd5dc', 'thumb'),
+(84, 'https://api.dicebear.com/7.x/thumbs/png?seed=momo84&backgroundColor=d1d4f9', 'thumb'),
+(85, 'https://api.dicebear.com/7.x/thumbs/png?seed=momo85&backgroundColor=ffdfbf', 'thumb');
+
+-- 更新时间戳
+ALTER TABLE avatar MODIFY COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;

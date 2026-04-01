@@ -2,7 +2,9 @@ App({
   globalData: {
     apiBase: 'http://192.168.10.105:8080',
     history: [],
-    theme: 'purple'
+    theme: 'purple',
+    userInfo: null,
+    token: null
   },
 
   // 5套柔和主题
@@ -54,6 +56,10 @@ App({
     this.globalData.history = history
     const savedTheme = wx.getStorageSync('mp_theme') || 'purple'
     this.globalData.theme = savedTheme
+    const token = wx.getStorageSync('token') || null
+    const userInfo = wx.getStorageSync('userInfo') || null
+    this.globalData.token = token
+    this.globalData.userInfo = userInfo
   },
 
   getTheme() {
@@ -71,5 +77,23 @@ App({
     if (history.length > 50) history.pop()
     this.globalData.history = history
     wx.setStorageSync('downloadHistory', history)
+  },
+
+  setUser(token, userInfo) {
+    this.globalData.token = token
+    this.globalData.userInfo = userInfo
+    wx.setStorageSync('token', token)
+    wx.setStorageSync('userInfo', userInfo)
+  },
+
+  clearUser() {
+    this.globalData.token = null
+    this.globalData.userInfo = null
+    wx.removeStorageSync('token')
+    wx.removeStorageSync('userInfo')
+  },
+
+  getUser() {
+    return this.globalData.userInfo
   }
 })

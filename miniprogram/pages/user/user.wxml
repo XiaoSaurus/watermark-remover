@@ -1,0 +1,187 @@
+<view class="user-page">
+  <!-- 已登录 -->
+  <block wx:if="{{userInfo}}">
+    <!-- 用户头部卡片 -->
+    <view class="user-header">
+      <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill" bindtap="chooseAvatar" />
+      <view class="user-info">
+        <text class="username">{{userInfo.nickname || userInfo.username}}</text>
+        <text class="login-type">{{loginTypeLabel}}</text>
+        <text class="user-id">ID: {{userInfo.id}}</text>
+      </view>
+    </view>
+
+    <!-- 等级和积分卡片 -->
+    <view class="level-card">
+      <view class="level-item">
+        <text class="level-icon">👑</text>
+        <text class="level-text">Lv.{{userInfo.level || 1}}</text>
+        <text class="level-name">{{getLevelName(userInfo.level || 1)}}</text>
+      </view>
+      <view class="divider"></view>
+      <view class="points-item">
+        <text class="points-value">{{userInfo.points || 0}}</text>
+        <text class="points-label">积分</text>
+      </view>
+      <view class="divider"></view>
+      <view class="vip-item" wx:if="{{userInfo.vipStatus === 'active'}}">
+        <text class="vip-icon">⭐</text>
+        <text class="vip-text">VIP会员</text>
+      </view>
+      <view class="vip-item" wx:else>
+        <text class="vip-icon">✨</text>
+        <text class="vip-text">普通用户</text>
+      </view>
+    </view>
+
+    <!-- 个人信息卡片 -->
+    <view class="info-card">
+      <view class="info-row">
+        <text class="label">昵称</text>
+        <text class="value">{{userInfo.nickname || '未设置'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">手机号</text>
+        <text class="value">{{userInfo.phoneMasked || '未绑定'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">性别</text>
+        <text class="value">{{getGenderLabel(userInfo.gender)}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">生日</text>
+        <text class="value">{{userInfo.birthday || '未设置'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">登录方式</text>
+        <text class="value">{{loginTypeLabel}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">登录次数</text>
+        <text class="value">{{userInfo.loginCount || 0}} 次</text>
+      </view>
+    </view>
+
+    <!-- 个人简介 -->
+    <view class="bio-card" wx:if="{{userInfo.bio}}">
+      <text class="bio-title">个人简介</text>
+      <text class="bio-text">{{userInfo.bio}}</text>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <button class="btn btn-primary" bindtap="editProfile">编辑资料</button>
+      <button class="btn btn-secondary" bindtap="changePassword">修改密码</button>
+      <button class="btn btn-secondary" bindtap="bindPhone" wx:if="{{!userInfo.phone && (userInfo.loginType === 'tourist' || userInfo.loginType === 'wechat')}}">绑定手机号</button>
+      <button class="btn btn-danger" bindtap="handleLogout">退出登录</button>
+    </view>
+  </block>
+
+  <!-- 未登录 -->
+  <block wx:else>
+    <view class="not-login">
+      <text class="logo">✂️</text>
+      <text class="title">去水印工具</text>
+      <text class="sub">登录后可同步解析历史和下载记录</text>
+      <button class="btn-login" bindtap="goLogin">登录 / 注册</button>
+    </view>
+  </block>
+
+  <!-- 编辑资料弹窗 -->
+  <van-popup show="{{showEditModal}}" position="bottom" custom-style="height: 60%;" bind:close="closeEditModal">
+    <view class="modal-header">
+      <text class="modal-title">编辑资料</text>
+      <text class="close-btn" bindtap="closeEditModal">✕</text>
+    </view>
+    <scroll-view scroll-y class="modal-content">
+      <view class="form-group">
+        <text class="form-label">昵称</text>
+        <input class="form-input" type="text" placeholder="请输入昵称" value="{{editForm.nickname}}" bindinput="onNicknameInput" maxlength="50" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">个人简介</text>
+        <textarea class="form-textarea" placeholder="介绍一下自己吧" value="{{editForm.bio}}" bindinput="onBioInput" maxlength="200"></textarea>
+      </view>
+      <view class="form-group">
+        <text class="form-label">性别</text>
+        <view class="radio-group">
+          <label class="radio-item">
+            <radio value="0" checked="{{editForm.gender === 0}}" bindchange="onGenderChange" />
+            <text>保密</text>
+          </label>
+          <label class="radio-item">
+            <radio value="1" checked="{{editForm.gender === 1}}" bindchange="onGenderChange" />
+            <text>男</text>
+          </label>
+          <label class="radio-item">
+            <radio value="2" checked="{{editForm.gender === 2}}" bindchange="onGenderChange" />
+            <text>女</text>
+          </label>
+        </view>
+      </view>
+      <view class="form-group">
+        <text class="form-label">生日</text>
+        <picker mode="date" value="{{editForm.birthday}}" bindchange="onBirthdayChange">
+          <view class="picker-value">{{editForm.birthday || '选择生日'}}</view>
+        </picker>
+      </view>
+    </scroll-view>
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="closeEditModal">取消</button>
+      <button class="btn-confirm" bindtap="saveProfile" loading="{{saving}}">保存</button>
+    </view>
+  </van-popup>
+
+  <!-- 修改密码弹窗 -->
+  <van-popup show="{{showPasswordModal}}" position="bottom" custom-style="height: 50%;" bind:close="closePasswordModal">
+    <view class="modal-header">
+      <text class="modal-title">修改密码</text>
+      <text class="close-btn" bindtap="closePasswordModal">✕</text>
+    </view>
+    <scroll-view scroll-y class="modal-content">
+      <view class="form-group">
+        <text class="form-label">旧密码</text>
+        <input class="form-input" type="password" placeholder="请输入旧密码" value="{{passwordForm.oldPassword}}" bindinput="onOldPasswordInput" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">新密码</text>
+        <input class="form-input" type="password" placeholder="至少6位密码" value="{{passwordForm.newPassword}}" bindinput="onNewPasswordInput" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">确认密码</text>
+        <input class="form-input" type="password" placeholder="再次输入新密码" value="{{passwordForm.confirmPassword}}" bindinput="onConfirmPasswordInput" />
+      </view>
+    </scroll-view>
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="closePasswordModal">取消</button>
+      <button class="btn-confirm" bindtap="submitPassword" loading="{{changingPassword}}">确定</button>
+    </view>
+  </van-popup>
+
+  <!-- 绑定手机号弹窗 -->
+  <van-popup show="{{showBindPhoneModal}}" position="bottom" custom-style="height: 50%;" bind:close="closeBindPhoneModal">
+    <view class="modal-header">
+      <text class="modal-title">绑定手机号</text>
+      <text class="close-btn" bindtap="closeBindPhoneModal">✕</text>
+    </view>
+    <scroll-view scroll-y class="modal-content">
+      <view class="form-group">
+        <text class="form-label">手机号</text>
+        <input class="form-input" type="number" placeholder="请输入手机号" value="{{bindPhoneForm.phone}}" bindinput="onPhoneInput" maxlength="11" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">验证码</text>
+        <view class="code-input-group">
+          <input class="form-input" type="number" placeholder="请输入验证码" value="{{bindPhoneForm.code}}" bindinput="onCodeInput" maxlength="6" />
+          <button class="btn-code" bindtap="sendCode" disabled="{{countdown > 0}}" loading="{{sendingCode}}">
+            {{countdown > 0 ? countdown + 's' : '获取验证码'}}
+          </button>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="closeBindPhoneModal">取消</button>
+      <button class="btn-confirm" bindtap="submitBindPhone" loading="{{bindingPhone}}">确定</button>
+    </view>
+  </van-popup>
+</view>

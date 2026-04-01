@@ -1,25 +1,37 @@
 package com.watermark.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class Result<T> {
     private int code;
     private String message;
     private T data;
 
     public static <T> Result<T> success(T data) {
-        Result<T> r = new Result<>();
-        r.code = 200;
-        r.message = "success";
-        r.data = data;
-        return r;
+        return Result.<T>builder()
+                .code(200)
+                .message("success")
+                .data(data)
+                .build();
     }
 
     public static <T> Result<T> error(String message) {
-        Result<T> r = new Result<>();
-        r.code = 500;
-        r.message = message;
-        return r;
+        return Result.<T>builder()
+                .code(500)
+                .message(message)
+                .data(null)
+                .build();
+    }
+
+    public static <T> Result<T> error(int code, String message) {
+        return Result.<T>builder()
+                .code(code)
+                .message(message)
+                .data(null)
+                .build();
     }
 }

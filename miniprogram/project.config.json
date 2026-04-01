@@ -47,12 +47,15 @@
   },
   "compileType": "miniprogram",
   "libVersion": "3.3.4",
-  "srcMiniprogramRoot": "./",
+  "srcMiniprogramRoot": "",
   "condition": {},
   "simulatorPluginLibVersion": {},
   "packOptions": {
     "ignore": [],
     "include": []
   },
-  "editorSetting": {}
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
 }

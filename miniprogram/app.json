@@ -1,5 +1,9 @@
 {
   "pages": [
+    "pages/login/login",
+    "pages/user/user",
+    "pages/register/register",
+    "pages/reset/reset",
     "pages/index/index",
     "pages/parse-history/parse-history",
     "pages/history/history"
@@ -34,6 +38,12 @@
         "text": "下载历史",
         "iconPath": "images/history.png",
         "selectedIconPath": "images/history_active.png"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "我的",
+        "iconPath": "images/user.png",
+        "selectedIconPath": "images/user_active.png"
       }
     ]
   },

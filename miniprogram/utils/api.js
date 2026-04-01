@@ -2,10 +2,13 @@ const app = getApp()
 
 function request(method, path, data) {
   return new Promise((resolve, reject) => {
+    const header = { 'Content-Type': 'application/json' }
+    const token = app.globalData.token
+    if (token) header['Authorization'] = 'Bearer ' + token
     wx.request({
       url: app.globalData.apiBase + path,
       method, data,
-      header: { 'Content-Type': 'application/json' },
+      header,
       success(res) {
         if (res.statusCode === 200) resolve(res.data)
         else reject(new Error(`HTTP ${res.statusCode}`))
@@ -33,8 +36,30 @@ function getDownloadHistory(page, size) { return request('GET', `/api/history?pa
 function deleteDownloadHistory(id) { return request('DELETE', `/api/history/${id}`) }
 function clearDownloadHistoryApi() { return request('DELETE', '/api/history') }
 
+// 用户认证
+function sendSms(phone, scene) { return request('POST', '/api/auth/sms/send', { phone, scene }) }
+
+function verifySmsCode(phone, code, scene) { 
+  return request('POST', '/api/auth/sms/verify', { phone, code, scene }) 
+}
+
+function login(type, data) { return request('POST', '/api/auth/login', { type, ...data }) }
+
+function register(phone, code, password, confirmPassword, username) {
+  const data = { type: 'phone', phone, code, password, confirmPassword }
+  if (username) data.username = username
+  return request('POST', '/api/auth/register', data)
+}
+
+function resetPassword(phone, code, newPassword, confirmPassword) {
+  return request('POST', '/api/auth/reset-password', { phone, code, newPassword, confirmPassword })
+}
+
+function getUserInfo() { return request('GET', '/api/auth/me') }
+
 module.exports = {
   parseVideo, getDownloadUrl,
   saveParseHistory, getParseHistory, deleteParseHistory, clearParseHistoryApi,
-  saveDownloadHistory, getDownloadHistory, deleteDownloadHistory, clearDownloadHistoryApi
+  saveDownloadHistory, getDownloadHistory, deleteDownloadHistory, clearDownloadHistoryApi,
+  sendSms, verifySmsCode, login, register, resetPassword, getUserInfo
 }
