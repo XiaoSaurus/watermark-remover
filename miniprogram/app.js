@@ -1,6 +1,6 @@
 App({
   globalData: {
-    apiBase: 'http://10.16.247.27:8080',
+    apiBase: 'http://192.168.10.105:8080',
     history: [],
     theme: 'purple'
   },
