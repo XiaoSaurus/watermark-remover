@@ -1,0 +1,56 @@
+<view class="edit-profile-page">
+  <!-- 顶部导航 -->
+  <view class="nav-bar">
+    <view class="nav-back" bindtap="goBack">
+      <text class="back-icon">‹</text>
+    </view>
+    <text class="nav-title">编辑资料</text>
+    <view class="nav-save" bindtap="saveProfile">
+      <text class="save-btn" loading="{{saving}}">保存</text>
+    </view>
+  </view>
+
+  <!-- 头像 -->
+  <view class="avatar-section" bindtap="chooseAvatar">
+    <view class="avatar-wrapper">
+      <image class="avatar" src="{{form.avatar || userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill" />
+      <view class="avatar-tip">点击更换头像</view>
+    </view>
+  </view>
+
+  <!-- 表单 -->
+  <view class="form-section">
+    <view class="form-item">
+      <view class="form-label">昵称</view>
+      <input class="form-input" type="text" placeholder="请输入昵称" value="{{form.nickname}}" bindinput="onNicknameInput" maxlength="20" />
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">性别</view>
+      <view class="gender-select">
+        <view class="gender-item {{form.gender === 0 ? 'active' : ''}}" bindtap="onGenderChange" data-gender="0">
+          <text>保密</text>
+        </view>
+        <view class="gender-item {{form.gender === 1 ? 'active' : ''}}" bindtap="onGenderChange" data-gender="1">
+          <text>男</text>
+        </view>
+        <view class="gender-item {{form.gender === 2 ? 'active' : ''}}" bindtap="onGenderChange" data-gender="2">
+          <text>女</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">生日</view>
+      <picker mode="date" value="{{form.birthday}}" bindchange="onBirthdayChange" start="1950-01-01" end="{{today}}">
+        <view class="picker-value {{form.birthday ? '' : 'placeholder'}}">{{form.birthday || '选择生日'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item textarea-item">
+      <view class="form-label">个人简介</view>
+      <textarea class="form-textarea" placeholder="介绍一下自己吧~" value="{{form.bio}}" bindinput="onBioInput" maxlength="200" auto-height />
+      <view class="char-count">{{form.bio ? form.bio.length : 0}}/200</view>
+    </view>
+  </view>
+</view>

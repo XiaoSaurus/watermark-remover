@@ -1,12 +1,15 @@
 {
   "pages": [
-    "pages/login/login",
-    "pages/user/user",
-    "pages/register/register",
-    "pages/reset/reset",
     "pages/index/index",
     "pages/parse-history/parse-history",
-    "pages/history/history"
+    "pages/history/history",
+    "pages/user/user",
+    "pages/login/login",
+    "pages/register/register",
+    "pages/reset/reset",
+    "pages/edit-profile/edit-profile",
+    "pages/change-password/change-password",
+    "pages/bind-phone/bind-phone"
   ],
   "window": {
     "backgroundTextStyle": "light",

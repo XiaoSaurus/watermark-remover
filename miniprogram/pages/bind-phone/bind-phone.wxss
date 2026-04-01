@@ -1,0 +1,137 @@
+.bind-phone-page {
+  min-height: 100vh;
+  background: #f5f5f8;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 导航栏 */
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 30rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #eee;
+}
+
+.nav-back {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-icon {
+  font-size: 48rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.nav-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.nav-placeholder {
+  width: 60rpx;
+}
+
+/* 内容 */
+.content {
+  flex: 1;
+  padding-top: 20rpx;
+}
+
+.tips {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  background: #fff;
+  margin-bottom: 20rpx;
+}
+
+.tip-icon {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+}
+
+.tip-text {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.form-section {
+  background: #fff;
+  padding: 0 30rpx;
+}
+
+.form-item {
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.form-item:last-child {
+  border-bottom: none;
+}
+
+.form-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.form-input {
+  width: 100%;
+  padding: 16rpx 0;
+  font-size: 30rpx;
+  color: #333;
+  border: none;
+  background: transparent;
+}
+
+.form-input::placeholder {
+  color: #ccc;
+}
+
+.code-input-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.code-input-wrapper .form-input {
+  flex: 1;
+}
+
+.code-btn {
+  padding: 16rpx 24rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  font-size: 24rpx;
+  border-radius: 30rpx;
+  border: none;
+  white-space: nowrap;
+}
+
+.code-btn[disabled] {
+  background: #ccc;
+}
+
+/* 提交按钮 */
+.submit-section {
+  padding: 30rpx;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 28rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+  border-radius: 50rpx;
+  border: none;
+}
