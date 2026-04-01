@@ -47,25 +47,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserVO loginByPhone(LoginRequest req) throws Exception {
+        log.info("手机号登录: phone={}", req.getPhone());
         if (!smsService.verifyCode(req.getPhone(), "login", req.getCode())) {
+            log.warn("验证码验证失败: phone={}", req.getPhone());
             throw new Exception("验证码错误或已过期");
         }
         Optional<User> opt = userRepo.findByPhone(req.getPhone());
         User user = opt.orElseGet(() -> createPhoneUser(req.getPhone()));
+        log.info("手机号登录成功: userId={}", user.getId());
         return buildVO(user);
     }
 
     @Override
     public UserVO loginByWechatMiniprogram(LoginRequest req) throws Exception {
+        log.info("微信小程序登录: code={}", req.getCode());
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + mpAppId
                 + "&secret=" + mpAppSecret + "&js_code=" + req.getCode() + "&grant_type=authorization_code";
         String body = httpGet(url);
         JSONObject json = JSON.parseObject(body);
         if (json.containsKey("errcode") && json.getIntValue("errcode") != 0) {
+            log.error("微信登录失败: {}", json.getString("errmsg"));
             throw new Exception("微信登录失败：" + json.getString("errmsg"));
         }
         String openId = json.getString("openid");
         String unionId = json.getString("unionid");
+        log.info("微信小程序认证成功: openId={}", openId);
         Optional<User> opt = userRepo.findByWxOpenId(openId);
         User user;
         if (opt.isPresent()) {
@@ -74,9 +80,18 @@ public class UserServiceImpl implements UserService {
                 user.setWxUnionId(unionId);
                 userRepo.save(user);
             }
+            log.info("微信小程序登录成功（已存在用户）: userId={}", user.getId());
         } else {
             // 微信小程序新用户，分配随机头像
             Avatar randomAvatar = avatarService.getRandomAvatar();
+            if (randomAvatar == null) {
+                log.warn("获取随机头像失败，使用默认头像");
+                randomAvatar = Avatar.builder()
+                        .id(snowflake.nextId())
+                        .url("https://api.dicebear.com/7.x/bottts/png?seed=default")
+                        .category("default")
+                        .build();
+            }
             user = User.builder()
                     .id(snowflake.nextId())
                     .username(generateUsername())
@@ -87,6 +102,7 @@ public class UserServiceImpl implements UserService {
                     .loginType("wechat")
                     .build();
             userRepo.save(user);
+            log.info("微信小程序登录成功（新用户）: userId={}, avatar={}", user.getId(), randomAvatar.getUrl());
         }
         return buildVO(user);
     }
@@ -137,9 +153,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserVO loginAsTourist() throws Exception {
+        log.info("游客登录请求");
         String username = generateUsername();
+        log.info("生成用户名: {}", username);
+        
         // 游客登录时分配随机头像
         Avatar randomAvatar = avatarService.getRandomAvatar();
+        if (randomAvatar == null) {
+            log.warn("获取随机头像失败，使用默认头像");
+            randomAvatar = Avatar.builder()
+                    .id(snowflake.nextId())
+                    .url("https://api.dicebear.com/7.x/bottts/png?seed=default")
+                    .category("default")
+                    .build();
+        }
+        log.info("分配头像: {}", randomAvatar.getUrl());
+        
         User user = User.builder()
                 .id(snowflake.nextId())
                 .username(username)
@@ -148,7 +177,7 @@ public class UserServiceImpl implements UserService {
                 .loginType("tourist")
                 .build();
         userRepo.save(user);
-        log.info("游客登录成功，分配头像: {}", randomAvatar.getUrl());
+        log.info("游客登录成功，用户ID: {}, 头像: {}", user.getId(), randomAvatar.getUrl());
         return buildVO(user);
     }
 

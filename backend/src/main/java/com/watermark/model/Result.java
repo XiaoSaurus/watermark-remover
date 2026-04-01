@@ -22,7 +22,7 @@ public class Result<T> {
     public static <T> Result<T> error(String message) {
         return Result.<T>builder()
                 .code(500)
-                .message(message)
+                .message(message != null ? message : "Internal Server Error")
                 .data(null)
                 .build();
     }
@@ -30,7 +30,7 @@ public class Result<T> {
     public static <T> Result<T> error(int code, String message) {
         return Result.<T>builder()
                 .code(code)
-                .message(message)
+                .message(message != null ? message : "Error")
                 .data(null)
                 .build();
     }

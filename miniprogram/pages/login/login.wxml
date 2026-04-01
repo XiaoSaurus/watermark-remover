@@ -1,70 +1,100 @@
 <view class="login-page">
-  <!-- 顶部品牌 -->
+  <!-- 顶部返回 -->
+  <view class="top-bar">
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-icon">‹</text>
+    </view>
+  </view>
+
+  <!-- 品牌区域 -->
   <view class="brand">
-    <text class="logo">✂️</text>
-    <text class="title">去水印工具</text>
+    <view class="logo-wrap">
+      <text class="logo">✂️</text>
+    </view>
+    <text class="brand-title">去水印工具</text>
+    <text class="brand-sub">专业视频图片去水印</text>
   </view>
 
-  <!-- 登录方式选择 -->
-  <view class="login-types">
-    <view class="type-item {{loginType=='phone'?'active':''}}" bindtap="selectType" data-type="phone">
-      <text class="icon">📱</text>
-      <text class="label">手机号登录</text>
+  <!-- 登录卡片 -->
+  <view class="login-card">
+    <!-- Tab 切换 -->
+    <view class="tab-bar">
+      <view class="tab-item {{tabIndex === 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0">
+        <text>手机号登录</text>
+      </view>
+      <view class="tab-item {{tabIndex === 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1">
+        <text>微信授权</text>
+      </view>
+      <view class="tab-item {{tabIndex === 2 ? 'active' : ''}}" bindtap="switchTab" data-index="2">
+        <text>游客试用</text>
+      </view>
     </view>
-    <view class="type-item {{loginType=='wechat'?'active':''}}" bindtap="selectType" data-type="wechat">
-      <text class="icon">💬</text>
-      <text class="label">微信授权登录</text>
-    </view>
-    <view class="type-item {{loginType=='tourist'?'active':''}}" bindtap="selectType" data-type="tourist">
-      <text class="icon">👤</text>
-      <text class="label">游客登录</text>
-    </view>
-  </view>
 
-  <!-- 手机号表单 -->
-  <view class="form" wx:if="{{loginType=='phone'}}">
-    <view class="form-title">手机号登录</view>
-    <view class="input-group">
-      <input class="input" placeholder="请输入手机号" type="number" maxlength="11" bindinput="onPhoneInput" value="{{phone}}" />
-    </view>
-    <view class="input-group sms-row">
-      <input class="input" placeholder="请输入6位验证码" type="number" maxlength="6" bindinput="onCodeInput" value="{{code}}" />
-      <button class="sms-btn {{smsLoading || smsCooldown>0 ? 'disabled' : ''}}" bindtap="sendSms" disabled="{{smsLoading || smsCooldown>0}}">
-        {{smsCooldown > 0 ? smsCooldown + 's' : '获取验证码'}}
+    <!-- 手机号登录 -->
+    <view class="tab-content" wx:if="{{tabIndex === 0}}">
+      <view class="input-wrap">
+        <view class="input-item {{focusField === 'phone' ? 'focus' : ''}}">
+          <view class="input-left">
+            <text class="input-icon">📱</text>
+            <text class="input-prefix">+86</text>
+            <view class="input-line"></view>
+          </view>
+          <input class="input-field" type="number" maxlength="11" placeholder="请输入手机号" value="{{phone}}" bindinput="onPhoneInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="phone" />
+        </view>
+        <view class="input-item {{focusField === 'code' ? 'focus' : ''}}">
+          <view class="input-left">
+            <text class="input-icon">🔐</text>
+          </view>
+          <input class="input-field" type="number" maxlength="6" placeholder="请输入验证码" value="{{code}}" bindinput="onCodeInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="code" />
+          <button class="code-btn {{smsCooldown > 0 ? 'cooldown' : ''}}" bindtap="sendSms" disabled="{{smsLoading || smsCooldown > 0}}">
+            {{smsCooldown > 0 ? smsCooldown + 's' : (smsLoading ? '发送中' : '获取验证码')}}
+          </button>
+        </view>
+      </view>
+      <button class="btn-login" bindtap="handleLogin" loading="{{loading}}">
+        <text>登 录</text>
       </button>
+      <view class="card-bottom">
+        <text class="link-text" bindtap="goReset">忘记密码？</text>
+        <text class="link-divider">|</text>
+        <text class="link-text link-primary" bindtap="goRegister">注册账号</text>
+      </view>
     </view>
-    <button class="btn-primary" bindtap="handleLogin" loading="{{loading}}">登录</button>
-  </view>
 
-  <!-- 微信授权 -->
-  <view class="form" wx:if="{{loginType=='wechat'}}">
-    <view class="form-title">微信授权登录</view>
-    <view class="wechat-tip">
-      <text>点击下方按钮，即表示同意</text>
-      <text class="link">《用户服务协议》</text>
+    <!-- 微信授权 -->
+    <view class="tab-content" wx:if="{{tabIndex === 1}}">
+      <view class="wechat-wrap">
+        <view class="wechat-icon-wrap">
+          <text class="wechat-icon">💬</text>
+        </view>
+        <text class="wechat-tip-main">微信一键登录</text>
+        <text class="wechat-tip-sub">便捷安全，无需记住密码</text>
+        <view class="agreement-row">
+          <text class="agreement-text">登录即表示同意</text>
+          <text class="agreement-link">《用户服务协议》</text>
+          <text class="agreement-text">和</text>
+          <text class="agreement-link">《隐私政策》</text>
+        </view>
+        <button class="btn-wechat" open-type="getPhoneNumber" bindgetphonenumber="onGetPhoneNumber">
+          <text class="btn-wechat-text">微信授权登录</text>
+        </button>
+      </view>
     </view>
-    <button class="btn-wechat" open-type="getPhoneNumber" bindgetphonenumber="onGetPhoneNumber">
-      <text>微信授权登录</text>
-    </button>
-    <button class="btn-wechat-code" bindtap="handleWechatLogin">
-      <text>使用微信码登录（备用）</text>
-    </button>
-  </view>
 
-  <!-- 游客登录 -->
-  <view class="form" wx:if="{{loginType=='tourist'}}">
-    <view class="form-title">游客登录</view>
-    <view class="tourist-tip">
-      <text>游客账号默认密码为 123456</text>
-      <text>登录后可升级为正式账号</text>
+    <!-- 游客试用 -->
+    <view class="tab-content" wx:if="{{tabIndex === 2}}">
+      <view class="tourist-wrap">
+        <view class="tourist-icon-wrap">
+          <text class="tourist-icon">👤</text>
+        </view>
+        <text class="tourist-tip-main">游客模式</text>
+        <text class="tourist-tip-sub">无需注册，直接体验全部功能</text>
+        <text class="tourist-tip-sub mt10">数据本地保存，登录后可同步</text>
+        <button class="btn-tourist" bindtap="handleTouristLogin" loading="{{loading}}">
+          <text>进入游客模式</text>
+        </button>
+        <text class="tourist-notice">登录后仍可升级为正式账号，数据不丢失</text>
+      </view>
     </view>
-    <button class="btn-primary" bindtap="handleTouristLogin">游客登录</button>
-  </view>
-
-  <!-- 底部链接 -->
-  <view class="bottom-links">
-    <text bindtap="goRegister">注册账号</text>
-    <text class="divider">|</text>
-    <text bindtap="goReset">忘记密码</text>
   </view>
 </view>

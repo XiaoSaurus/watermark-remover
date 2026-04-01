@@ -11,11 +11,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Tag(name = "用户认证")
+@Slf4j
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -81,16 +83,32 @@ public class AuthController {
     @PostMapping("/login")
     public Result<UserVO> login(@RequestBody LoginRequest req) {
         try {
+            log.info("登录请求: type={}", req.getType());
             UserVO vo = switch (req.getType()) {
-                case "phone" -> userService.loginByPhone(req);
-                case "wechat_miniprogram" -> userService.loginByWechatMiniprogram(req);
-                case "wechat_web" -> userService.loginByWechatWeb(req);
-                case "tourist" -> userService.loginAsTourist();
+                case "phone" -> {
+                    log.info("手机号登录");
+                    yield userService.loginByPhone(req);
+                }
+                case "wechat_miniprogram" -> {
+                    log.info("微信小程序登录");
+                    yield userService.loginByWechatMiniprogram(req);
+                }
+                case "wechat_web" -> {
+                    log.info("微信网页登录");
+                    yield userService.loginByWechatWeb(req);
+                }
+                case "tourist" -> {
+                    log.info("游客登录");
+                    yield userService.loginAsTourist();
+                }
                 default -> throw new Exception("不支持的登录方式：" + req.getType());
             };
+            log.info("登录成功: userId={}", vo.getId());
             return Result.success(vo);
         } catch (Exception e) {
-            return Result.error(e.getMessage());
+            String errorMsg = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
+            log.error("登录失败: {}", errorMsg, e);
+            return Result.error(errorMsg);
         }
     }
 

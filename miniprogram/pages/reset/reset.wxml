@@ -1,22 +1,71 @@
 <view class="reset-page">
-  <view class="form">
-    <view class="form-title">重置密码</view>
-    <view class="input-group">
-      <input class="input" placeholder="请输入手机号" type="number" maxlength="11" bindinput="onPhoneInput" />
+  <!-- 顶部返回 -->
+  <view class="top-bar">
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-icon">‹</text>
     </view>
-    <view class="input-group sms-row">
-      <input class="input" placeholder="请输入验证码" type="number" maxlength="6" bindinput="onCodeInput" />
-      <button class="sms-btn" bindtap="sendSms" disabled="{{smsCooldown>0}}">{{ smsCooldown > 0 ? smsCooldown + 's' : '获取验证码' }}</button>
-    </view>
-    <view class="input-group">
-      <input class="input" placeholder="请输入新密码（6位以上）" password bindinput="onPasswordInput" />
-    </view>
-    <view class="input-group">
-      <input class="input" placeholder="请再次输入新密码" password bindinput="onConfirmInput" />
-    </view>
-    <button class="btn-primary" bindtap="handleReset">确认重置</button>
-    <view class="bottom-links">
-      <text bindtap="goLogin">想起密码了？去登录</text>
+    <text class="page-title">重置密码</text>
+    <view class="placeholder"></view>
+  </view>
+
+  <!-- 重置卡片 -->
+  <view class="reset-card">
+    <view class="form-wrap">
+      <!-- 手机号 -->
+      <view class="input-group">
+        <view class="input-item {{focusField === 'phone' ? 'focus' : ''}}">
+          <view class="input-left">
+            <text class="input-icon">📱</text>
+            <text class="input-prefix">+86</text>
+            <view class="input-line"></view>
+          </view>
+          <input class="input-field" type="number" maxlength="11" placeholder="请输入手机号" value="{{phone}}" bindinput="onPhoneInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="phone" />
+        </view>
+      </view>
+
+      <!-- 验证码 -->
+      <view class="input-group">
+        <view class="input-item {{focusField === 'code' ? 'focus' : ''}}">
+          <view class="input-left">
+            <text class="input-icon">🔐</text>
+          </view>
+          <input class="input-field" type="number" maxlength="6" placeholder="请输入验证码" value="{{code}}" bindinput="onCodeInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="code" />
+          <button class="code-btn {{smsCooldown > 0 ? 'cooldown' : ''}}" bindtap="sendSms" disabled="{{smsLoading || smsCooldown > 0}}">
+            {{smsCooldown > 0 ? smsCooldown + 's' : (smsLoading ? '发送中' : '获取验证码')}}
+          </button>
+        </view>
+      </view>
+
+      <!-- 新密码 -->
+      <view class="input-group">
+        <view class="input-item {{focusField === 'password' ? 'focus' : ''}}">
+          <view class="input-left">
+            <text class="input-icon">🔒</text>
+          </view>
+          <input class="input-field" password placeholder="请输入新密码（6位以上）" value="{{password}}" bindinput="onPasswordInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="password" />
+        </view>
+      </view>
+
+      <!-- 确认密码 -->
+      <view class="input-group">
+        <view class="input-item {{focusField === 'confirm' ? 'focus' : ''}}">
+          <view class="input-left">
+            <text class="input-icon">🔒</text>
+          </view>
+          <input class="input-field" password placeholder="请再次输入新密码" value="{{confirmPassword}}" bindinput="onConfirmInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="confirm" />
+        </view>
+      </view>
+
+      <!-- 重置按钮 -->
+      <button class="btn-reset" bindtap="handleReset" loading="{{loading}}">
+        <text>确认重置</text>
+      </button>
+
+      <!-- 底部登录链接 -->
+      <view class="bottom-link">
+        <text class="link-text">想起密码了？</text>
+        <text class="link-text link-primary" bindtap="goLogin">立即登录</text>
+      </view>
     </view>
   </view>
 </view>

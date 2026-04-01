@@ -1,28 +1,92 @@
 <view class="register-page">
-  <view class="form">
-    <view class="form-title">注册账号</view>
-    <view class="input-group">
-      <input class="input" placeholder="请输入用户名（可选，留空自动生成）" bindinput="onUsernameInput" value="{{username}}" />
-      <view wx:if="{{usernameMessage}}" class="username-status {{usernameStatus}}">
-        <text>{{usernameMessage}}</text>
+  <!-- 顶部返回 -->
+  <view class="top-bar">
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-icon">‹</text>
+    </view>
+    <text class="page-title">注册账号</text>
+    <view class="placeholder"></view>
+  </view>
+
+  <!-- 注册卡片 -->
+  <view class="register-card">
+    <view class="form-wrap">
+      <!-- 用户名（可选） -->
+      <view class="input-group">
+        <view class="input-item {{focusField === 'username' ? 'focus' : ''}}">
+          <view class="input-left">
+            <text class="input-icon">👤</text>
+          </view>
+          <input class="input-field" placeholder="用户名（可选）" value="{{username}}" bindinput="onUsernameInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="username" maxlength="20" />
+        </view>
+        <view class="username-tip" wx:if="{{usernameMessage}}">
+          <text class="username-status {{usernameStatus}}">{{usernameMessage}}</text>
+        </view>
       </view>
-    </view>
-    <view class="input-group">
-      <input class="input" placeholder="请输入手机号" type="number" maxlength="11" bindinput="onPhoneInput" />
-    </view>
-    <view class="input-group sms-row">
-      <input class="input" placeholder="请输入验证码" type="number" maxlength="6" bindinput="onCodeInput" />
-      <button class="sms-btn" bindtap="sendSms" disabled="{{smsCooldown>0}}">{{ smsCooldown > 0 ? smsCooldown + 's' : '获取验证码' }}</button>
-    </view>
-    <view class="input-group">
-      <input class="input" placeholder="请输入密码（6位以上）" password bindinput="onPasswordInput" />
-    </view>
-    <view class="input-group">
-      <input class="input" placeholder="请再次输入密码" password bindinput="onConfirmInput" />
-    </view>
-    <button class="btn-primary" bindtap="handleRegister">注册</button>
-    <view class="bottom-links">
-      <text bindtap="goLogin">已有账号？去登录</text>
+
+      <!-- 手机号 -->
+      <view class="input-group">
+        <view class="input-item {{focusField === 'phone' ? 'focus' : ''}}">
+          <view class="input-left">
+            <text class="input-icon">📱</text>
+            <text class="input-prefix">+86</text>
+            <view class="input-line"></view>
+          </view>
+          <input class="input-field" type="number" maxlength="11" placeholder="请输入手机号" value="{{phone}}" bindinput="onPhoneInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="phone" />
+        </view>
+      </view>
+
+      <!-- 验证码 -->
+      <view class="input-group">
+        <view class="input-item {{focusField === 'code' ? 'focus' : ''}}">
+          <view class="input-left">
+            <text class="input-icon">🔐</text>
+          </view>
+          <input class="input-field" type="number" maxlength="6" placeholder="请输入验证码" value="{{code}}" bindinput="onCodeInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="code" />
+          <button class="code-btn {{smsCooldown > 0 ? 'cooldown' : ''}}" bindtap="sendSms" disabled="{{smsLoading || smsCooldown > 0}}">
+            {{smsCooldown > 0 ? smsCooldown + 's' : (smsLoading ? '发送中' : '获取验证码')}}
+          </button>
+        </view>
+      </view>
+
+      <!-- 密码 -->
+      <view class="input-group">
+        <view class="input-item {{focusField === 'password' ? 'focus' : ''}}">
+          <view class="input-left">
+            <text class="input-icon">🔒</text>
+          </view>
+          <input class="input-field" password placeholder="请输入密码（6位以上）" value="{{password}}" bindinput="onPasswordInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="password" />
+        </view>
+      </view>
+
+      <!-- 确认密码 -->
+      <view class="input-group">
+        <view class="input-item {{focusField === 'confirm' ? 'focus' : ''}}">
+          <view class="input-left">
+            <text class="input-icon">🔒</text>
+          </view>
+          <input class="input-field" password placeholder="请再次输入密码" value="{{confirmPassword}}" bindinput="onConfirmInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="confirm" />
+        </view>
+      </view>
+
+      <!-- 注册按钮 -->
+      <button class="btn-register" bindtap="handleRegister" loading="{{loading}}">
+        <text>注 册</text>
+      </button>
+
+      <!-- 协议提示 -->
+      <view class="agreement-wrap">
+        <text class="agreement-text">注册即表示同意</text>
+        <text class="agreement-link">《用户服务协议》</text>
+        <text class="agreement-text">和</text>
+        <text class="agreement-link">《隐私政策》</text>
+      </view>
+
+      <!-- 底部登录链接 -->
+      <view class="bottom-link">
+        <text class="link-text">已有账号？</text>
+        <text class="link-text link-primary" bindtap="goLogin">立即登录</text>
+      </view>
     </view>
   </view>
 </view>
