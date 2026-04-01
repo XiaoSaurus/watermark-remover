@@ -88,3 +88,35 @@ export const authApi = {
     return http.get("/user/check-username", { params: { username } });
   }
 };
+
+/**
+ * 头像 API
+ */
+export const avatarApi = {
+  /**
+   * 获取随机头像
+   */
+  getRandomAvatar() {
+    return http.get("/avatar/random");
+  },
+
+  /**
+   * 获取头像列表
+   * @param {string} category 分类
+   */
+  getAvatarList(category) {
+    return http.get("/avatar/list", { params: { category } });
+  },
+
+  /**
+   * 上传头像
+   * @param {File} file 文件
+   */
+  uploadAvatar(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    return http.post("/avatar/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+  }
+};
