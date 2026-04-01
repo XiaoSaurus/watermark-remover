@@ -3,129 +3,193 @@
   <block wx:if="{{userInfo}}">
     <!-- 用户头部卡片 -->
     <view class="user-header">
-      <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill" bindtap="chooseAvatar" />
-      <view class="user-info">
-        <text class="username">{{userInfo.nickname || userInfo.username}}</text>
-        <text class="login-type">{{loginTypeLabel}}</text>
-        <text class="user-id">ID: {{userInfo.id}}</text>
+      <view class="header-bg"></view>
+      <view class="user-info-wrapper">
+        <view class="avatar-wrapper" bindtap="chooseAvatar">
+          <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill" />
+          <view class="avatar-edit">
+            <text class="edit-icon">✏️</text>
+          </view>
+        </view>
+        <view class="user-text-info">
+          <text class="username">{{userInfo.nickname || userInfo.username}}</text>
+          <text class="user-id">ID: {{userInfo.id}}</text>
+        </view>
+        <view class="login-type-badge">
+          <text class="login-type-text">{{loginTypeLabel}}</text>
+        </view>
       </view>
     </view>
 
-    <!-- 等级和积分卡片 -->
-    <view class="level-card">
-      <view class="level-item">
-        <text class="level-icon">👑</text>
-        <text class="level-text">Lv.{{userInfo.level || 1}}</text>
-        <text class="level-name">{{getLevelName(userInfo.level || 1)}}</text>
+    <!-- 会员卡片 -->
+    <view class="vip-card">
+      <view class="vip-left">
+        <view class="vip-icon-wrapper">
+          <text class="vip-icon">👑</text>
+        </view>
+        <view class="vip-info">
+          <text class="vip-title">{{userInfo.vipStatus === 'active' ? 'VIP会员' : '普通用户'}}</text>
+          <text class="vip-desc">{{userInfo.vipStatus === 'active' ? '会员到期: ' + (userInfo.vipExpireAt || '永久') : '升级会员享受更多特权'}}</text>
+        </view>
       </view>
-      <view class="divider"></view>
-      <view class="points-item">
-        <text class="points-value">{{userInfo.points || 0}}</text>
-        <text class="points-label">积分</text>
-      </view>
-      <view class="divider"></view>
-      <view class="vip-item" wx:if="{{userInfo.vipStatus === 'active'}}">
-        <text class="vip-icon">⭐</text>
-        <text class="vip-text">VIP会员</text>
-      </view>
-      <view class="vip-item" wx:else>
-        <text class="vip-icon">✨</text>
-        <text class="vip-text">普通用户</text>
+      <view class="vip-right">
+        <button class="vip-btn" wx:if="{{userInfo.vipStatus !== 'active'}}">立即开通</button>
+        <text class="vip-active-tag" wx:else>已开通</text>
       </view>
     </view>
 
-    <!-- 个人信息卡片 -->
-    <view class="info-card">
-      <view class="info-row">
-        <text class="label">昵称</text>
-        <text class="value">{{userInfo.nickname || '未设置'}}</text>
+    <!-- 数据统计 -->
+    <view class="stats-card">
+      <view class="stat-item">
+        <text class="stat-value">{{userInfo.level || 1}}</text>
+        <text class="stat-label">等级</text>
       </view>
-      <view class="info-row">
-        <text class="label">手机号</text>
-        <text class="value">{{userInfo.phoneMasked || '未绑定'}}</text>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-value points">{{userInfo.points || 0}}</text>
+        <text class="stat-label">积分</text>
       </view>
-      <view class="info-row">
-        <text class="label">性别</text>
-        <text class="value">{{getGenderLabel(userInfo.gender)}}</text>
-      </view>
-      <view class="info-row">
-        <text class="label">生日</text>
-        <text class="value">{{userInfo.birthday || '未设置'}}</text>
-      </view>
-      <view class="info-row">
-        <text class="label">登录方式</text>
-        <text class="value">{{loginTypeLabel}}</text>
-      </view>
-      <view class="info-row">
-        <text class="label">登录次数</text>
-        <text class="value">{{userInfo.loginCount || 0}} 次</text>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-value">{{userInfo.loginCount || 0}}</text>
+        <text class="stat-label">登录次数</text>
       </view>
     </view>
 
-    <!-- 个人简介 -->
-    <view class="bio-card" wx:if="{{userInfo.bio}}">
-      <text class="bio-title">个人简介</text>
-      <text class="bio-text">{{userInfo.bio}}</text>
+    <!-- 个人信息列表 -->
+    <view class="info-section">
+      <view class="section-title">
+        <text>基本信息</text>
+      </view>
+      <view class="info-card">
+        <view class="info-item" bindtap="editProfile">
+          <view class="info-left">
+            <text class="info-icon">👤</text>
+            <text class="info-label">昵称</text>
+          </view>
+          <view class="info-right">
+            <text class="info-value">{{userInfo.nickname || '未设置'}}</text>
+            <text class="arrow">›</text>
+          </view>
+        </view>
+        <view class="info-item">
+          <view class="info-left">
+            <text class="info-icon">📱</text>
+            <text class="info-label">手机号</text>
+          </view>
+          <view class="info-right">
+            <text class="info-value">{{userInfo.phoneMasked || '未绑定'}}</text>
+          </view>
+        </view>
+        <view class="info-item">
+          <view class="info-left">
+            <text class="info-icon">⚧</text>
+            <text class="info-label">性别</text>
+          </view>
+          <view class="info-right">
+            <text class="info-value">{{getGenderLabel(userInfo.gender)}}</text>
+          </view>
+        </view>
+        <view class="info-item">
+          <view class="info-left">
+            <text class="info-icon">🎂</text>
+            <text class="info-label">生日</text>
+          </view>
+          <view class="info-right">
+            <text class="info-value">{{userInfo.birthday || '未设置'}}</text>
+          </view>
+        </view>
+        <view class="info-item" wx:if="{{userInfo.bio}}">
+          <view class="info-left">
+            <text class="info-icon">💬</text>
+            <text class="info-label">个人简介</text>
+          </view>
+          <view class="info-right">
+            <text class="info-value bio-text">{{userInfo.bio}}</text>
+          </view>
+        </view>
+      </view>
     </view>
 
     <!-- 操作按钮 -->
-    <view class="action-buttons">
-      <button class="btn btn-primary" bindtap="editProfile">编辑资料</button>
-      <button class="btn btn-secondary" bindtap="changePassword">修改密码</button>
-      <button class="btn btn-secondary" bindtap="bindPhone" wx:if="{{!userInfo.phone && (userInfo.loginType === 'tourist' || userInfo.loginType === 'wechat')}}">绑定手机号</button>
-      <button class="btn btn-danger" bindtap="handleLogout">退出登录</button>
+    <view class="action-section">
+      <button class="action-btn primary" bindtap="editProfile">
+        <text class="btn-icon">✏️</text>
+        <text class="btn-text">编辑资料</text>
+      </button>
+      <button class="action-btn" bindtap="changePassword" wx:if="{{userInfo.phone}}">
+        <text class="btn-icon">🔑</text>
+        <text class="btn-text">修改密码</text>
+      </button>
+      <button class="action-btn" bindtap="bindPhone" wx:if="{{!userInfo.phone && (userInfo.loginType === 'tourist' || userInfo.loginType === 'wechat')}}">
+        <text class="btn-icon">📱</text>
+        <text class="btn-text">绑定手机号</text>
+      </button>
+      <button class="action-btn danger" bindtap="handleLogout">
+        <text class="btn-icon">🚪</text>
+        <text class="btn-text">退出登录</text>
+      </button>
     </view>
   </block>
 
   <!-- 未登录 -->
   <block wx:else>
     <view class="not-login">
+      <view class="not-login-bg"></view>
       <view class="not-login-content">
-        <text class="logo">✂️</text>
+        <view class="logo-wrapper">
+          <text class="logo">✂️</text>
+        </view>
         <text class="title">去水印工具</text>
         <text class="sub">登录后可同步解析历史和下载记录</text>
-        <button class="btn-login" bindtap="goLogin">登录 / 注册</button>
+        <button class="btn-login" bindtap="goLogin">
+          <text>登录 / 注册</text>
+        </button>
         <text class="guest-tip">或继续以游客身份使用</text>
       </view>
     </view>
   </block>
 
   <!-- 编辑资料弹窗 -->
-  <van-popup show="{{showEditModal}}" position="bottom" custom-style="height: 60%;" bind:close="closeEditModal">
+  <van-popup show="{{showEditModal}}" position="bottom" round custom-style="height: 70%;">
     <view class="modal-header">
       <text class="modal-title">编辑资料</text>
       <text class="close-btn" bindtap="closeEditModal">✕</text>
     </view>
     <scroll-view scroll-y class="modal-content">
+      <view class="avatar-upload">
+        <view class="avatar-upload-wrapper" bindtap="chooseAvatar">
+          <image class="avatar-preview" src="{{editForm.avatar || userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill" />
+          <text class="avatar-tip">点击更换头像</text>
+        </view>
+      </view>
       <view class="form-group">
         <text class="form-label">昵称</text>
-        <input class="form-input" type="text" placeholder="请输入昵称" value="{{editForm.nickname}}" bindinput="onNicknameInput" maxlength="50" />
+        <input class="form-input" type="text" placeholder="请输入昵称" value="{{editForm.nickname}}" bindinput="onNicknameInput" maxlength="20" />
       </view>
       <view class="form-group">
         <text class="form-label">个人简介</text>
         <textarea class="form-textarea" placeholder="介绍一下自己吧" value="{{editForm.bio}}" bindinput="onBioInput" maxlength="200"></textarea>
+        <text class="char-count">{{editForm.bio ? editForm.bio.length : 0}}/200</text>
       </view>
       <view class="form-group">
         <text class="form-label">性别</text>
-        <view class="radio-group">
-          <label class="radio-item">
-            <radio value="0" checked="{{editForm.gender === 0}}" bindchange="onGenderChange" />
+        <view class="gender-select">
+          <view class="gender-item {{editForm.gender === 0 ? 'active' : ''}}" bindtap="onGenderChange" data-gender="0">
             <text>保密</text>
-          </label>
-          <label class="radio-item">
-            <radio value="1" checked="{{editForm.gender === 1}}" bindchange="onGenderChange" />
+          </view>
+          <view class="gender-item {{editForm.gender === 1 ? 'active' : ''}}" bindtap="onGenderChange" data-gender="1">
             <text>男</text>
-          </label>
-          <label class="radio-item">
-            <radio value="2" checked="{{editForm.gender === 2}}" bindchange="onGenderChange" />
+          </view>
+          <view class="gender-item {{editForm.gender === 2 ? 'active' : ''}}" bindtap="onGenderChange" data-gender="2">
             <text>女</text>
-          </label>
+          </view>
         </view>
       </view>
       <view class="form-group">
         <text class="form-label">生日</text>
-        <picker mode="date" value="{{editForm.birthday}}" bindchange="onBirthdayChange">
-          <view class="picker-value">{{editForm.birthday || '选择生日'}}</view>
+        <picker mode="date" value="{{editForm.birthday}}" bindchange="onBirthdayChange" start="1900-01-01" end="{{today}}">
+          <view class="picker-value {{editForm.birthday ? '' : 'placeholder'}}">{{editForm.birthday || '选择生日'}}</view>
         </picker>
       </view>
     </scroll-view>
@@ -136,7 +200,7 @@
   </van-popup>
 
   <!-- 修改密码弹窗 -->
-  <van-popup show="{{showPasswordModal}}" position="bottom" custom-style="height: 50%;" bind:close="closePasswordModal">
+  <van-popup show="{{showPasswordModal}}" position="bottom" round custom-style="height: 55%;">
     <view class="modal-header">
       <text class="modal-title">修改密码</text>
       <text class="close-btn" bindtap="closePasswordModal">✕</text>
@@ -162,7 +226,7 @@
   </van-popup>
 
   <!-- 绑定手机号弹窗 -->
-  <van-popup show="{{showBindPhoneModal}}" position="bottom" custom-style="height: 50%;" bind:close="closeBindPhoneModal">
+  <van-popup show="{{showBindPhoneModal}}" position="bottom" round custom-style="height: 50%;">
     <view class="modal-header">
       <text class="modal-title">绑定手机号</text>
       <text class="close-btn" bindtap="closeBindPhoneModal">✕</text>
@@ -176,7 +240,7 @@
         <text class="form-label">验证码</text>
         <view class="code-input-group">
           <input class="form-input" type="number" placeholder="请输入验证码" value="{{bindPhoneForm.code}}" bindinput="onCodeInput" maxlength="6" />
-          <button class="btn-code" bindtap="sendCode" disabled="{{countdown > 0}}" loading="{{sendingCode}}">
+          <button class="btn-code" bindtap="sendCode" disabled="{{countdown > 0}}">
             {{countdown > 0 ? countdown + 's' : '获取验证码'}}
           </button>
         </view>

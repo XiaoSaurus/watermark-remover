@@ -129,7 +129,7 @@ Page({
   },
 
   onGenderChange(e) {
-    this.setData({ 'editForm.gender': parseInt(e.detail.value) })
+    this.setData({ 'editForm.gender': parseInt(e.currentTarget.dataset.gender) })
   },
 
   onBirthdayChange(e) {
