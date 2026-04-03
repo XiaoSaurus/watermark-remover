@@ -3,8 +3,8 @@
   <!-- Hero -->
   <view class="hero" style="background:{{theme.gradBg}}">
     <view class="hero-top-bar">
-      <view class="hero-badge">✨ 免费 · 无广告 · 无水印</view>
-      <view class="theme-btn" bindtap="showThemePicker">🎨</view>
+      <view class="hero-badge">免费 · 无广告 · 无水印</view>
+      <view class="theme-btn" bindtap="showThemePicker">主题</view>
     </view>
     <text class="hero-title">短视频去水印</text>
     <text class="hero-sub">粘贴链接，一键去水印下载</text>
@@ -18,7 +18,7 @@
 
   <!-- 输入卡片 -->
   <view class="card input-card">
-    <view class="input-label">🔗 粘贴分享链接</view>
+    <view class="input-label">粘贴分享链接</view>
     <textarea
       class="url-input"
       value="{{inputUrl}}"
@@ -28,15 +28,15 @@
       auto-height
     />
     <view class="btn-row">
-      <view class="btn-clear-sm" bindtap="clearInput" wx:if="{{inputUrl}}">🗑 清空</view>
+      <view class="btn-clear-sm" bindtap="clearInput" wx:if="{{inputUrl}}">清空</view>
       <view
         class="btn-parse {{loading ? 'btn-parse-loading' : ''}}"
         style="background:{{loading ? 'linear-gradient(135deg,#aaa,#ccc)' : theme.gradBtn}}"
         bindtap="handleParse"
       >
         <view class="btn-parse-inner">
-          <text wx:if="{{loading}}">⏳ 解析中...</text>
-          <text wx:else>🚀 立即解析</text>
+          <text wx:if="{{loading}}">解析中...</text>
+          <text wx:else>立即解析</text>
         </view>
       </view>
     </view>
@@ -47,19 +47,19 @@
     <view class="result-header">
       <view class="cover-wrap">
         <image class="cover-img" src="{{result.cover}}" mode="aspectFill" wx:if="{{result.cover}}" />
-        <view class="cover-placeholder" wx:else><text>🎬</text></view>
+        <view class="cover-placeholder" wx:else><text class="cover-ph-text">无封面</text></view>
         <view class="cover-platform-badge" style="background:{{theme.primary}}">{{platformLabel}}</view>
       </view>
       <view class="result-meta">
         <text class="result-title">{{result.title || '无标题'}}</text>
-        <text class="result-author">👤 {{result.author || '未知作者'}}</text>
+        <text class="result-author">作者 {{result.author || '未知作者'}}</text>
       </view>
     </view>
     <view class="divider" />
     <view class="progress-block" wx:if="{{downloadStatus}}">
       <view class="progress-info-row">
         <text class="progress-label-text" style="color:{{theme.primary}}">
-          {{downloadStatus === 'saving' ? '⏳ 保存到相册中...' : '⬇️ 下载中 ' + downloadProgress + '%'}}
+          {{downloadStatus === 'saving' ? '保存到相册中...' : '下载中 ' + downloadProgress + '%'}}
         </text>
         <view class="progress-pct-badge" style="background:{{theme.gradBtn}}">
           {{downloadStatus === 'saving' ? '100%' : downloadProgress + '%'}}
@@ -70,7 +70,7 @@
       </view>
     </view>
     <view class="download-section">
-      <view class="section-title">📥 选择清晰度下载</view>
+      <view class="section-title">选择清晰度下载</view>
       <view class="quality-list">
         <view class="quality-row" wx:for="{{result.videoUrls}}" wx:key="quality">
           <view class="quality-info">
@@ -85,21 +85,21 @@
               data-url="{{item.url}}" data-quality="{{item.quality}}" data-index="{{index}}"
             >
               <text wx:if="{{downloadingIndex === index}}">{{downloadProgress}}%</text>
-              <text wx:else>⬇️ 下载</text>
+              <text wx:else>下载</text>
             </view>
-            <view class="btn-copy-sm" style="color:{{theme.primary}}" bindtap="copyUrl" data-url="{{item.url}}">📋</view>
+            <view class="btn-copy-sm" style="color:{{theme.primary}}" bindtap="copyUrl" data-url="{{item.url}}">复制</view>
           </view>
         </view>
       </view>
     </view>
     <view class="tip-box" wx:if="{{result.platform === 'bilibili'}}">
-      ⚠️ B站视频音视频分离，需分别下载后合并
+      B站视频音视频分离，需分别下载后合并
     </view>
   </view>
 
   <!-- 使用说明 -->
   <view class="card guide-card">
-    <view class="guide-title">📖 使用说明</view>
+    <view class="guide-title">使用说明</view>
     <view class="guide-steps">
       <view class="guide-step" wx:for="{{steps}}" wx:key="index">
         <image class="step-icon" src="{{item.icon}}" mode="aspectFit" />
@@ -114,7 +114,7 @@
   <!-- 悬浮进度条 -->
   <view class="float-progress" wx:if="{{downloadStatus}}">
     <text class="float-label" style="color:{{theme.primary}}">
-      {{downloadStatus === 'saving' ? '⏳ 保存中...' : '⬇️ 下载中 ' + downloadProgress + '%'}}
+      {{downloadStatus === 'saving' ? '保存中...' : '下载中 ' + downloadProgress + '%'}}
     </text>
     <view class="progress-bar-bg">
       <view class="progress-bar-fill" style="width:{{downloadStatus==='saving'?100:downloadProgress}}%;background:{{theme.gradBtn}}"></view>

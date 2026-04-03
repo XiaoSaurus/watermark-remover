@@ -8,6 +8,7 @@ import com.watermark.service.impl.SmsServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class AuthController {
 
     @Operation(summary = "发送短信验证码")
     @PostMapping("/sms/send")
-    public Result<Void> sendSms(@RequestBody SmsRequest req, HttpServletRequest request) {
+    public Result<Void> sendSms(@Valid @RequestBody SmsRequest req, HttpServletRequest request) {
         try {
             // 获取客户端IP
             String ip = getClientIp(request);
@@ -67,7 +68,7 @@ public class AuthController {
 
     @Operation(summary = "验证短信验证码")
     @PostMapping("/sms/verify")
-    public Result<Map<String, Boolean>> verifySms(@RequestBody VerifySmsRequest req) {
+    public Result<Map<String, Boolean>> verifySms(@Valid @RequestBody VerifySmsRequest req) {
         boolean valid = smsService.verifyCode(req.getPhone(), req.getScene(), req.getCode());
         Map<String, Boolean> data = new HashMap<>();
         data.put("valid", valid);
@@ -81,7 +82,7 @@ public class AuthController {
 
     @Operation(summary = "登录（phone/wechat_miniprogram/wechat_web/tourist）")
     @PostMapping("/login")
-    public Result<UserVO> login(@RequestBody LoginRequest req) {
+    public Result<UserVO> login(@Valid @RequestBody LoginRequest req) {
         try {
             // 记录完整的请求信息
             log.info("登录请求接收: {}", req);
@@ -128,7 +129,7 @@ public class AuthController {
 
     @Operation(summary = "注册（手机号）")
     @PostMapping("/register")
-    public Result<UserVO> register(@RequestBody RegisterRequest req) {
+    public Result<UserVO> register(@Valid @RequestBody RegisterRequest req) {
         try {
             return Result.success(userService.register(req));
         } catch (Exception e) {
@@ -138,7 +139,7 @@ public class AuthController {
 
     @Operation(summary = "忘记密码/重置密码")
     @PostMapping("/reset-password")
-    public Result<Void> resetPassword(@RequestBody ResetPasswordRequest req) {
+    public Result<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest req) {
         try {
             userService.resetPassword(req);
             return Result.success(null);
@@ -169,7 +170,7 @@ public class AuthController {
 
     @Operation(summary = "更新用户资料")
     @PutMapping("/profile")
-    public Result<Void> updateProfile(Authentication auth, @RequestBody UpdateProfileRequest req) {
+    public Result<Void> updateProfile(Authentication auth, @Valid @RequestBody UpdateProfileRequest req) {
         if (auth == null) return Result.error("未登录");
         Long userId = (Long) auth.getPrincipal();
         try {
@@ -182,7 +183,7 @@ public class AuthController {
 
     @Operation(summary = "修改密码")
     @PutMapping("/password")
-    public Result<Void> changePassword(Authentication auth, @RequestBody ChangePasswordRequest req) {
+    public Result<Void> changePassword(Authentication auth, @Valid @RequestBody ChangePasswordRequest req) {
         if (auth == null) return Result.error("未登录");
         Long userId = (Long) auth.getPrincipal();
         try {
@@ -195,7 +196,7 @@ public class AuthController {
 
     @Operation(summary = "绑定手机号")
     @PostMapping("/bind-phone")
-    public Result<Void> bindPhone(Authentication auth, @RequestBody BindPhoneRequest req) {
+    public Result<Void> bindPhone(Authentication auth, @Valid @RequestBody BindPhoneRequest req) {
         if (auth == null) return Result.error("未登录");
         Long userId = (Long) auth.getPrincipal();
         try {

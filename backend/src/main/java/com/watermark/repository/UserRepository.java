@@ -12,6 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByWxOpenId(String wxOpenId);
     Optional<User> findByWxUnionId(String wxUnionId);
     Optional<User> findByWxWebOpenId(String wxWebOpenId);
+    Optional<User> findByDeviceIdAndLoginType(String deviceId, String loginType);
     boolean existsByUsername(String username);
     boolean existsByPhone(String phone);
 }

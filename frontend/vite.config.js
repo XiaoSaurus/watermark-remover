@@ -16,8 +16,6 @@ export default defineConfig({
       "/api": {
         target: "http://127.0.0.1:8080",
         changeOrigin: true,
-        // 添加更多代理选项
-        rewrite: (path) => path,
       },
     },
   },

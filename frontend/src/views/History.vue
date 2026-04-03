@@ -53,11 +53,11 @@ import Navbar from '@/components/Navbar.vue'
 import { historyApi } from '@/api/watermark'
 import { clearDownloadHistory, removeDownloadHistory } from '@/store/history'
 const list=ref([]),total=ref(0),currentPage=ref(1),pageSize=20,pageLoading=ref(false)
-const platformMap={douyin:'🎵 抖音',kuaishou:'⚡ 快手',bilibili:'📺 B站',weibo:'🌐 微博',xiaohongshu:'📕 小红书'}
+const platformMap = { douyin: '抖音', kuaishou: '快手', bilibili: 'B站', weibo: '微博', xiaohongshu: '小红书' }
 onMounted(loadList)
 async function loadList(){
   pageLoading.value=true
-  try{const res=await historyApi.list(currentPage.value-1,pageSize);list.value=res.data.content;total.value=res.data.totalElements}
+  try{const res=await historyApi.list(currentPage.value-1,pageSize); const page=res.data?.data?.content||res.data?.content||[]; list.value=Array.isArray(page)?page:[]; total.value=res.data?.data?.totalElements||res.data?.totalElements||0}
   catch{ElMessage.error('加载失败')}finally{pageLoading.value=false}
 }
 function formatTime(ts){
@@ -66,11 +66,32 @@ function formatTime(ts){
 }
 async function handleClear(){
   await ElMessageBox.confirm('确定清空所有下载历史？','确认清空',{type:'warning',confirmButtonText:'清空',cancelButtonText:'取消'})
-  await clearDownloadHistory();list.value=[];total.value=0;ElMessage({message:'已清空',type:'success',plain:true})
+  try {
+    await clearDownloadHistory()
+    list.value = []
+    total.value = 0
+    ElMessage({message:'已清空',type:'success',plain:true})
+  } catch (e) {
+    if (e.response?.status === 403) {
+      ElMessage({message:'请先登录后再操作',type:'warning',plain:true})
+    } else {
+      ElMessage({message:'清空失败',type:'error',plain:true})
+    }
+  }
 }
 async function handleDelete(id){
-  await removeDownloadHistory(id);list.value=list.value.filter(i=>i.id!==id);total.value--
-  ElMessage({message:'已删除',type:'success',plain:true})
+  try {
+    await removeDownloadHistory(id)
+    list.value = list.value.filter(i => i.id !== id)
+    total.value--
+    ElMessage({message:'已删除',type:'success',plain:true})
+  } catch (e) {
+    if (e.response?.status === 403) {
+      ElMessage({message:'请先登录后再操作',type:'warning',plain:true})
+    } else {
+      ElMessage({message:'删除失败',type:'error',plain:true})
+    }
+  }
 }
 function coverError(e){e.target.src='https://via.placeholder.com/80x60?text=No+Cover'}
 </script>
@@ -80,7 +101,7 @@ function coverError(e){e.target.src='https://via.placeholder.com/80x60?text=No+C
 .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
 .page-title{display:flex;align-items:center;gap:8px}
 .page-title h2{font-size:22px;font-weight:800;color:var(--text-primary)}
-.count-badge{background:var(--gradient-btn);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:var(--border-radius-full)}
+.count-badge{background:var(--color-primary);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:var(--border-radius-full)}
 .loading-wrap{display:flex;justify-content:center;padding:80px}
 .empty-card{padding:60px 40px!important}
 .history-list{display:flex;flex-direction:column;gap:12px}
@@ -98,4 +119,78 @@ function coverError(e){e.target.src='https://via.placeholder.com/80x60?text=No+C
 .item-time{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted)}
 .item-errmsg{font-size:11px;color:var(--color-danger)}
 .pagination{display:flex;justify-content:center;margin-top:28px}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .main {
+    padding: 20px 12px 60px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .page-title h2 {
+    font-size: 18px;
+  }
+
+  .count-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .history-list {
+    gap: 10px;
+  }
+
+  .history-item {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .item-cover {
+    width: 70px;
+    height: 52px;
+  }
+
+  .item-title {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .item-tags {
+    gap: 4px;
+    margin-bottom: 5px;
+  }
+
+  .tag {
+    font-size: 10px;
+    padding: 2px 7px;
+  }
+
+  .item-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .item-time {
+    font-size: 10px;
+  }
+
+  .item-errmsg {
+    font-size: 10px;
+  }
+
+  .empty-card {
+    padding: 40px 20px !important;
+  }
+
+  .pagination {
+    margin-top: 20px;
+  }
+}
 </style>

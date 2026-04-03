@@ -15,7 +15,7 @@
       <view class="input-group">
         <view class="input-item {{focusField === 'username' ? 'focus' : ''}}">
           <view class="input-left">
-            <text class="input-icon">👤</text>
+            <text class="input-key">户</text>
           </view>
           <input class="input-field" placeholder="用户名（可选）" value="{{username}}" bindinput="onUsernameInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="username" maxlength="20" />
         </view>
@@ -28,7 +28,7 @@
       <view class="input-group">
         <view class="input-item {{focusField === 'phone' ? 'focus' : ''}}">
           <view class="input-left">
-            <text class="input-icon">📱</text>
+            <text class="input-key">机</text>
             <text class="input-prefix">+86</text>
             <view class="input-line"></view>
           </view>
@@ -40,7 +40,7 @@
       <view class="input-group">
         <view class="input-item {{focusField === 'code' ? 'focus' : ''}}">
           <view class="input-left">
-            <text class="input-icon">🔐</text>
+            <text class="input-key">验</text>
           </view>
           <input class="input-field" type="number" maxlength="6" placeholder="请输入验证码" value="{{code}}" bindinput="onCodeInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="code" />
           <button class="code-btn {{smsCooldown > 0 ? 'cooldown' : ''}}" bindtap="sendSms" disabled="{{smsLoading || smsCooldown > 0}}">
@@ -53,7 +53,7 @@
       <view class="input-group">
         <view class="input-item {{focusField === 'password' ? 'focus' : ''}}">
           <view class="input-left">
-            <text class="input-icon">🔒</text>
+            <text class="input-key">密</text>
           </view>
           <input class="input-field" password placeholder="请输入密码（6位以上）" value="{{password}}" bindinput="onPasswordInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="password" />
         </view>
@@ -63,7 +63,7 @@
       <view class="input-group">
         <view class="input-item {{focusField === 'confirm' ? 'focus' : ''}}">
           <view class="input-left">
-            <text class="input-icon">🔒</text>
+            <text class="input-key">密</text>
           </view>
           <input class="input-field" password placeholder="请再次输入密码" value="{{confirmPassword}}" bindinput="onConfirmInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="confirm" />
         </view>

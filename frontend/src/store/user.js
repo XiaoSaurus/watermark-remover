@@ -6,34 +6,37 @@ export const useUserStore = defineStore("user", () => {
   const user = ref(null);
   const token = ref(localStorage.getItem("token") || "");
 
-  const isLoggedIn = computed(() => !!token.value && !!user.value);
+  const isLoggedIn = computed(() => !!token.value);
 
   async function login(type, data) {
     const res = await authApi.login(type, data);
-    if (res.code === 200) {
-      token.value = res.data.token;
-      user.value = res.data;
+    const result = res.data; // axios 全局实例返回 AxiosResponse，需要 .data 获取 Result
+    if (result.code === 200) {
+      token.value = result.data.token;
+      user.value = result.data;
       localStorage.setItem("token", token.value);
-      return res.data;
+      return result.data;
     }
-    throw new Error(res.message);
+    throw new Error(result.message);
   }
 
   async function register(phone, code, password, confirmPassword, username) {
     const res = await authApi.register(phone, code, password, confirmPassword, username);
-    if (res.code === 200) {
-      token.value = res.data.token;
-      user.value = res.data;
+    const result = res.data;
+    if (result.code === 200) {
+      token.value = result.data.token;
+      user.value = result.data;
       localStorage.setItem("token", token.value);
-      return res.data;
+      return result.data;
     }
-    throw new Error(res.message);
+    throw new Error(result.message);
   }
 
   async function resetPassword(phone, code, newPassword, confirmPassword) {
     const res = await authApi.resetPassword(phone, code, newPassword, confirmPassword);
-    if (res.code === 200) return res.data;
-    throw new Error(res.message);
+    const result = res.data;
+    if (result.code === 200) return result.data;
+    throw new Error(result.message);
   }
 
   function logout() {

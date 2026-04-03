@@ -1,24 +1,26 @@
 import axios from "axios";
 
-const http = axios.create({ baseURL: "/api", timeout: 30000 });
-http.interceptors.response.use(res => res.data, err => Promise.reject(err));
+// 直接使用全局 axios 实例，复用 main.js 中配置的拦截器（token注入、401跳转）
+// 不再创建独立实例，确保所有请求都经过全局拦截器处理
+
+const API_BASE = "/api";
 
 export const videoApi = {
-  parse(url) { return http.post("/video/parse", { url }); },
+  parse(url) { return axios.post(`${API_BASE}/video/parse`, { url }); },
 };
 
 // 解析历史
 export const parseHistoryApi = {
-  save(item)              { return http.post("/parse-history", item); },
-  list(page=0, size=20)   { return http.get("/parse-history", { params: { page, size } }); },
-  remove(id)              { return http.delete(`/parse-history/${id}`); },
-  clear()                 { return http.delete("/parse-history"); },
+  save(item)              { return axios.post(`${API_BASE}/parse-history`, item); },
+  list(page=0, size=20)   { return axios.get(`${API_BASE}/parse-history`, { params: { page, size } }); },
+  remove(id)              { return axios.delete(`${API_BASE}/parse-history/${id}`); },
+  clear()                 { return axios.delete(`${API_BASE}/parse-history`); },
 };
 
 // 下载历史
 export const historyApi = {
-  save(item)              { return http.post("/history", item); },
-  list(page=0, size=20)   { return http.get("/history", { params: { page, size } }); },
-  remove(id)              { return http.delete(`/history/${id}`); },
-  clear()                 { return http.delete("/history"); },
+  save(item)              { return axios.post(`${API_BASE}/history`, item); },
+  list(page=0, size=20)   { return axios.get(`${API_BASE}/history`, { params: { page, size } }); },
+  remove(id)              { return axios.delete(`${API_BASE}/history/${id}`); },
+  clear()                 { return axios.delete(`${API_BASE}/history`); },
 };

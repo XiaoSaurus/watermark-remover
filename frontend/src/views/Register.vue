@@ -12,7 +12,7 @@
         <!-- 头部 -->
         <div class="register-header">
           <div class="logo-wrapper">
-            <span class="logo">✂️</span>
+            <el-icon class="logo-icon" :size="40" color="#fff"><Film /></el-icon>
           </div>
           <h1>创建账号</h1>
           <p>开始使用去水印工具</p>
@@ -140,6 +140,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store/user'
 import { authApi } from '@/api/auth'
+import { Film } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -315,7 +316,7 @@ function goBack() {
 <style scoped>
 .register-page {
   min-height: 100vh;
-  background: var(--gradient-bg);
+  background: var(--bg-page);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -376,10 +377,10 @@ function goBack() {
 /* 注册容器 */
 .register-container {
   background: var(--bg-card);
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(108, 99, 255, 0.2);
+  border-radius: var(--border-radius-xl);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
   padding: 48px 32px;
-  backdrop-filter: blur(10px);
 }
 
 /* 头部 */
@@ -392,12 +393,12 @@ function goBack() {
   width: 80px;
   height: 80px;
   margin: 0 auto 20px;
-  background: linear-gradient(135deg, #6c63ff, #764ba2);
-  border-radius: 20px;
+  background: var(--color-primary);
+  border-radius: var(--border-radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.3);
+  box-shadow: var(--shadow-btn);
   animation: bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -406,9 +407,8 @@ function goBack() {
   50% { transform: translateY(-10px); }
 }
 
-.logo {
-  font-size: 48px;
-  display: block;
+.logo-icon {
+  display: flex;
 }
 
 .register-header h1 {
@@ -492,8 +492,8 @@ function goBack() {
 .send-code-btn:hover:not(:disabled) {
   background: var(--color-primary-light);
   border-color: var(--color-primary-light);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .send-code-btn:disabled {
@@ -505,22 +505,23 @@ function goBack() {
 .submit-btn {
   width: 100%;
   height: 48px;
-  border-radius: 12px;
+  border-radius: var(--border-radius-md);
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  background: linear-gradient(135deg, var(--color-primary), #764ba2);
+  background: var(--color-primary);
   border: none;
   color: white;
   cursor: pointer;
   transition: var(--transition);
-  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.3);
+  box-shadow: var(--shadow-btn);
   margin-top: 8px;
 }
 
 .submit-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(108, 99, 255, 0.4);
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: var(--shadow-md);
 }
 
 .submit-btn:active:not(:disabled) {
@@ -587,6 +588,73 @@ function goBack() {
 
   .back-btn:hover {
     background: rgba(26, 26, 46, 1);
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .register-page {
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: 60px;
+  }
+
+  .back-btn {
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .register-wrapper {
+    max-width: 100%;
+  }
+
+  .register-container {
+    padding: 24px 16px;
+    border-radius: var(--border-radius-lg);
+  }
+
+  .register-header {
+    margin-bottom: 28px;
+  }
+
+  .logo-wrapper {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+  }
+
+  .register-header h1 {
+    font-size: 26px;
+  }
+
+  .register-header p {
+    font-size: 13px;
+  }
+
+  .code-input-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .send-code-btn {
+    width: 100%;
+    height: 44px;
+  }
+
+  .submit-btn {
+    height: 44px;
+    font-size: 15px;
+    margin-top: 4px;
+  }
+
+  .auth-footer {
+    margin-top: 20px;
+  }
+
+  .footer-text {
+    font-size: 12px;
   }
 }
 </style>

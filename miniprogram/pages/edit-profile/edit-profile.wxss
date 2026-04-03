@@ -41,7 +41,7 @@
 
 .save-btn {
   padding: 12rpx 24rpx;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #6c63ff;
   color: #fff;
   font-size: 26rpx;
   border-radius: 30rpx;
@@ -128,7 +128,7 @@
 }
 
 .gender-item.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #6c63ff;
   color: #fff;
 }
 

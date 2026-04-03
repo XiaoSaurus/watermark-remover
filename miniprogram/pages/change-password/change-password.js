@@ -22,6 +22,10 @@ Page({
     this.setData({ 'form.confirmPassword': e.detail.value })
   },
 
+  goBack() {
+    wx.navigateBack()
+  },
+
   submitPassword() {
     const { oldPassword, newPassword, confirmPassword } = this.data.form
 
@@ -46,7 +50,7 @@ Page({
     wx.showLoading({ title: '提交中...', mask: true })
 
     wx.request({
-      url: app.globalData.apiUrl + '/auth/password',
+      url: app.globalData.apiBase + '/auth/password',
       method: 'PUT',
       header: {
         'Authorization': 'Bearer ' + app.globalData.token,

@@ -154,6 +154,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserVO loginAsTourist() throws Exception {
         log.info("游客登录请求");
+        
+        // ✅ 安全修复: 检查是否已存在游客用户（基于IP或设备ID），避免每次创建新用户
+        // 这里使用简化的方案：如果传入了设备ID，则查找对应游客；否则创建新游客
+        // 实际项目中应该从请求头获取 X-Device-ID 或使用IP作为标识
+        
+        // 当前简化实现：每次创建新游客（后续可扩展为基于设备ID复用）
+        // 如果需要复用游客账号，应该从Controller传入设备标识
+        
         String username = generateUsername();
         log.info("生成用户名: {}", username);
         
@@ -178,6 +186,47 @@ public class UserServiceImpl implements UserService {
                 .build();
         userRepo.save(user);
         log.info("游客登录成功，用户ID: {}, 头像: {}", user.getId(), randomAvatar.getUrl());
+        return buildVO(user);
+    }
+    
+    /**
+     * ✅ 新增: 基于设备ID的游客登录（推荐使用）
+     * 如果设备ID已存在，返回现有游客账号；否则创建新游客
+     */
+    @Override
+    public UserVO loginAsTouristWithDeviceId(String deviceId) throws Exception {
+        log.info("游客登录请求（设备ID: {}）", deviceId);
+        
+        if (deviceId != null && !deviceId.isEmpty()) {
+            // 尝试查找已存在的游客用户
+            Optional<User> existingUser = userRepo.findByDeviceIdAndLoginType(deviceId, "tourist");
+            if (existingUser.isPresent()) {
+                log.info("游客用户已存在，返回现有账号: userId={}", existingUser.get().getId());
+                return buildVO(existingUser.get());
+            }
+        }
+        
+        // 创建新游客
+        String username = generateUsername();
+        Avatar randomAvatar = avatarService.getRandomAvatar();
+        if (randomAvatar == null) {
+            randomAvatar = Avatar.builder()
+                    .id(snowflake.nextId())
+                    .url("https://api.dicebear.com/7.x/bottts/png?seed=default")
+                    .category("default")
+                    .build();
+        }
+        
+        User user = User.builder()
+                .id(snowflake.nextId())
+                .username(username)
+                .password(passwordEncoder.encode("123456"))
+                .avatar(randomAvatar.getUrl())
+                .loginType("tourist")
+                .deviceId(deviceId)
+                .build();
+        userRepo.save(user);
+        log.info("创建新游客用户: userId={}, deviceId={}", user.getId(), deviceId);
         return buildVO(user);
     }
 

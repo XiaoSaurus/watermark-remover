@@ -12,7 +12,7 @@
         <!-- 头部 -->
         <div class="login-header">
           <div class="logo-wrapper">
-            <span class="logo">✂️</span>
+            <el-icon class="logo-icon" :size="40" color="#fff"><Film /></el-icon>
           </div>
           <h1>去水印工具</h1>
           <p>快速登录或注册</p>
@@ -26,7 +26,7 @@
             :class="['mode-btn', { active: loginType === mode.value }]"
             @click="loginType = mode.value"
           >
-            <span class="mode-icon">{{ mode.icon }}</span>
+            <el-icon class="mode-icon-el" :size="22"><component :is="mode.icon" /></el-icon>
             <span class="mode-label">{{ mode.label }}</span>
           </button>
         </div>
@@ -134,11 +134,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, markRaw } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store/user'
 import { authApi } from '@/api/auth'
+import { Film, Iphone, ChatRound, User } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -152,9 +153,9 @@ const loginData = ref({ phone: '', code: '' })
 
 // 登录方式列表
 const loginModes = [
-  { value: 'phone', label: '手机号', icon: '📱' },
-  { value: 'wechat_web', label: '微信', icon: '🔐' },
-  { value: 'tourist', label: '游客', icon: '👤' }
+  { value: 'phone', label: '手机号', icon: markRaw(Iphone) },
+  { value: 'wechat_web', label: '微信', icon: markRaw(ChatRound) },
+  { value: 'tourist', label: '游客', icon: markRaw(User) }
 ]
 
 // 手机号验证规则
@@ -294,7 +295,7 @@ function goBack() {
 <style scoped>
 .login-page {
   min-height: 100vh;
-  background: var(--gradient-bg);
+  background: var(--bg-page);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -355,10 +356,10 @@ function goBack() {
 /* 登录容器 */
 .login-container {
   background: var(--bg-card);
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(108, 99, 255, 0.2);
+  border-radius: var(--border-radius-xl);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
   padding: 48px 32px;
-  backdrop-filter: blur(10px);
 }
 
 /* 头部 */
@@ -371,12 +372,12 @@ function goBack() {
   width: 80px;
   height: 80px;
   margin: 0 auto 20px;
-  background: linear-gradient(135deg, #6c63ff, #764ba2);
-  border-radius: 20px;
+  background: var(--color-primary);
+  border-radius: var(--border-radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.3);
+  box-shadow: var(--shadow-btn);
   animation: bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -385,9 +386,8 @@ function goBack() {
   50% { transform: translateY(-10px); }
 }
 
-.logo {
-  font-size: 48px;
-  display: block;
+.logo-icon {
+  display: flex;
 }
 
 .login-header h1 {
@@ -435,13 +435,16 @@ function goBack() {
 
 .mode-btn.active {
   border-color: var(--color-primary);
-  background: linear-gradient(135deg, rgba(108, 99, 255, 0.1), rgba(118, 75, 162, 0.1));
+  background: var(--nav-link-active-bg);
   color: var(--color-primary);
-  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.15);
+  box-shadow: none;
 }
 
-.mode-icon {
-  font-size: 24px;
+.mode-icon-el {
+  color: var(--text-secondary);
+}
+.mode-btn.active .mode-icon-el {
+  color: var(--color-primary);
 }
 
 .mode-label {
@@ -520,8 +523,8 @@ function goBack() {
 .send-code-btn:hover:not(:disabled) {
   background: var(--color-primary-light);
   border-color: var(--color-primary-light);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .send-code-btn:disabled {
@@ -533,21 +536,22 @@ function goBack() {
 .submit-btn {
   width: 100%;
   height: 48px;
-  border-radius: 12px;
+  border-radius: var(--border-radius-md);
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  background: linear-gradient(135deg, var(--color-primary), #764ba2);
+  background: var(--color-primary);
   border: none;
   color: white;
   cursor: pointer;
   transition: var(--transition);
-  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.3);
+  box-shadow: var(--shadow-btn);
 }
 
 .submit-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(108, 99, 255, 0.4);
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: var(--shadow-md);
 }
 
 .submit-btn:active:not(:disabled) {
@@ -601,8 +605,9 @@ function goBack() {
   width: 100px;
   height: 100px;
   margin: 0 auto 24px;
-  background: linear-gradient(135deg, rgba(108, 99, 255, 0.1), rgba(118, 75, 162, 0.1));
-  border-radius: 20px;
+  background: var(--bg-tag);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -704,6 +709,106 @@ function goBack() {
 
   .back-btn:hover {
     background: rgba(26, 26, 46, 1);
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .login-page {
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: 60px;
+  }
+
+  .back-btn {
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .login-wrapper {
+    max-width: 100%;
+  }
+
+  .login-container {
+    padding: 24px 16px;
+    border-radius: var(--border-radius-lg);
+  }
+
+  .login-header {
+    margin-bottom: 28px;
+  }
+
+  .logo-wrapper {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+  }
+
+  .login-header h1 {
+    font-size: 26px;
+  }
+
+  .login-header p {
+    font-size: 13px;
+  }
+
+  .login-mode-selector {
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .mode-btn {
+    padding: 12px 8px;
+    border-radius: 12px;
+  }
+
+  .mode-label {
+    font-size: 11px;
+  }
+
+  .form-wrapper {
+    min-height: 160px;
+  }
+
+  .code-input-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .send-code-btn {
+    width: 100%;
+    height: 44px;
+  }
+
+  .submit-btn {
+    height: 44px;
+    font-size: 15px;
+  }
+
+  .wechat-login,
+  .guest-login {
+    padding: 24px 16px;
+  }
+
+  .qrcode-placeholder {
+    width: 160px;
+    height: 160px;
+  }
+
+  .guest-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .auth-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer-text {
+    font-size: 12px;
   }
 }
 </style>

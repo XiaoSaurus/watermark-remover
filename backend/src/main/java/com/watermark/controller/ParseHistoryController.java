@@ -9,6 +9,7 @@ import com.watermark.service.ParseHistoryService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,9 +23,18 @@ public class ParseHistoryController {
     private final ParseHistoryService service;
     private final ObjectMapper objectMapper;
 
-    /** 保存解析记录 */
+    /** 从 Authentication 中获取用户ID，未登录返回 null */
+    private Long getUserId(Authentication auth) {
+        if (auth == null) return null;
+        try { return Long.parseLong(auth.getName()); }
+        catch (Exception e) { return null; }
+    }
+
+    /** 保存解析记录（需要认证） */
     @PostMapping
-    public Result<ParseHistory> save(@RequestBody SaveReq req) throws Exception {
+    public Result<ParseHistory> save(Authentication auth, @RequestBody SaveReq req) throws Exception {
+        Long userId = getUserId(auth);
+        if (userId == null) return Result.error(401, "请先登录");
         ParseHistory h = ParseHistory.builder()
                 .platform(req.getPlatform())
                 .title(req.getTitle())
@@ -34,15 +44,17 @@ public class ParseHistoryController {
                 .videoUrlsJson(objectMapper.writeValueAsString(req.getVideoUrls()))
                 .client(req.getClient())
                 .build();
-        return Result.success(service.save(h));
+        return Result.success(service.save(userId, h));
     }
 
-    /** 分页查询（含 videoUrls 反序列化） */
+    /** 分页查询（需要认证，含 videoUrls 反序列化） */
     @GetMapping
     public Result<Page<ParseHistoryVO>> list(
+            Authentication auth,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) throws Exception {
-        Page<ParseHistory> raw = service.list(page, size);
+        Long userId = getUserId(auth);
+        Page<ParseHistory> raw = service.list(userId, page, size);
         Page<ParseHistoryVO> vo = raw.map(h -> {
             ParseHistoryVO v = new ParseHistoryVO();
             v.setId(h.getId());
@@ -64,17 +76,19 @@ public class ParseHistoryController {
         return Result.success(vo);
     }
 
-    /** 逻辑删除单条 */
+    /** 逻辑删除单条（需要认证） */
     @DeleteMapping("/{id}")
-    public Result<Void> delete(@PathVariable Long id) {
-        service.delete(id);
+    public Result<Void> delete(Authentication auth, @PathVariable Long id) {
+        Long userId = getUserId(auth);
+        service.delete(userId, id);
         return Result.success(null);
     }
 
-    /** 逻辑删除全部 */
+    /** 逻辑删除全部（需要认证） */
     @DeleteMapping
-    public Result<Void> clear() {
-        service.clear();
+    public Result<Void> clear(Authentication auth) {
+        Long userId = getUserId(auth);
+        service.clear(userId);
         return Result.success(null);
     }
 

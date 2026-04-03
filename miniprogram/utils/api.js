@@ -57,9 +57,15 @@ function resetPassword(phone, code, newPassword, confirmPassword) {
 
 function getUserInfo() { return request('GET', '/api/auth/me') }
 
+// 检查用户名是否存在
+function checkUsernameExists(username) {
+  return request('GET', `/api/auth/check-username?username=${encodeURIComponent(username)}`)
+}
+
 module.exports = {
   parseVideo, getDownloadUrl,
   saveParseHistory, getParseHistory, deleteParseHistory, clearParseHistoryApi,
   saveDownloadHistory, getDownloadHistory, deleteDownloadHistory, clearDownloadHistoryApi,
-  sendSms, verifySmsCode, login, register, resetPassword, getUserInfo
+  sendSms, verifySmsCode, login, register, resetPassword, getUserInfo,
+  checkUsernameExists
 }

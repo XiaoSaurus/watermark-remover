@@ -12,11 +12,11 @@
     "pages/bind-phone/bind-phone"
   ],
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#6c63ff",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTitleText": "去水印下载",
-    "navigationBarTextStyle": "white",
-    "backgroundColor": "#f0f2f8"
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f7f8fa"
   },
   "tabBar": {
     "color": "#9999bb",

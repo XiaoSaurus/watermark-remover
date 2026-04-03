@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
     @Index(name = "idx_username", columnList = "username"),
     @Index(name = "idx_wx_openid", columnList = "wxOpenId"),
     @Index(name = "idx_wx_unionid", columnList = "wxUnionId"),
-    @Index(name = "idx_wx_web_openid", columnList = "wxWebOpenId")
+    @Index(name = "idx_wx_web_openid", columnList = "wxWebOpenId"),
+    @Index(name = "idx_device_id", columnList = "deviceId")
 })
 public class User {
     @Id
@@ -34,6 +35,9 @@ public class User {
 
     @Column(length = 64)
     private String wxWebOpenId;
+
+    @Column(length = 128)
+    private String deviceId;  // 设备ID，用于游客用户复用
 
     @Column(length = 256)
     private String avatar;

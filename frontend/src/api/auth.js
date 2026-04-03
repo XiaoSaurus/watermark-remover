@@ -1,18 +1,9 @@
 import axios from "axios";
 
-const http = axios.create({
-  baseURL: "/api",
-  timeout: 30000
-});
+// 直接使用全局 axios 实例，复用 main.js 中配置的拦截器（token注入、401跳转）
+// 不再创建独立实例，确保所有请求都经过全局拦截器处理
 
-http.interceptors.response.use(
-  res => res.data,
-  err => {
-    // 统一处理网络错误
-    const msg = err.response?.data?.message || err.message || "网络请求失败";
-    return Promise.reject(new Error(msg));
-  }
-);
+const API_BASE = "/api";
 
 export const authApi = {
   /**
@@ -21,7 +12,7 @@ export const authApi = {
    * @param {string} scene 场景：login/register/reset
    */
   sendSms(phone, scene) {
-    return http.post("/auth/sms/send", { phone, scene });
+    return axios.post(`${API_BASE}/auth/sms/send`, { phone, scene });
   },
 
   /**
@@ -31,7 +22,7 @@ export const authApi = {
    * @param {string} scene 场景
    */
   verifySmsCode(phone, code, scene) {
-    return http.post("/auth/sms/verify", { phone, code, scene });
+    return axios.post(`${API_BASE}/auth/sms/verify`, { phone, code, scene });
   },
 
   /**
@@ -40,7 +31,7 @@ export const authApi = {
    * @param {object} data 登录数据
    */
   login(type, data) {
-    return http.post("/auth/login", { type, ...data });
+    return axios.post(`${API_BASE}/auth/login`, { type, ...data });
   },
 
   /**
@@ -54,7 +45,7 @@ export const authApi = {
   register(phone, code, password, confirmPassword, username) {
     const data = { type: "phone", phone, code, password, confirmPassword };
     if (username) data.username = username;
-    return http.post("/auth/register", data);
+    return axios.post(`${API_BASE}/auth/register`, data);
   },
 
   /**
@@ -65,7 +56,7 @@ export const authApi = {
    * @param {string} confirmPassword 确认密码
    */
   resetPassword(phone, code, newPassword, confirmPassword) {
-    return http.post("/auth/reset-password", {
+    return axios.post(`${API_BASE}/auth/reset-password`, {
       phone,
       code,
       newPassword,
@@ -77,7 +68,7 @@ export const authApi = {
    * 获取当前用户信息
    */
   getMe() {
-    return http.get("/auth/me");
+    return axios.get(`${API_BASE}/auth/me`);
   },
 
   /**
@@ -85,7 +76,7 @@ export const authApi = {
    * @param {string} username 用户名
    */
   checkUsername(username) {
-    return http.get("/user/check-username", { params: { username } });
+    return axios.get(`${API_BASE}/user/check-username`, { params: { username } });
   }
 };
 
@@ -97,7 +88,7 @@ export const avatarApi = {
    * 获取随机头像
    */
   getRandomAvatar() {
-    return http.get("/avatar/random");
+    return axios.get(`${API_BASE}/avatar/random`);
   },
 
   /**
@@ -105,7 +96,7 @@ export const avatarApi = {
    * @param {string} category 分类
    */
   getAvatarList(category) {
-    return http.get("/avatar/list", { params: { category } });
+    return axios.get(`${API_BASE}/avatar/list`, { params: { category } });
   },
 
   /**
@@ -115,7 +106,7 @@ export const avatarApi = {
   uploadAvatar(file) {
     const formData = new FormData();
     formData.append("file", file);
-    return http.post("/avatar/upload", formData, {
+    return axios.post(`${API_BASE}/avatar/upload`, formData, {
       headers: { "Content-Type": "multipart/form-data" }
     });
   }

@@ -9,7 +9,7 @@
   <!-- 品牌区域 -->
   <view class="brand">
     <view class="logo-wrap">
-      <text class="logo">✂️</text>
+      <text class="logo">影</text>
     </view>
     <text class="brand-title">去水印工具</text>
     <text class="brand-sub">专业视频图片去水印</text>
@@ -35,7 +35,7 @@
       <view class="input-wrap">
         <view class="input-item {{focusField === 'phone' ? 'focus' : ''}}">
           <view class="input-left">
-            <text class="input-icon">📱</text>
+            <text class="input-key">机</text>
             <text class="input-prefix">+86</text>
             <view class="input-line"></view>
           </view>
@@ -43,7 +43,7 @@
         </view>
         <view class="input-item {{focusField === 'code' ? 'focus' : ''}}">
           <view class="input-left">
-            <text class="input-icon">🔐</text>
+            <text class="input-key">验</text>
           </view>
           <input class="input-field" type="number" maxlength="6" placeholder="请输入验证码" value="{{code}}" bindinput="onCodeInput" bindfocus="onFieldFocus" bindblur="onFieldBlur" data-field="code" />
           <button class="code-btn {{smsCooldown > 0 ? 'cooldown' : ''}}" bindtap="sendSms" disabled="{{smsLoading || smsCooldown > 0}}">
@@ -65,7 +65,7 @@
     <view class="tab-content" wx:if="{{tabIndex === 1}}">
       <view class="wechat-wrap">
         <view class="wechat-icon-wrap">
-          <text class="wechat-icon">💬</text>
+          <text class="wechat-icon">微</text>
         </view>
         <text class="wechat-tip-main">微信一键登录</text>
         <text class="wechat-tip-sub">便捷安全，无需记住密码</text>
@@ -85,7 +85,7 @@
     <view class="tab-content" wx:if="{{tabIndex === 2}}">
       <view class="tourist-wrap">
         <view class="tourist-icon-wrap">
-          <text class="tourist-icon">👤</text>
+          <text class="tourist-icon">游</text>
         </view>
         <text class="tourist-tip-main">游客模式</text>
         <text class="tourist-tip-sub">无需注册，直接体验全部功能</text>

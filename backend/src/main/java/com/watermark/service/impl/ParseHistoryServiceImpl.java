@@ -13,13 +13,20 @@ public class ParseHistoryServiceImpl implements ParseHistoryService {
 
     private final ParseHistoryRepository repo;
 
-    @Override public ParseHistory save(ParseHistory h) { return repo.save(h); }
-
-    @Override public Page<ParseHistory> list(int page, int size) {
-        return repo.findByDeletedFalseOrderByCreatedAtDesc(PageRequest.of(page, size));
+    @Override public ParseHistory save(Long userId, ParseHistory h) {
+        h.setUserId(userId);
+        return repo.save(h);
     }
 
-    @Override public void delete(Long id) { repo.softDelete(id); }
+    @Override public Page<ParseHistory> list(Long userId, int page, int size) {
+        // 未登录时返回所有记录，已登录时返回当前用户的记录
+        if (userId == null) {
+            return repo.findByDeletedFalseOrderByCreatedAtDesc(PageRequest.of(page, size));
+        }
+        return repo.findByUserIdAndDeletedFalseOrderByCreatedAtDesc(userId, PageRequest.of(page, size));
+    }
 
-    @Override public void clear() { repo.softDeleteAll(); }
+    @Override public void delete(Long userId, Long id) { repo.softDeleteByIdAndUserId(id, userId); }
+
+    @Override public void clear(Long userId) { repo.softDeleteAllByUserId(userId); }
 }

@@ -11,7 +11,7 @@
   <!-- 内容 -->
   <view class="content">
     <view class="tips">
-      <text class="tip-icon">📱</text>
+      <text class="tip-key">机</text>
       <text class="tip-text">绑定手机号后，可以使用手机号登录</text>
     </view>
 

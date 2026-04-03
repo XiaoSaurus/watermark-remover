@@ -2,45 +2,59 @@
   --color-primary: #6c63ff;
   --color-primary-light: #8b85ff;
   --color-primary-dark: #4e46e5;
-  --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-btn: linear-gradient(135deg, #6c63ff, #764ba2);
-  --bg-page: #f0f2f8;
+  /* 页面底色（纯色，简约） */
+  --bg-page: #f7f8fa;
   --bg-card: #ffffff;
-  --bg-card-hover: #fafbff;
-  --bg-input: #f8f9ff;
-  --bg-tag: #f0f0ff;
-  --text-primary: #1a1a2e;
-  --text-secondary: #555577;
-  --text-muted: #9999bb;
-  --border-color: #e8eaf6;
+  --bg-card-hover: #fafbfc;
+  --bg-input: #f3f4f6;
+  --bg-tag: #eef2ff;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+  --border-color: #e5e7eb;
   --border-radius-sm: 8px;
-  --border-radius-md: 12px;
-  --border-radius-lg: 18px;
-  --border-radius-xl: 24px;
+  --border-radius-md: 10px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
   --border-radius-full: 9999px;
-  --shadow-sm: 0 2px 8px rgba(108,99,255,0.08);
-  --shadow-md: 0 8px 32px rgba(108,99,255,0.12);
-  --shadow-lg: 0 20px 60px rgba(108,99,255,0.18);
-  --shadow-card: 0 4px 24px rgba(0,0,0,0.07);
-  --color-success: #18a058;
-  --color-success-bg: #f0faf0;
-  --color-danger: #d03050;
-  --color-danger-bg: #fff0f0;
-  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  /* 中性浅阴影，避免紫色光晕 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-btn: 0 2px 8px rgba(108, 99, 255, 0.22);
+  --color-success: #16a34a;
+  --color-success-bg: #f0fdf4;
+  --color-danger: #dc2626;
+  --color-danger-bg: #fef2f2;
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  /* 顶栏 / 兼容旧变量名 */
+  --navbar-bg: #ffffff;
+  --nav-link-active-bg: rgba(108, 99, 255, 0.1);
+  /* 主按钮：纯色（简约） */
+  --gradient-btn: var(--color-primary);
+  /* 兼容旧名：不再用作整页紫渐变，与页面底色一致 */
+  --gradient-bg: var(--bg-page);
 }
+
 [data-theme="dark"] {
-  --gradient-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  --bg-page: #0d0d1a;
-  --bg-card: #1a1a2e;
-  --bg-card-hover: #1e1e35;
-  --bg-input: #12122a;
-  --bg-tag: #1e1e40;
-  --text-primary: #e8e8ff;
-  --text-secondary: #9999cc;
-  --text-muted: #5555aa;
-  --border-color: #2a2a4a;
-  --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
-  --shadow-md: 0 8px 32px rgba(0,0,0,0.4);
+  --bg-page: #0f1117;
+  --bg-card: #1a1d26;
+  --bg-card-hover: #22262f;
+  --bg-input: #14171f;
+  --bg-tag: #252a3a;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --border-color: #2d3340;
+  --navbar-bg: #1a1d26;
+  --nav-link-active-bg: rgba(108, 99, 255, 0.18);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.45);
+  --shadow-btn: 0 2px 8px rgba(0, 0, 0, 0.4);
   --color-success-bg: #0d2a1a;
-  --color-danger-bg: #2a0d1a;
+  --color-danger-bg: #2a1515;
+  --gradient-bg: var(--bg-page);
+  --gradient-btn: var(--color-primary);
 }

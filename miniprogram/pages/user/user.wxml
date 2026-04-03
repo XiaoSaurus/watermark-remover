@@ -22,7 +22,7 @@
     <view class="vip-card">
       <view class="vip-left">
         <view class="vip-icon-wrapper">
-          <text class="vip-icon">👑</text>
+          <text class="vip-icon">V</text>
         </view>
         <view class="vip-info">
           <text class="vip-title">{{userInfo.vipStatus === 'active' ? 'VIP会员' : '普通用户'}}</text>
@@ -57,21 +57,21 @@
     <view class="menu-section">
       <view class="menu-item" bindtap="goEditProfile">
         <view class="menu-left">
-          <text class="menu-icon">✏️</text>
+          <text class="menu-icon-letter">编</text>
           <text class="menu-text">编辑资料</text>
         </view>
         <text class="menu-arrow">›</text>
       </view>
       <view class="menu-item" bindtap="goChangePassword" wx:if="{{userInfo.phone}}">
         <view class="menu-left">
-          <text class="menu-icon">🔑</text>
+          <text class="menu-icon-letter">密</text>
           <text class="menu-text">修改密码</text>
         </view>
         <text class="menu-arrow">›</text>
       </view>
       <view class="menu-item" bindtap="goBindPhone" wx:if="{{!userInfo.phone}}">
         <view class="menu-left">
-          <text class="menu-icon">📱</text>
+          <text class="menu-icon-letter">机</text>
           <text class="menu-text">绑定手机号</text>
         </view>
         <text class="menu-arrow">›</text>
@@ -90,7 +90,7 @@
       <view class="not-login-bg"></view>
       <view class="not-login-content">
         <view class="logo-wrapper">
-          <text class="logo">✂️</text>
+          <text class="logo">影</text>
         </view>
         <text class="title">去水印工具</text>
         <text class="sub">登录后可同步解析历史和下载记录</text>

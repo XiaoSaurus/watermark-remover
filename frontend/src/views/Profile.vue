@@ -18,7 +18,7 @@
           <!-- 用户等级和积分 -->
           <div class="level-points">
             <div class="level-badge" :class="'level-' + profile.level">
-              <span class="level-icon">👑</span>
+              <el-icon class="level-icon"><Trophy /></el-icon>
               <span class="level-text">Lv.{{ profile.level }} {{ profile.levelName }}</span>
             </div>
             <div class="points-info">
@@ -217,7 +217,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus, Star } from '@element-plus/icons-vue'
+import { Plus, Star, Trophy } from '@element-plus/icons-vue'
 import { useUserStore } from '@/store/user'
 import { avatarApi } from '@/api/auth'
 import axios from 'axios'
@@ -225,29 +225,33 @@ import axios from 'axios'
 const router = useRouter()
 const userStore = useUserStore()
 
+// 使用全局 axios 实例，复用 main.js 中的拦截器
+const http = axios.create({ baseURL: '/api', timeout: 30000 })
+
+// 全局 axios 拦截器会自动注入 token
+// 手动设置 Authorization 是为了兼容 Profile 页面的特殊需求
+// 实际上全局拦截器已经处理了，这里可以简化
+// 但保留手动设置以防止 edge case
+
 const profile = ref({})
+const loadingAvatars = ref(false)
+const saving = ref(false)
+const avatarList = ref([])
+const isEditMode = ref(false)
+const showAvatarSelector = ref(false)
 const showChangePassword = ref(false)
 const showBindPhone = ref(false)
-const showAvatarSelector = ref(false)
-const isEditMode = ref(false)
-const saving = ref(false)
+const editForm = ref({})
+const passwordForm = ref({})
+const bindPhoneForm = ref({})
+const avatarTab = ref('random')
+const selectedAvatar = ref(null)
+const previewAvatar = ref('')
+const savingAvatar = ref(false)
 const changingPassword = ref(false)
 const bindingPhone = ref(false)
-const sendingCode = ref(false)
 const countdown = ref(0)
-
-const passwordForm = ref({ oldPassword: '', newPassword: '', confirmPassword: '' })
-const bindPhoneForm = ref({ phone: '', code: '' })
-const editForm = ref({ nickname: '', bio: '', gender: 0, birthday: '' })
-
-const avatarTab = ref('random')
-const avatarList = ref([])
-const selectedAvatar = ref(null)
-const loadingAvatars = ref(false)
-const savingAvatar = ref(false)
-const previewAvatar = ref('')
-
-const http = axios.create({ baseURL: '/api' })
+const sendingCode = ref(false)
 
 const loginTypeLabel = computed(() => {
   const map = { phone: '手机号登录', wechat: '微信登录', tourist: '游客登录' }
@@ -577,13 +581,14 @@ function formatDate(dateStr) {
 .level-badge.level-4 { background: #fff3e0; color: #e65100; }
 .level-badge.level-5 { background: #fce4ec; color: #c2185b; }
 .level-badge.level-6, .level-badge.level-7, .level-badge.level-8,
-.level-badge.level-9, .level-badge.level-10 { 
-  background: linear-gradient(135deg, #ff9800, #f57c00); 
-  color: #fff; 
+.level-badge.level-9, .level-badge.level-10 {
+  background: #f59e0b;
+  color: #fff;
 }
 
 .level-icon {
   font-size: 14px;
+  margin-right: 2px;
 }
 
 .points-info {
@@ -693,5 +698,99 @@ function formatDate(dateStr) {
   color: var(--text-secondary);
   font-size: 12px;
   margin-top: 10px;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .profile-page {
+    padding: 20px 12px;
+  }
+
+  .profile-container {
+    padding: 20px 16px;
+    border-radius: var(--border-radius-md);
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .avatar-wrapper {
+    order: -1;
+  }
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .user-info {
+    width: 100%;
+  }
+
+  .user-info h2 {
+    font-size: 20px;
+  }
+
+  .level-points {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .level-badge {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
+  .points-info {
+    text-align: center;
+  }
+
+  .profile-section {
+    margin-bottom: 24px;
+  }
+
+  .profile-section h3 {
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  :deep(.el-descriptions) {
+    --el-descriptions-table-border: 1px solid var(--border-color);
+  }
+
+  :deep(.el-descriptions__label) {
+    font-size: 13px;
+  }
+
+  :deep(.el-descriptions__content) {
+    font-size: 13px;
+  }
+
+  /* 对话框适配 */
+  :deep(.el-dialog) {
+    width: 90% !important;
+    margin: 10vh auto !important;
+  }
+
+  .avatar-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .avatar-item {
+    width: 60px;
+    height: 60px;
+  }
+
+  .avatar-uploader-icon,
+  .preview-avatar {
+    width: 120px;
+    height: 120px;
+  }
 }
 </style>

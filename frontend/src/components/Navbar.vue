@@ -2,7 +2,7 @@
   <header class="navbar">
     <div class="navbar-inner">
       <router-link to="/" class="brand">
-        <span class="brand-logo">✂️</span>
+        <el-icon class="brand-logo-icon" :size="22"><Film /></el-icon>
         <span class="brand-name">去水印</span>
       </router-link>
       <nav class="nav-links">
@@ -59,7 +59,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { VideoCamera, Clock, Download, User, ArrowDown, SwitchButton } from '@element-plus/icons-vue'
+import { Film, VideoCamera, Clock, Download, User, ArrowDown, SwitchButton } from '@element-plus/icons-vue'
 import { useUserStore } from '@/store/user'
 
 const router = useRouter()
@@ -98,27 +98,26 @@ function handleCommand(command) {
 <style scoped>
 .navbar {
   position: sticky; top: 0; z-index: 100;
-  background: var(--gradient-bg);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+  background: var(--navbar-bg);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
 }
 .navbar-inner {
   max-width: 900px; margin: 0 auto; padding: 0 24px;
-  height: 64px; display: flex; align-items: center; gap: 16px;
+  height: 56px; display: flex; align-items: center; gap: 16px;
 }
 .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; flex-shrink: 0; }
-.brand-logo { font-size: 22px; }
-.brand-name { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+.brand-logo-icon { color: var(--color-primary); flex-shrink: 0; }
+.brand-name { font-size: 17px; font-weight: 700; color: var(--text-primary); letter-spacing: 0.02em; }
 .nav-links { display: flex; align-items: center; gap: 4px; flex: 1; justify-content: center; }
 .nav-link {
   display: flex; align-items: center; gap: 5px;
-  color: rgba(255,255,255,0.75); text-decoration: none;
+  color: var(--text-secondary); text-decoration: none;
   padding: 7px 14px; border-radius: var(--border-radius-full);
   font-size: 14px; font-weight: 500; transition: var(--transition);
 }
-.nav-link:hover { color: #fff; background: rgba(255,255,255,0.15); }
-.nav-link.router-link-active { color: #fff; background: rgba(255,255,255,0.22); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.nav-link:hover { color: var(--text-primary); background: var(--bg-input); }
+.nav-link.router-link-active { color: var(--color-primary); background: var(--nav-link-active-bg); }
 
 /* 右侧区域 */
 .navbar-right {
@@ -136,19 +135,20 @@ function handleCommand(command) {
   cursor: pointer;
   padding: 4px 10px;
   border-radius: var(--border-radius-full);
-  background: rgba(255,255,255,0.15);
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
   transition: var(--transition);
 }
-.user-avatar-wrap:hover { background: rgba(255,255,255,0.25); }
+.user-avatar-wrap:hover { background: var(--bg-card-hover); }
 .user-avatar {
   width: 28px;
   height: 28px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(255,255,255,0.5);
+  border: 1px solid var(--border-color);
 }
 .user-name {
-  color: #fff;
+  color: var(--text-primary);
   font-size: 13px;
   font-weight: 500;
   max-width: 80px;
@@ -157,7 +157,7 @@ function handleCommand(command) {
   white-space: nowrap;
 }
 .arrow-icon {
-  color: rgba(255,255,255,0.7);
+  color: var(--text-muted);
   font-size: 12px;
 }
 
@@ -166,22 +166,94 @@ function handleCommand(command) {
   display: flex;
   align-items: center;
   gap: 5px;
-  color: rgba(255,255,255,0.85);
+  color: var(--color-primary);
   text-decoration: none;
   padding: 7px 14px;
   border-radius: var(--border-radius-full);
   font-size: 14px;
-  font-weight: 500;
-  background: rgba(255,255,255,0.15);
+  font-weight: 600;
+  background: var(--nav-link-active-bg);
+  border: 1px solid transparent;
   transition: var(--transition);
 }
-.login-btn:hover { color: #fff; background: rgba(255,255,255,0.28); }
+.login-btn:hover { background: var(--color-primary); color: #fff; }
 
 /* 主题切换 */
 .theme-toggle {
   flex-shrink: 0; width: 38px; height: 38px; border-radius: var(--border-radius-full);
-  border: none; background: rgba(255,255,255,0.15); cursor: pointer;
+  border: 1px solid var(--border-color); background: var(--bg-card); cursor: pointer;
   display: flex; align-items: center; justify-content: center; transition: var(--transition); font-size: 16px;
 }
-.theme-toggle:hover { background: rgba(255,255,255,0.28); transform: scale(1.08); }
+.theme-toggle:hover { background: var(--bg-input); }
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .navbar-inner {
+    padding: 0 16px;
+    height: 52px;
+  }
+
+  .brand-name {
+    display: none;
+  }
+
+  .brand-logo-icon {
+    font-size: 20px;
+  }
+
+  .nav-links {
+    gap: 2px;
+  }
+
+  .nav-link {
+    padding: 6px 10px;
+    font-size: 13px;
+    gap: 4px;
+  }
+
+  .nav-link span {
+    display: none;
+  }
+
+  .nav-link .el-icon {
+    font-size: 18px;
+  }
+
+  .navbar-right {
+    gap: 8px;
+  }
+
+  .user-avatar-wrap {
+    padding: 4px 8px;
+    gap: 4px;
+  }
+
+  .user-name {
+    display: none;
+  }
+
+  .user-avatar {
+    width: 26px;
+    height: 26px;
+  }
+
+  .arrow-icon {
+    display: none;
+  }
+
+  .login-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .login-btn span {
+    display: none;
+  }
+
+  .theme-toggle {
+    width: 34px;
+    height: 34px;
+    font-size: 14px;
+  }
+}
 </style>

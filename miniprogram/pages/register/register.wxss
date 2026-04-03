@@ -1,6 +1,6 @@
 .register-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #667eea 0%, #764ba2 50%, #8b5cf6 100%);
+  background: #f7f8fa;
   display: flex;
   flex-direction: column;
 }
@@ -20,14 +20,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.2);
+  background: #fff;
   border-radius: 50%;
-  backdrop-filter: blur(10rpx);
+  border: 1rpx solid #e5e7eb;
 }
 
 .back-icon {
   font-size: 40rpx;
-  color: #fff;
+  color: #374151;
   font-weight: bold;
   line-height: 1;
 }
@@ -35,7 +35,7 @@
 .page-title {
   font-size: 32rpx;
   font-weight: bold;
-  color: #fff;
+  color: #111827;
   flex: 1;
   text-align: center;
 }
@@ -88,8 +88,18 @@
   border-right: 1rpx solid #eee;
 }
 
-.input-icon {
-  font-size: 32rpx;
+.input-key {
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  text-align: center;
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #6c63ff;
+  background: #eef2ff;
+  border-radius: 10rpx;
+  margin-right: 8rpx;
+  flex-shrink: 0;
 }
 
 .input-prefix {
@@ -114,7 +124,7 @@
 }
 
 .code-btn {
-  background: linear-gradient(135deg, #6c63ff, #764ba2);
+  background: #6c63ff;
   color: #fff;
   font-size: 24rpx;
   padding: 16rpx 24rpx;
@@ -149,7 +159,7 @@
 
 /* 注册按钮 */
 .btn-register {
-  background: linear-gradient(135deg, #6c63ff, #764ba2);
+  background: #6c63ff;
   color: #fff;
   font-size: 32rpx;
   font-weight: bold;
@@ -157,13 +167,13 @@
   border-radius: 16rpx;
   border: none;
   margin-top: 30rpx;
-  box-shadow: 0 8rpx 24rpx rgba(108, 99, 255, 0.4);
+  box-shadow: 0 4rpx 16rpx rgba(108, 99, 255, 0.22);
   transition: all 0.3s ease;
 }
 
 .btn-register:active {
   transform: scale(0.98);
-  box-shadow: 0 4rpx 16rpx rgba(108, 99, 255, 0.3);
+  box-shadow: 0 2rpx 12rpx rgba(108, 99, 255, 0.2);
 }
 
 /* 协议提示 */

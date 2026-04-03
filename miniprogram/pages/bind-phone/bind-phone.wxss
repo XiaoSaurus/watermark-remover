@@ -53,9 +53,18 @@
   margin-bottom: 20rpx;
 }
 
-.tip-icon {
-  font-size: 32rpx;
-  margin-right: 12rpx;
+.tip-key {
+  width: 44rpx;
+  height: 44rpx;
+  line-height: 44rpx;
+  text-align: center;
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #6c63ff;
+  background: #eef2ff;
+  border-radius: 10rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
 }
 
 .tip-text {
@@ -108,7 +117,7 @@
 
 .code-btn {
   padding: 16rpx 24rpx;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #6c63ff;
   color: #fff;
   font-size: 24rpx;
   border-radius: 30rpx;
@@ -128,7 +137,7 @@
 .submit-btn {
   width: 100%;
   padding: 28rpx;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #6c63ff;
   color: #fff;
   font-size: 32rpx;
   font-weight: bold;

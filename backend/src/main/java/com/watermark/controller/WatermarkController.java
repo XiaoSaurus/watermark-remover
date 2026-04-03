@@ -6,6 +6,7 @@ import com.watermark.service.WatermarkService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -36,7 +37,7 @@ public class WatermarkController {
 
     @Operation(summary = "解析分享链接，获取无水印视频地址")
     @PostMapping("/parse")
-    public Result<VideoInfo> parse(@RequestBody ParseRequest request) {
+    public Result<VideoInfo> parse(@Valid @RequestBody ParseRequest request) {
         try {
             VideoInfo info = watermarkService.parseVideo(request.getUrl());
             return Result.success(info);

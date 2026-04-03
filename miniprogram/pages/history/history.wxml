@@ -1,7 +1,7 @@
 <view class="page" style="--color-primary:{{theme.primary}};--gradient-btn:{{theme.gradBtn}}">
   <view class="page-header">
     <view class="page-title-wrap">
-      <text class="page-title">📥 下载历史</text>
+      <text class="page-title">下载历史</text>
       <view class="count-badge" wx:if="{{total > 0}}" style="background:{{theme.gradBtn}}">{{total}}</view>
     </view>
     <view class="btn-clear-all" bindtap="clearAll" wx:if="{{list.length > 0}}">清空</view>
@@ -12,7 +12,7 @@
   </view>
 
   <view class="empty-wrap" wx:elif="{{list.length === 0}}">
-    <text class="empty-icon">📭</text>
+    <view class="empty-icon-circle"></view>
     <text class="empty-text">暂无下载记录</text>
     <text class="empty-sub">去解析历史中下载视频吧～</text>
   </view>
@@ -20,17 +20,17 @@
   <view class="list" wx:else>
     <view class="card history-item" wx:for="{{list}}" wx:key="id">
       <image class="item-cover" src="{{item.cover}}" mode="aspectFill" wx:if="{{item.cover}}" />
-      <view class="cover-ph-sm" wx:else><text>🎬</text></view>
+      <view class="cover-ph-sm" wx:else><text class="cover-ph-text">无封面</text></view>
       <view class="item-info">
         <text class="item-title">{{item.title || '无标题'}}</text>
         <view class="item-tags">
           <view class="tag tag-platform" style="color:{{theme.primary}};background:{{theme.primary}}1a">{{platformMap[item.platform] || item.platform}}</view>
           <view class="tag tag-quality">{{item.quality}}</view>
-          <view class="tag tag-success" wx:if="{{item.status === 'success'}}">✅ 成功</view>
-          <view class="tag tag-fail" wx:elif="{{item.status === 'fail'}}">❌ 失败</view>
+          <view class="tag tag-success" wx:if="{{item.status === 'success'}}">成功</view>
+          <view class="tag tag-fail" wx:elif="{{item.status === 'fail'}}">失败</view>
         </view>
         <view class="item-bottom">
-          <text class="item-time">🕐 {{item.timeStr}}</text>
+          <text class="item-time">{{item.timeStr}}</text>
           <text class="item-errmsg" wx:if="{{item.status === 'fail' && item.errMsg}}">{{item.errMsg}}</text>
         </view>
       </view>

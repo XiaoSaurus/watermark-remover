@@ -7,6 +7,7 @@ public interface UserService {
     UserVO loginByWechatMiniprogram(LoginRequest req) throws Exception;
     UserVO loginByWechatWeb(LoginRequest req) throws Exception;
     UserVO loginAsTourist() throws Exception;
+    UserVO loginAsTouristWithDeviceId(String deviceId) throws Exception;  // 新增：基于设备ID的游客登录
     UserVO register(RegisterRequest req) throws Exception;
     void resetPassword(ResetPasswordRequest req) throws Exception;
     UserVO getUserInfo(Long userId);

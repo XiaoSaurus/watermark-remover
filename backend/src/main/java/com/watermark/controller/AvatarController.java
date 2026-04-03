@@ -7,6 +7,7 @@ import com.watermark.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 @Tag(name = "头像管理")
+@Slf4j
 @RestController
 @RequestMapping("/api/avatar")
 @RequiredArgsConstructor
@@ -88,7 +90,20 @@ public class AvatarController {
     @GetMapping("/file/{filename}")
     public ResponseEntity<Resource> getAvatarFile(@PathVariable String filename) {
         try {
+            // ⚠️ 安全修复: 校验 filename 防止路径遍历攻击
+            if (filename == null || filename.contains("..") || filename.contains("/") || filename.contains("\\")) {
+                log.warn("头像文件名包含非法字符: {}", filename);
+                return ResponseEntity.badRequest().build();
+            }
+            
             Path filePath = Paths.get(avatarUploadPath).resolve(filename).normalize();
+            
+            // 确保解析后的路径仍在 avatarUploadPath 目录下
+            if (!filePath.startsWith(Paths.get(avatarUploadPath).normalize())) {
+                log.warn("头像文件路径遍历尝试: {}", filename);
+                return ResponseEntity.badRequest().build();
+            }
+            
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists() && resource.isReadable()) {
                 String contentType = "image/png";

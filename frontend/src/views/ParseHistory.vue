@@ -77,13 +77,13 @@ import { parseHistoryApi } from '@/api/watermark'
 import { saveDownload, clearParseHistory, removeParseHistory } from '@/store/history'
 const list = ref([]), total = ref(0), currentPage = ref(1), pageSize = 20, pageLoading = ref(false)
 const downloadingKey = ref(null), downloadProgress = ref(0), downloadStatus = ref('')
-const platformMap = {douyin:'🎵 抖音',kuaishou:'⚡ 快手',bilibili:'📺 B站',weibo:'🌐 微博',xiaohongshu:'📕 小红书'}
-const progressColors = [{color:'#6c63ff',percentage:50},{color:'#764ba2',percentage:80},{color:'#18a058',percentage:100}]
+const platformMap = { douyin: '抖音', kuaishou: '快手', bilibili: 'B站', weibo: '微博', xiaohongshu: '小红书' }
+const progressColors = [{ color: '#6c63ff', percentage: 40 }, { color: '#6c63ff', percentage: 100 }]
 onMounted(loadList)
 async function loadList() {
   pageLoading.value = true
-  try { const res = await parseHistoryApi.list(currentPage.value-1,pageSize); list.value=res.data.content; total.value=res.data.totalElements }
-  catch { ElMessage.error('加载失败') } finally { pageLoading.value=false }
+  try { const res = await parseHistoryApi.list(currentPage.value-1,pageSize); const page = res.data?.data?.content || res.data?.content || []; list.value = Array.isArray(page) ? page : []; total.value = res.data?.data?.totalElements || res.data?.totalElements || 0 }
+  catch { ElMessage.error('加载失败') } finally { pageLoading.value = false }
 }
 function formatTime(ts) {
   if(!ts) return ''; const d=new Date(ts),pad=n=>String(n).padStart(2,'0')
@@ -91,11 +91,32 @@ function formatTime(ts) {
 }
 async function handleClear() {
   await ElMessageBox.confirm('确定清空所有解析历史？','确认清空',{type:'warning',confirmButtonText:'清空',cancelButtonText:'取消'})
-  await clearParseHistory(); list.value=[]; total.value=0; ElMessage({message:'已清空',type:'success',plain:true})
+  try {
+    await clearParseHistory()
+    list.value = []
+    total.value = 0
+    ElMessage({message:'已清空',type:'success',plain:true})
+  } catch (e) {
+    if (e.response?.status === 403) {
+      ElMessage({message:'请先登录后再操作',type:'warning',plain:true})
+    } else {
+      ElMessage({message:'清空失败',type:'error',plain:true})
+    }
+  }
 }
 async function handleDelete(id) {
-  await removeParseHistory(id); list.value=list.value.filter(i=>i.id!==id); total.value--
-  ElMessage({message:'已删除',type:'success',plain:true})
+  try {
+    await removeParseHistory(id)
+    list.value = list.value.filter(i => i.id !== id)
+    total.value--
+    ElMessage({message:'已删除',type:'success',plain:true})
+  } catch (e) {
+    if (e.response?.status === 403) {
+      ElMessage({message:'请先登录后再操作',type:'warning',plain:true})
+    } else {
+      ElMessage({message:'删除失败',type:'error',plain:true})
+    }
+  }
 }
 function downloadVideo(item, url, quality, vi) {
   if(downloadingKey.value!==null) return
@@ -127,7 +148,7 @@ function coverError(e){e.target.src='https://via.placeholder.com/100x75?text=No+
 .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
 .page-title{display:flex;align-items:center;gap:8px}
 .page-title h2{font-size:22px;font-weight:800;color:var(--text-primary)}
-.count-badge{background:var(--gradient-btn);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:var(--border-radius-full)}
+.count-badge{background:var(--color-primary);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:var(--border-radius-full)}
 .loading-wrap{display:flex;justify-content:center;padding:80px}
 .empty-card{padding:60px 40px!important}
 .parse-list{display:flex;flex-direction:column;gap:14px}
@@ -146,12 +167,130 @@ function coverError(e){e.target.src='https://via.placeholder.com/100x75?text=No+
 .dl-row:last-child{margin-bottom:0}
 .dl-row:hover{border-color:var(--color-primary)}
 .dl-quality{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text-primary)}
-.quality-dot{width:7px;height:7px;border-radius:50%;background:var(--gradient-btn);flex-shrink:0}
+.quality-dot{width:7px;height:7px;border-radius:50%;background:var(--color-primary);flex-shrink:0}
 .dl-actions{display:flex;gap:6px}
-.btn-dl{background:var(--gradient-btn)!important;border:none!important;font-weight:600!important}
+.btn-dl{background:var(--color-primary)!important;border:none!important;font-weight:600!important;box-shadow:var(--shadow-btn)!important}
 .pagination{display:flex;justify-content:center;margin-top:28px}
 .float-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg-card);padding:14px 24px;box-shadow:0 -4px 24px rgba(0,0,0,0.12);border-top:1px solid var(--border-color);z-index:200}
 .float-bar-inner{display:flex;align-items:center;gap:10px;max-width:800px;margin:0 auto;font-size:13px;color:var(--color-primary);font-weight:500}
 .slide-up-enter-active,.slide-up-leave-active{transition:transform 0.3s ease}
 .slide-up-enter-from,.slide-up-leave-to{transform:translateY(100%)}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .main {
+    padding: 20px 12px 100px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .page-title h2 {
+    font-size: 18px;
+  }
+
+  .count-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .parse-list {
+    gap: 10px;
+  }
+
+  .parse-item {
+    padding: 14px 16px;
+  }
+
+  .item-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .cover-wrap {
+    width: 100%;
+  }
+
+  .item-cover {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4/3;
+    max-height: 180px;
+  }
+
+  .platform-badge {
+    bottom: 8px;
+    left: 8px;
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+
+  .item-info {
+    width: 100%;
+  }
+
+  .item-title {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .item-meta {
+    gap: 10px;
+  }
+
+  .meta-item {
+    font-size: 11px;
+  }
+
+  .download-area {
+    padding-top: 12px;
+  }
+
+  .download-area-title {
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+
+  .dl-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .dl-quality {
+    font-size: 12px;
+  }
+
+  .dl-actions {
+    width: 100%;
+  }
+
+  .dl-actions .el-button {
+    flex: 1;
+  }
+
+  .empty-card {
+    padding: 40px 20px !important;
+  }
+
+  .pagination {
+    margin-top: 20px;
+  }
+
+  .float-bar {
+    padding: 12px 16px;
+  }
+
+  .float-bar-inner {
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+  }
+}
 </style>

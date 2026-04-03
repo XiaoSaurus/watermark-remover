@@ -18,6 +18,10 @@ Page({
     this.setData({ 'form.code': e.detail.value })
   },
 
+  goBack() {
+    wx.navigateBack()
+  },
+
   sendCode() {
     const phone = this.data.form.phone
     if (!phone || !/^1[3-9]\d{9}$/.test(phone)) {
@@ -26,7 +30,7 @@ Page({
     }
 
     wx.request({
-      url: app.globalData.apiUrl + '/auth/sms/send',
+      url: app.globalData.apiBase + '/auth/sms/send',
       method: 'POST',
       header: { 'Content-Type': 'application/json' },
       data: { phone, scene: 'bind' },
@@ -70,7 +74,7 @@ Page({
     wx.showLoading({ title: '绑定中...', mask: true })
 
     wx.request({
-      url: app.globalData.apiUrl + '/auth/bind-phone',
+      url: app.globalData.apiBase + '/auth/bind-phone',
       method: 'POST',
       header: {
         'Authorization': 'Bearer ' + app.globalData.token,

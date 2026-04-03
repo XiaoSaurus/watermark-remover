@@ -1,53 +1,54 @@
 App({
   globalData: {
-    apiBase: 'http://192.168.10.105:8080',
+    // 开发环境API地址 - 生产环境请修改为实际服务器地址
+    apiBase: 'http://localhost:8080',
     history: [],
     theme: 'purple',
     userInfo: null,
     token: null
   },
 
-  // 5套柔和主题
+  // 5 套主题（简约：页头/背景为浅纯色，主按钮为纯色 primary）
   themes: {
     purple: {
-      name: '紫罗兰', emoji: '💜', desc: '经典紫色，沉稳优雅',
-      primary: '#7c6ff7',
-      primaryLight: '#a09af9',
-      gradBtn: 'linear-gradient(135deg,#7c6ff7,#9b59b6)',
-      gradBg:  'linear-gradient(135deg,#7c6ff7 0%,#9b59b6 100%)',
-      navBg:   '#7c6ff7'
+      name: '紫罗兰', emoji: '💜', desc: '经典主色，简约清爽',
+      primary: '#6c63ff',
+      primaryLight: '#8b85ff',
+      gradBtn: '#6c63ff',
+      gradBg: '#f7f8fa',
+      navBg: '#ffffff'
     },
     slate: {
-      name: '深空蓝', emoji: '🌌', desc: '深邃蓝调，专业沉稳',
+      name: '深空蓝', emoji: '🌌', desc: '蓝调工具感',
       primary: '#4a7fa5',
       primaryLight: '#6b9fc4',
-      gradBtn: 'linear-gradient(135deg,#4a7fa5,#2c5f82)',
-      gradBg:  'linear-gradient(135deg,#5b8db8 0%,#2c5f82 100%)',
-      navBg:   '#4a7fa5'
+      gradBtn: '#4a7fa5',
+      gradBg: '#f4f7f9',
+      navBg: '#ffffff'
     },
     sage: {
-      name: '抹茶绿', emoji: '🍵', desc: '清新自然，舒适护眼',
-      primary: '#4a9e7f',
-      primaryLight: '#6bbfa0',
-      gradBtn: 'linear-gradient(135deg,#4a9e7f,#2d7a5f)',
-      gradBg:  'linear-gradient(135deg,#5aaf8e 0%,#2d7a5f 100%)',
-      navBg:   '#4a9e7f'
+      name: '抹茶绿', emoji: '🍵', desc: '清新自然',
+      primary: '#3d8b6e',
+      primaryLight: '#5aaf8e',
+      gradBtn: '#3d8b6e',
+      gradBg: '#f4faf7',
+      navBg: '#ffffff'
     },
     rose: {
-      name: '玫瑰粉', emoji: '🌸', desc: '温柔粉调，清新甜美',
+      name: '玫瑰粉', emoji: '🌸', desc: '柔和粉调',
       primary: '#c0607a',
       primaryLight: '#d4849a',
-      gradBtn: 'linear-gradient(135deg,#c0607a,#a04060)',
-      gradBg:  'linear-gradient(135deg,#cc7088 0%,#a04060 100%)',
-      navBg:   '#c0607a'
+      gradBtn: '#c0607a',
+      gradBg: '#fdf5f7',
+      navBg: '#ffffff'
     },
     amber: {
-      name: '琥珀橙', emoji: '🍂', desc: '温暖橙调，活力秋意',
+      name: '琥珀橙', emoji: '🍂', desc: '温暖点缀',
       primary: '#c07830',
       primaryLight: '#d49050',
-      gradBtn: 'linear-gradient(135deg,#c07830,#a05820)',
-      gradBg:  'linear-gradient(135deg,#cc8840 0%,#a05820 100%)',
-      navBg:   '#c07830'
+      gradBtn: '#c07830',
+      gradBg: '#faf6f0',
+      navBg: '#ffffff'
     }
   },
 

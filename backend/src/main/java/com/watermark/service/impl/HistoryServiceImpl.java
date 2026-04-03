@@ -13,13 +13,19 @@ public class HistoryServiceImpl implements HistoryService {
 
     private final DownloadHistoryRepository repo;
 
-    @Override public DownloadHistory save(DownloadHistory h) { return repo.save(h); }
-
-    @Override public Page<DownloadHistory> list(int page, int size) {
-        return repo.findByDeletedFalseOrderByCreatedAtDesc(PageRequest.of(page, size));
+    @Override public DownloadHistory save(Long userId, DownloadHistory h) {
+        h.setUserId(userId);
+        return repo.save(h);
     }
 
-    @Override public void delete(Long id) { repo.softDelete(id); }
+    @Override public Page<DownloadHistory> list(Long userId, int page, int size) {
+        if (userId == null) {
+            return repo.findByDeletedFalseOrderByCreatedAtDesc(PageRequest.of(page, size));
+        }
+        return repo.findByUserIdAndDeletedFalseOrderByCreatedAtDesc(userId, PageRequest.of(page, size));
+    }
 
-    @Override public void clear() { repo.softDeleteAll(); }
+    @Override public void delete(Long userId, Long id) { repo.softDeleteByIdAndUserId(id, userId); }
+
+    @Override public void clear(Long userId) { repo.softDeleteAllByUserId(userId); }
 }

@@ -2,7 +2,13 @@
   "name": "watermark-remover-frontend",
   "version": "1.0.0",
   "description": "去水印小程序前端",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
+    "predev": "node scripts/check-node.cjs",
+    "prebuild": "node scripts/check-node.cjs",
+    "prepreview": "node scripts/check-node.cjs",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"

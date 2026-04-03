@@ -62,7 +62,7 @@ Page({
   uploadAvatar(filePath) {
     wx.showLoading({ title: '上传中...', mask: true })
     wx.uploadFile({
-      url: app.globalData.apiUrl + '/avatar/upload',
+      url: app.globalData.apiBase + '/avatar/upload',
       filePath: filePath,
       name: 'file',
       header: {
@@ -96,7 +96,7 @@ Page({
     wx.showLoading({ title: '保存中...', mask: true })
     
     wx.request({
-      url: app.globalData.apiUrl + '/auth/profile',
+      url: app.globalData.apiBase + '/auth/profile',
       method: 'PUT',
       header: {
         'Authorization': 'Bearer ' + app.globalData.token,

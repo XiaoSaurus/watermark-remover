@@ -15,6 +15,10 @@ public class ParseHistory {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /** 用户ID，关联用户表 */
+    @Column(name = "user_id")
+    private Long userId;
+
     @Column(length = 32)
     private String platform;
 

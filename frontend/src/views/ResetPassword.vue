@@ -9,7 +9,7 @@
     
     <div class="reset-container">
       <div class="reset-header">
-        <span class="logo">✂️</span>
+        <el-icon class="logo-icon" :size="40" color="#6c63ff"><Film /></el-icon>
         <h1>重置密码</h1>
         <p>找回您的账号</p>
       </div>
@@ -60,6 +60,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store/user'
 import { authApi } from '@/api/auth'
+import { Film } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -214,7 +215,7 @@ function goLogin() {
 <style scoped>
 .reset-page {
   min-height: 100vh;
-  background: var(--gradient-bg);
+  background: var(--bg-page);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -223,7 +224,8 @@ function goLogin() {
 
 .reset-container {
   background: var(--bg-card);
-  border-radius: var(--border-radius-lg);
+  border-radius: var(--border-radius-xl);
+  border: 1px solid var(--border-color);
   box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 420px;
@@ -235,9 +237,9 @@ function goLogin() {
   margin-bottom: 30px;
 }
 
-.logo {
-  font-size: 48px;
-  display: block;
+.logo-icon {
+  display: flex;
+  justify-content: center;
   margin-bottom: 10px;
 }
 
@@ -308,5 +310,61 @@ function goLogin() {
   width: 20px;
   height: 20px;
   color: #333;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .reset-page {
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: 60px;
+  }
+
+  .back-btn {
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .back-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .reset-container {
+    padding: 24px 16px;
+    border-radius: var(--border-radius-lg);
+  }
+
+  .reset-header {
+    margin-bottom: 24px;
+  }
+
+  .reset-header h1 {
+    font-size: 24px;
+  }
+
+  .reset-header p {
+    font-size: 13px;
+  }
+
+  .code-input-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .code-input-group :deep(.el-button) {
+    width: 100%;
+  }
+
+  :deep(.el-form-item__label) {
+    font-size: 13px;
+    padding-bottom: 6px;
+  }
+
+  .bottom-links {
+    margin-top: 16px;
+  }
 }
 </style>

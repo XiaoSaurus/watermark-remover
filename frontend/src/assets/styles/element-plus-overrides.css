@@ -1,0 +1,12 @@
+/* Element Plus 与全局令牌对齐（简约主色、统一圆角） */
+:root {
+  --el-color-primary: #6c63ff;
+  --el-color-primary-light-3: #8b85ff;
+  --el-color-primary-light-5: #a59fff;
+  --el-color-primary-light-7: #c4bfff;
+  --el-color-primary-light-9: #ebe9ff;
+  --el-color-primary-dark-2: #4e46e5;
+  --el-border-radius-base: 10px;
+  --el-border-radius-small: 8px;
+  --el-border-radius-round: 9999px;
+}

@@ -1,7 +1,8 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: "PingFang SC","HarmonyOS Sans","Microsoft YaHei",-apple-system,sans-serif;
+  font-family: system-ui, -apple-system, "PingFang SC", "HarmonyOS Sans", "Microsoft YaHei", sans-serif;
+  line-height: 1.55;
   background: var(--bg-page);
   color: var(--text-primary);
   transition: background 0.3s ease, color 0.3s ease;
@@ -17,7 +18,8 @@ body {
 .card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--color-primary-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #c4c9d4; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
 [data-theme="dark"] .el-input__wrapper,
 [data-theme="dark"] .el-textarea__inner {
   background: var(--bg-input) !important;

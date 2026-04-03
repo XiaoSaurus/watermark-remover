@@ -203,6 +203,9 @@ cpolar http 3000
 
 ## 常见问题
 
+### Q: 前端 `npm run dev` 报错或打不开 localhost:3000？
+A: 本项目使用 **Vite 5**，必须使用 **Node.js 18 及以上**（推荐安装 [Node 20 LTS](https://nodejs.org/zh-cn/)）。在终端执行 `node -v`，若为 v16 或更低，请先升级 Node 再重新执行 `npm install` 与 `npm run dev`。若版本过低，`npm run dev` 会由脚本直接提示并退出。
+
 ### Q: 解析失败/返回 403？
 A: 各大平台反爬策略经常变化，请确认网络可以访问目标平台，或稍后重试。
 
